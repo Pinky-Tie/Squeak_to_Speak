@@ -2,7 +2,7 @@ from langchain.output_parsers import PydanticOutputParser
 from langchain.schema.runnable.base import Runnable
 from pydantic import BaseModel
 
-from company_name.chatbot.chains.base import PromptTemplate, generate_prompt_templates
+from Squeak_to_speak.chatbot.chains.base import PromptTemplate, generate_prompt_templates
 
 
 class OrderId(BaseModel):

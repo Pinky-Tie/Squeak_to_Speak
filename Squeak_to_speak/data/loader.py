@@ -36,5 +36,5 @@ def get_sqlite_database_path():
     Returns:
         db_path: The path to the SQLite database file.
     """
-    db_path = os.path.join(BASE_DIR, "database", "ecommerce.db")
+    db_path = os.path.join(BASE_DIR, "database", "squeaktospeak_db.db")
     return db_path

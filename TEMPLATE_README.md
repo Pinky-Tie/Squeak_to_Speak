@@ -1,21 +1,18 @@
-# CompanyName
-
-This README.md template is designed to provide a clear and structured guide for documenting your chatbot project. It outlines the essential sections that should be included in your repository to ensure that anyone reviewing or contributing to the project can easily understand its functionality, setup process, and testing methodology. By following this template, you'll ensure that your project is well-documented, making it easier for team members and future contributors to maintain and extend the chatbot.
+# Squeak To Speak
 
 ## 1. Project Overview
 
-- **Company Name**: [Company Name]
-- **Group X**: [List of contributors]
+- **Company Name**: Squeak to Speak
+- **Group X**: Joana Sanches,Margarida Sardinha, Margarida Marchão, Maria Santos, Renato Bernardino
 - **Description**:  
-  Provide a concise overview of the company and the chatbot's purpose. Outline its core functionality and the intended use cases it addresses, including how it interacts with users, the types of queries it handles, and its overall objective.
-
+  Squeak to Speak revolutionizes access to mental health resources through conversational AI that provides personalized and context-based recommendations. By including LLM technology, the AI assistant continuously adapts to user needs and preferences, creating a personalized and adaptable support path that encourages emotional growth and helps users connect with the most suitable mental health resources. This approach ensures a comfortable journey toward emotional well-being, making it easier for users to find the right support while also ensuring the effective use of human psychological resources.
 ---
 
 ## 2. How to Test the Chatbot
 
 ### 2.1 Prerequisites
 
-- **Python Version**: [Specify required version of Python]
+- **Python Version**: 3.10.11
 - **Dependencies**:  
   List all the required libraries and frameworks.
 - **Environment Setup**:  
@@ -28,8 +25,9 @@ Provide a clear, step-by-step guide on how to launch and interact with the chatb
 ## 3. Database Schema
 
 ### 3.1 Database Overview and Schema Diagram
+(descrição)
 
-Provide an overview of the database used by the chatbot system. Include a diagram of the database schema to visually represent the structure of tables, their relationships, and data flow. (with image)
+![Alt text](database_schema.png "Database Schema")
 
 ### 3.2 Table Descriptions
 
@@ -43,9 +41,20 @@ Describe each table in the database schema, including its columns and their purp
 
 List and briefly describe the user intentions that the chatbot is designed to handle. For example:
 
-- **Product Information**: User requests details about a specific product or product category.
-- **Order Status**: User queries the status of an existing order based on an order ID.
-- **Create Order**: User intends to create a new order, and the chatbot processes the order request.
+**1: I want a recommendation for a healthcare professional**:
+**2: I want to know about support groups in my area**:
+**3: I want a contact for an emergency or non-emergency hotline**:
+**4: I want an alternative to a habit I have**:
+**5: I want to make an entry in my journal or mood board**:
+**6: I want to see my journal or mood board**:
+**7: I want to make an entry on the community gratitude banner**:
+**8: I want to know more about Squeak to Speak mission and values**:
+**9: I want to know what Squeak and Speak can do for me**:
+**10: I want to know what Squeak and Speak knows about me**:
+**11: I want to delete data from my Journal or Mood Board**:
+**12: I want to alter data on my Journal or Mood Board**:
+**13: I want to talk to the Chatbot having the knowledge of what I wrote in my journal**:
+
 
 ### 4.2 How to Test Each Intention
 
