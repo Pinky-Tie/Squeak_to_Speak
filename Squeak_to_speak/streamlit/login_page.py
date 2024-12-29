@@ -1,7 +1,7 @@
 import sqlite3
 
 import streamlit as st
-from users_db import UserDatabase
+from database import UserDatabase
 
 
 def load_database():
