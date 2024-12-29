@@ -3,7 +3,7 @@
 ## 1. Project Overview
 
 - **Company Name**: Squeak to Speak
-- **Group X**: Joana Sanches,Margarida Sardinha, Margarida Marchão, Maria Santos, Renato Bernardino
+- **Group X**: Joana Sanches, Margarida Sardinha, Margarida Marchão, Maria Santos, Renato Bernardino
 - **Description**:  
   Squeak to Speak revolutionizes access to mental health resources through conversational AI that provides personalized and context-based recommendations. By including LLM technology, the AI assistant continuously adapts to user needs and preferences, creating a personalized and adaptable support path that encourages emotional growth and helps users connect with the most suitable mental health resources. This approach ensures a comfortable journey toward emotional well-being, making it easier for users to find the right support while also ensuring the effective use of human psychological resources.
 ---
