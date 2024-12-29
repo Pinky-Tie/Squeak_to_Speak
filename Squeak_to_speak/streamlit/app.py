@@ -3,8 +3,9 @@ This file should be the entrypoint of your Streamlit App.
 """
 
 from dotenv import load_dotenv  # Import dotenv to load environment variables
-
 from Squeak_to_speak import MainChatbot  # Import the chatbot class
+
+import streamlit as st
 
 
 def main(bot: MainChatbot):
@@ -48,3 +49,9 @@ if __name__ == "__main__":
 
     # Start the main interaction loop
     main(bot)
+
+def Homepage():
+    st.title("Homepage")
+
+pg = st.navigation([st.Page(Homepage), st.Page("login_page.py"), st.Page("user_registration.py")])
+pg.run()
