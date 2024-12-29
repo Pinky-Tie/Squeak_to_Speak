@@ -1,211 +1,201 @@
+# General Database Classes
 import sqlite3
-from datetime import datetime
+from pydantic import BaseModel, ValidationError
+import datetime
 
-class UserDatabase:
-    """
-    Class to interact with SQLite database table 'Users'.
-    
-    Schema:
-    - user_id: INTEGER PRIMARY KEY AUTOINCREMENT
-    - username: TEXT NOT NULL
-    - password: TEXT NOT NULL
-    - email: TEXT UNIQUE NOT NULL
-    - country: TEXT
-
-    Methods provide operations for managing users.
-    """
+class DatabaseManager:
     def __init__(self, conn):
         self.conn = conn
+
+    def insert(self, table_name, data):
+        placeholders = ", ".join(f":{key}" for key in data.keys())
+        columns = ", ".join(data.keys())
+        query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(query, data)
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"Error inserting into {table_name}: {e}")
+            return False
+        finally:
+            cursor.close()
+
+    def select(self, query, params=None):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(query, params or {})
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+
+    def update(self, query, params=None):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(query, params or {})
+            self.conn.commit()
+            return cursor.rowcount > 0
+        finally:
+            cursor.close()
+
+    def delete(self, query, params=None):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(query, params or {})
+            self.conn.commit()
+            return cursor.rowcount > 0
+        finally:
+            cursor.close()
+
+    def check_if_email_exists(self, email):
+        # Check if an email already exists in the database.
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(
+                "SELECT email FROM Users WHERE email = :email", {"email": email}
+            )
+            return cursor.fetchone() is not None
+        finally:
+            cursor.close()
+
+# Basic Insert Operations
+## User Registration
+class UserManager:
+    def __init__(self, db_manager):
+        self.db_manager = db_manager
 
     def add_user(self, username, password, email, country):
-        cursor = self.conn.cursor()
+        """
+        Validates and adds a new user to the database.
+
+        Args:
+            username (str): The user's username.
+            password (str): The user's password (hashed).
+            email (str): The user's email.
+            country (str): The user's country.
+
+        Returns:
+            str: Success or failure message.
+        """
+        # Basic validation
+        if not username or not email or not password or not country:
+            return "All fields are required."
+
+        if self.db_manager.check_if_email_exists(email):
+            return "This email is already registered."
+
+        data = {
+            "username": username,
+            "password": password,
+            "email": email,
+            "country": country
+        }
+
+        # Attempt to insert the new user into the database
+        success = self.db_manager.insert("Users", data)
+
+        if success:
+            return "User has been registered successfully!"
+        else:
+            return "An error occurred while registering. Please try again."
+
+## Insert Journal entry
+class JournalManager:
+    def __init__(self, db_manager):
+        self.db_manager = db_manager
+
+    def add_entry(self, user_id, message, date, hide_yn, time):
+        data = {
+            "user_id": user_id,
+            "message": message,
+            "date": date,
+            "hide_yn": hide_yn,
+            "time": time,
+        }
+        return self.db_manager.insert("Journal", data)
+
+class JournalEntryResponse:
+    def generate_response(self, success):
+        return "Entry added successfully." if success else "Failed to add your entry."
+
+## Insert Gratitude message
+class GratitudeManager:
+    def __init__(self, db_manager):
+        self.db_manager = db_manager
+
+    def add_gratitude_message(self, comment):
+        # Validates and adds a gratitude message to the database.
+        if not comment or len(comment.strip()) == 0:
+            return "Your gratitude message cannot be empty."
+
+        data = {
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "comment": comment,
+        }
+
+        # Attempt to insert the gratitude message into the database
+        success = self.db_manager.insert("Gratitude_entries", data)
+
+        if success:
+            return "Your gratitude message has been added successfully!"
+        else:
+            return "An error occurred. Please try again."
+
+
+
+# Feature-specific Database Classes
+
+## Use 1: I want a recommendation for a therapist
+### Chain 1: Get User preferences
+class UserPreferencesModel(BaseModel):
+    mental_health_needs: str
+    location: str
+    budget: int = None
+    online_option: bool = None
+
+class IdentifyUserPreferences:
+    def process_input(self, user_input: dict):
         try:
-            cursor.execute(
-                """
-                INSERT INTO Users (username, password, email, country)
-                VALUES (:username, :password, :email, :country)
-                """,
-                {"username": username, "password": password, "email": email, "country": country},
+            preferences = UserPreferencesModel(**user_input)
+            return preferences
+        except ValidationError as e:
+            return {"error": str(e)}
+
+### Chain 2: Get a Therapist match
+class TherapistFinder:
+    def __init__(self, db_manager):
+        self.db_manager = db_manager
+
+    def find_best_match(self, preferences):
+        query = """
+        SELECT * FROM Therapists
+        WHERE country = :location
+          AND specialty LIKE :mental_health_needs
+          AND (avg_consult_price <= :budget OR :budget IS NULL)
+          AND (online_option = :online_option OR :online_option IS NULL)
+        ORDER BY avg_consult_price ASC
+        LIMIT 1
+        """
+        params = {
+            "location": preferences.location,
+            "mental_health_needs": f"%{preferences.mental_health_needs}%",
+            "budget": preferences.budget,
+            "online_option": preferences.online_option,
+        }
+        results = self.db_manager.select(query, params)
+        return results
+
+### Chain 3: Output the best therapist
+class TherapistOutputFormatter:
+    def format_output(self, therapist, user_input):
+        if therapist:
+            return (
+                f"Based on your needs for {user_input['mental_health_needs']}, "
+                f"we recommend {therapist[0]['name']} located in {therapist[0]['location']}. "
+                f"They charge an average of {therapist[0]['avg_consult_price']}."
             )
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Error adding user: {e}")
-            return False
-        finally:
-            cursor.close()
+        return "No suitable therapist found for your preferences."
 
-    def get_user_details(self, user_id):
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute("SELECT * FROM Users WHERE user_id = :user_id", {"user_id": user_id})
-            return cursor.fetchone()
-        finally:
-            cursor.close()
 
-class TherapistDatabase:
-    """
-    Class to interact with the 'Therapists' table.
-
-    Schema:
-    - info_id: INTEGER PRIMARY KEY
-    - TYPE: TEXT
-    - name: TEXT
-    - country: TEXT
-    - email: TEXT
-    - website: TEXT
-    - phone: TEXT
-    - Organization: TEXT
-    - always_open: BOOLEAN
-    - location: TEXT
-    - avg_consult_price: INTEGER
-    - specialty: TEXT
-    - online_option: BOOLEAN
-    - in_person_option: BOOLEAN
-
-    Methods provide operations to query therapists.
-    """
-    def __init__(self, conn):
-        self.conn = conn
-
-    def get_therapists_by_preferences(self, country, specialty, max_price, online_option=None):
-        cursor = self.conn.cursor()
-        try:
-            query = """
-                SELECT * FROM Therapists
-                WHERE country = :country AND specialty = :specialty AND avg_consult_price <= :max_price
-            """
-            params = {"country": country, "specialty": specialty, "max_price": max_price}
-            if online_option is not None:
-                query += " AND online_option = :online_option"
-                params["online_option"] = online_option
-
-            cursor.execute(query, params)
-            return cursor.fetchall()
-        finally:
-            cursor.close()
-
-class SupportGroupDatabase:
-    """
-    Class to interact with the 'Support_groups' table.
-
-    Schema:
-    - info_id: INTEGER PRIMARY KEY
-    - TYPE: TEXT
-    - name: TEXT
-    - country: TEXT
-    - email: TEXT
-    - website: TEXT
-    - phone: TEXT
-    - Organization: TEXT
-    - session_price: INTEGER
-    - target_audience: TEXT
-    - location: TEXT
-
-    Methods provide operations to query support groups.
-    """
-    def __init__(self, conn):
-        self.conn = conn
-
-    def get_support_groups_by_preferences(self, country, target_audience, max_price):
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute(
-                """
-                SELECT * FROM Support_groups
-                WHERE country = :country AND target_audience = :target_audience AND session_price <= :max_price
-                """,
-                {"country": country, "target_audience": target_audience, "max_price": max_price},
-            )
-            return cursor.fetchall()
-        finally:
-            cursor.close()
-
-class GratitudeDatabase:
-    """
-    Class to interact with the 'Gratitude_entries' table.
-
-    Schema:
-    - id: INTEGER PRIMARY KEY
-    - date: DATETIME
-    - comment: TEXT
-
-    Methods allow inserting gratitude messages.
-    """
-    def __init__(self, conn):
-        self.conn = conn
-
-    def add_gratitude_entry(self, comment):
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute(
-                """
-                INSERT INTO Gratitude_entries (date, comment)
-                VALUES (:date, :comment)
-                """,
-                {"date": datetime.now(), "comment": comment},
-            )
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Error adding gratitude entry: {e}")
-            return False
-        finally:
-            cursor.close()
-
-class JournalDatabase:
-    """
-    Class to interact with the 'Journal' table.
-
-    Schema:
-    - message_id: INTEGER PRIMARY KEY
-    - user_id: INTEGER
-    - message: TEXT
-    - date: DATETIME
-    - hide_yn: BOOLEAN
-    - time: DATETIME
-
-    Methods allow creating and retrieving journal entries.
-    """
-    def __init__(self, conn):
-        self.conn = conn
-
-    def add_journal_entry(self, user_id, message, hide_yn):
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute(
-                """
-                INSERT INTO Journal (user_id, message, date, hide_yn, time)
-                VALUES (:user_id, :message, :date, :hide_yn, :time)
-                """,
-                {
-                    "user_id": user_id,
-                    "message": message,
-                    "date": datetime.now(),
-                    "hide_yn": hide_yn,
-                    "time": datetime.now().time(),
-                },
-            )
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Error adding journal entry: {e}")
-            return False
-        finally:
-            cursor.close()
-
-    def get_journal_entries(self, user_id):
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute(
-                "SELECT * FROM Journal WHERE user_id = :user_id ORDER BY date DESC",
-                {"user_id": user_id},
-            )
-            return cursor.fetchall()
-        finally:
-            cursor.close()
-
-# Example usage:
-# conn = sqlite3.connect("database.db")
-# user_db = UserDatabase(conn)
-# user_db.add_user("johndoe", "hashedpassword", "johndoe@example.com", "USA")
+## Use 2: I want to know about support groups in my area
