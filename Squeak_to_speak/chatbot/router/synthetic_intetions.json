@@ -1,558 +1,557 @@
 [
     {
         "Intention": "rec_therapist",
-        "Messages": [
-            {
-                "Intention": "rec_therapist",
-                "Message": "Can you recommend a therapist for anxiety near me?"
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "I'm looking for a counselor who specializes in grief support."
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "Please suggest affordable therapists in my area."
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "I need a mental health professional who accepts my insurance."
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "Are there any therapists who focus on depression nearby?"
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "Can you help me find a therapist for couples counseling?"
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "I'm searching for a mental health specialist for PTSD."
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "What are my options for therapists who work with teens?"
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "I need recommendations for online therapy services."
-            },
-            {
-                "Intention": "rec_therapist",
-                "Message": "Can you find a therapist who offers sliding scale fees?"
-            }
-        ],
+        "Message": "Can you recommend a therapist for anxiety near me?",
         "Id": 1
     },
     {
-        "Intention": "rec_group",
-        "Messages": [
-            {
-                "Intention": "rec_group",
-                "Message": "Are there any support groups for anxiety near me?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "I'm looking for grief support groups in my area."
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "Can you help me find addiction support groups locally?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "What are the meeting times for mental health support groups nearby?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "Are there online support groups available for depression?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "How can I join a local support group for stress management?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "Do you have information on in-person support groups for PTSD?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "Where can I find support groups focused on relationship issues?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "Are there any LGBTQ+ support groups in my vicinity?"
-            },
-            {
-                "Intention": "rec_group",
-                "Message": "Can you recommend support groups for new parents?"
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "I'm looking for a counselor who specializes in grief support.",
         "Id": 2
     },
     {
-        "Intention": "rec_hotline",
-        "Messages": [
-            {
-                "Intention": "rec_hotline",
-                "Message": "Can you provide me with a hotline for immediate crisis support?"
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "I need the contact for a mental health crisis hotline."
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "What are the numbers for non-emergency counseling services?"
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "Please share hotlines for abuse support."
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "I\u2019m looking for a hotline for general mental health assistance."
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "Can you give me the number for a suicide prevention hotline?"
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "What hotline should I call for anxiety support?"
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "I need information on hotlines for addiction help."
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "Are there any hotlines available for grief counseling?"
-            },
-            {
-                "Intention": "rec_hotline",
-                "Message": "Can you list the hotlines for mental health emergencies?"
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "Please suggest affordable therapists in my area.",
         "Id": 3
     },
     {
-        "Intention": "alt_habit",
-        "Messages": [
-            {
-                "Intention": "alt_habit",
-                "Message": "What are some healthier alternatives to my daily soda habit?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "I'm looking to replace my evening snacking with something healthier."
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "Can you suggest sustainable alternatives to my plastic water bottle usage?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "What are some better options for my late-night binge-watching?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "I want to find a healthier substitute for my coffee addiction."
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "What can I do instead of scrolling on my phone before bed?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "I'm trying to cut down on fast food; any healthier meal ideas?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "What are some alternatives to my daily chocolate cravings?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "Can you help me find a better way to cope with stress than smoking?"
-            },
-            {
-                "Intention": "alt_habit",
-                "Message": "What are some eco-friendly alternatives to my current shopping habits?"
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "I need a mental health professional who accepts my insurance.",
         "Id": 4
     },
     {
-        "Intention": "entry_journal_mood",
-        "Messages": [
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Feeling overwhelmed today, need to jot it down."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "I felt really happy when I helped a friend."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Struggling with anxiety lately, just want to express it."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Today was a mix of emotions, mostly frustration."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Grateful for the little things in life today."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Reflecting on my goals and how far I've come."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Feeling a bit lost, need to write about it."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Had a great day, I want to remember this feeling."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Feeling hopeful about the future, need to capture this."
-            },
-            {
-                "Intention": "entry_journal_mood",
-                "Message": "Today was tough, I need to vent my feelings."
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "Can you help me find a therapist who offers online sessions?",
         "Id": 5
     },
     {
-        "Intention": "entry_banner",
-        "Messages": [
-            {
-                "Intention": "entry_banner",
-                "Message": "I'm grateful for the support of my friends during tough times."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "Today, I found joy in a beautiful sunset."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "I'm thankful for the little moments of laughter in my day."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "Gratitude for the kindness of strangers that brightens my day."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "I appreciate the love and warmth of my family."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "Feeling thankful for the opportunity to learn something new."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "I'm grateful for my health and the ability to enjoy life."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "Today, I celebrate the small victories that bring me joy."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "I'm thankful for the beauty of nature that surrounds me."
-            },
-            {
-                "Intention": "entry_banner",
-                "Message": "Grateful for the moments of peace and quiet in my life."
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "I'm searching for a psychologist who focuses on depression.",
         "Id": 6
     },
     {
-        "Intention": "know_mission",
-        "Messages": [
-            {
-                "Intention": "know_mission",
-                "Message": "What is the mission of Squeak to Speak?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "Can you tell me about your organization's values?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "What goals does Squeak to Speak aim to achieve?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "I'd like to know the story behind Squeak to Speak."
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "How does Squeak to Speak prioritize user privacy?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "What is the vision of Squeak to Speak?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "Can you explain the commitment to mental health?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "What inspired the creation of Squeak to Speak?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "What are the core values of your organization?"
-            },
-            {
-                "Intention": "know_mission",
-                "Message": "How does Squeak to Speak support mental health initiatives?"
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "What are some local therapists that work with teens?",
         "Id": 7
     },
     {
-        "Intention": "know_services",
-        "Messages": [
-            {
-                "Intention": "know_services",
-                "Message": "What features does Squeak to Speak offer for mental health support?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "Can you explain how the chatbot can help me with my mental health?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "What tools are available on Squeak to Speak for users?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "How can I benefit from using Squeak to Speak?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "I'd like to know the functionalities of Squeak to Speak."
-            },
-            {
-                "Intention": "know_services",
-                "Message": "What services does Squeak to Speak provide for mental wellness?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "Can you give me an overview of Squeak to Speak's features?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "How does Squeak to Speak assist users with mental health issues?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "What can I do with Squeak to Speak?"
-            },
-            {
-                "Intention": "know_services",
-                "Message": "Tell me about the support tools available on Squeak to Speak."
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "I need recommendations for therapists who understand PTSD.",
         "Id": 8
     },
     {
-        "Intention": "know_data",
-        "Messages": [
-            {
-                "Intention": "know_data",
-                "Message": "Can I see the data you've collected about me?"
-            },
-            {
-                "Intention": "know_data",
-                "Message": "What preferences do you have stored for my account?"
-            },
-            {
-                "Intention": "know_data",
-                "Message": "I'd like to review my past journal entries, please."
-            },
-            {
-                "Intention": "know_data",
-                "Message": "How can I access my previous interactions with the chatbot?"
-            },
-            {
-                "Intention": "know_data",
-                "Message": "Can you show me what information you have on file?"
-            },
-            {
-                "Intention": "know_data",
-                "Message": "I want to check the data you've saved about my usage."
-            },
-            {
-                "Intention": "know_data",
-                "Message": "What details do you keep regarding my preferences?"
-            },
-            {
-                "Intention": "know_data",
-                "Message": "Is there a way to view my stored journal entries?"
-            },
-            {
-                "Intention": "know_data",
-                "Message": "Please provide a summary of my past interactions."
-            },
-            {
-                "Intention": "know_data",
-                "Message": "What kind of data do you collect about users?"
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "Can you find me a counselor who specializes in addiction?",
         "Id": 9
     },
     {
-        "Intention": "alter_entry",
-        "Messages": [
-            {
-                "Intention": "alter_entry",
-                "Message": "Can you help me edit my last journal entry?"
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "I want to change the mood of my previous entry."
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "Please update my journal entry with new thoughts."
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "I need to modify the text in my last mood entry."
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "Can I change the date on my earlier journal entry?"
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "I'd like to add more details to my last entry."
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "Please correct the mood associated with my previous entry."
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "I want to change the title of my last journal entry."
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "Can you help me rephrase my last mood board entry?"
-            },
-            {
-                "Intention": "alter_entry",
-                "Message": "I need to delete a specific entry from my journal."
-            }
-        ],
+        "Intention": "rec_therapist",
+        "Message": "I'm looking for a therapist who uses cognitive behavioral therapy.",
         "Id": 10
     },
     {
-        "Intention": "recall_entry",
-        "Messages": [
-            {
-                "Intention": "recall_entry",
-                "Message": "Can we talk about my last journal entry?"
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "I'd like to reflect on my previous thoughts."
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "What insights can you share from my past entries?"
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "Help me remember what I wrote about last week."
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "Can you remind me of my feelings from earlier entries?"
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "I'd love to discuss my journal reflections."
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "What patterns do you see in my past entries?"
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "Can we revisit my thoughts from last month?"
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "I'd like to explore my previous journal entries."
-            },
-            {
-                "Intention": "recall_entry",
-                "Message": "What did I say about my mood last time?"
-            }
-        ],
+        "Intention": "rec_group",
+        "Message": "Are there any anxiety support groups near me?",
         "Id": 11
     },
     {
-        "Intention": "None",
-        "Message": "What's your favorite movie of all time?",
+        "Intention": "rec_group",
+        "Message": "I'm looking for grief support groups in my area.",
         "Id": 12
     },
     {
-        "Intention": "None",
-        "Message": "I love the smell of fresh coffee in the morning.",
+        "Intention": "rec_group",
+        "Message": "Can you help me find addiction support groups locally?",
         "Id": 13
     },
     {
-        "Intention": "None",
-        "Message": "Do you think pineapple belongs on pizza?",
+        "Intention": "rec_group",
+        "Message": "What are the meeting times for support groups on depression?",
         "Id": 14
     },
     {
-        "Intention": "None",
-        "Message": "I just finished reading a great book!",
+        "Intention": "rec_group",
+        "Message": "Are there online support groups for anxiety I can join?",
         "Id": 15
     },
     {
-        "Intention": "None",
-        "Message": "What do you think about the weather today?",
+        "Intention": "rec_group",
+        "Message": "How do I join a local support group for grief?",
         "Id": 16
     },
     {
-        "Intention": "None",
-        "Message": "I can't believe how fast this year is going by.",
+        "Intention": "rec_group",
+        "Message": "Can you provide information on in-person support groups for addiction?",
         "Id": 17
     },
     {
-        "Intention": "None",
-        "Message": "Have you ever tried meditating? It\u2019s quite relaxing.",
+        "Intention": "rec_group",
+        "Message": "What topics do your support groups cover?",
         "Id": 18
     },
     {
-        "Intention": "None",
-        "Message": "What\u2019s your go-to comfort food?",
+        "Intention": "rec_group",
+        "Message": "Are there any support groups for stress management nearby?",
         "Id": 19
     },
     {
-        "Intention": "None",
-        "Message": "I really enjoy hiking on weekends.",
+        "Intention": "rec_group",
+        "Message": "Do you have details on support groups for PTSD in my area?",
         "Id": 20
     },
     {
-        "Intention": "None",
-        "Message": "Do you have any pets? I love animals!",
+        "Intention": "rec_hotline",
+        "Message": "Can you provide me with a hotline for immediate crisis support?",
         "Id": 21
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "I need the contact for a mental health crisis hotline.",
+        "Id": 22
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "What are the numbers for non-emergency counseling services?",
+        "Id": 23
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "Please share hotlines for abuse support.",
+        "Id": 24
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "I\u2019m looking for a hotline for general mental health assistance.",
+        "Id": 25
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "Can you give me the number for a suicide prevention hotline?",
+        "Id": 26
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "What hotline should I call for addiction support?",
+        "Id": 27
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "I need information on hotlines for anxiety support.",
+        "Id": 28
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "Are there hotlines available for grief counseling?",
+        "Id": 29
+    },
+    {
+        "Intention": "rec_hotline",
+        "Message": "Can you help me find a hotline for domestic violence?",
+        "Id": 30
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "I'm trying to cut down on soda. What can I drink instead?",
+        "Id": 31
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "I want to stop snacking on chips. Any healthier options?",
+        "Id": 32
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "Looking for alternatives to my daily coffee habit. Suggestions?",
+        "Id": 33
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "I want to reduce my screen time. What can I do instead?",
+        "Id": 34
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "What are some sustainable alternatives to fast food?",
+        "Id": 35
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "I need help finding a replacement for my evening dessert habit.",
+        "Id": 36
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "What can I do instead of binge-watching TV shows?",
+        "Id": 37
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "I'm trying to quit smoking. What healthier habits can I adopt?",
+        "Id": 38
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "What are some alternatives to my daily energy drink?",
+        "Id": 39
+    },
+    {
+        "Intention": "alt_habit",
+        "Message": "I want to stop using plastic bottles. What can I use instead?",
+        "Id": 40
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Feeling overwhelmed today, need to jot down my thoughts.",
+        "Id": 41
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "I\u2019m grateful for my friends and family, reflecting on that.",
+        "Id": 42
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Struggling with anxiety lately, want to capture my feelings.",
+        "Id": 43
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Today was a good day, I want to remember this moment.",
+        "Id": 44
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Feeling a bit lost, need to write about my emotions.",
+        "Id": 45
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "I felt really happy today, need to document this.",
+        "Id": 46
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Reflecting on my week, it was challenging but rewarding.",
+        "Id": 47
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "I want to express my gratitude for small joys today.",
+        "Id": 48
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Feeling hopeful about the future, need to write it down.",
+        "Id": 49
+    },
+    {
+        "Intention": "entry_journal_mood",
+        "Message": "Today was tough, I need to process my feelings.",
+        "Id": 50
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "I'm grateful for the support of my friends during tough times.",
+        "Id": 51
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "Today, I found joy in a beautiful sunset.",
+        "Id": 52
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "I'm thankful for the little moments of laughter in my day.",
+        "Id": 53
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "Grateful for the kindness of strangers that brightens my day.",
+        "Id": 54
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "I appreciate the love and support from my family.",
+        "Id": 55
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "Feeling thankful for the opportunity to learn something new.",
+        "Id": 56
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "I'm grateful for my health and the ability to enjoy life.",
+        "Id": 57
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "Today, I celebrate the small victories that bring me joy.",
+        "Id": 58
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "I'm thankful for the beauty of nature that surrounds me.",
+        "Id": 59
+    },
+    {
+        "Intention": "entry_banner",
+        "Message": "Grateful for the moments of peace and quiet in my life.",
+        "Id": 60
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "What is the mission of Squeak to Speak?",
+        "Id": 61
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "Can you tell me about the values of Squeak to Speak?",
+        "Id": 62
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "What goals does Squeak to Speak aim to achieve?",
+        "Id": 63
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "I'd like to know the vision behind Squeak to Speak.",
+        "Id": 64
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "What inspired the creation of Squeak to Speak?",
+        "Id": 65
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "How does Squeak to Speak prioritize user privacy?",
+        "Id": 66
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "What commitment does Squeak to Speak have towards mental health?",
+        "Id": 67
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "Can you explain the core values of Squeak to Speak?",
+        "Id": 68
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "What is the story behind Squeak to Speak's founding?",
+        "Id": 69
+    },
+    {
+        "Intention": "know_mission",
+        "Message": "How does Squeak to Speak support mental health initiatives?",
+        "Id": 70
+    },
+    {
+        "Intention": "know_services",
+        "Message": "What features does Squeak to Speak offer for mental health support?",
+        "Id": 71
+    },
+    {
+        "Intention": "know_services",
+        "Message": "Can you explain how the chatbot can help me with my mental health?",
+        "Id": 72
+    },
+    {
+        "Intention": "know_services",
+        "Message": "What tools are available on Squeak to Speak for users?",
+        "Id": 73
+    },
+    {
+        "Intention": "know_services",
+        "Message": "How can I benefit from using Squeak to Speak?",
+        "Id": 74
+    },
+    {
+        "Intention": "know_services",
+        "Message": "Tell me about the functionalities of Squeak to Speak.",
+        "Id": 75
+    },
+    {
+        "Intention": "know_services",
+        "Message": "What services does Squeak to Speak provide for mental wellness?",
+        "Id": 76
+    },
+    {
+        "Intention": "know_services",
+        "Message": "How does Squeak to Speak assist users with their mental health needs?",
+        "Id": 77
+    },
+    {
+        "Intention": "know_services",
+        "Message": "What can I do with the Squeak to Speak platform?",
+        "Id": 78
+    },
+    {
+        "Intention": "know_services",
+        "Message": "Can you give me an overview of Squeak to Speak's features?",
+        "Id": 79
+    },
+    {
+        "Intention": "know_services",
+        "Message": "What kind of support can I expect from Squeak to Speak?",
+        "Id": 80
+    },
+    {
+        "Intention": "know_data",
+        "Message": "Can I see the data you've collected about me?",
+        "Id": 81
+    },
+    {
+        "Intention": "know_data",
+        "Message": "What preferences do you have stored for my account?",
+        "Id": 82
+    },
+    {
+        "Intention": "know_data",
+        "Message": "I'd like to review my previous interactions, please.",
+        "Id": 83
+    },
+    {
+        "Intention": "know_data",
+        "Message": "How can I access my journal entries?",
+        "Id": 84
+    },
+    {
+        "Intention": "know_data",
+        "Message": "What information do you keep about my usage?",
+        "Id": 85
+    },
+    {
+        "Intention": "know_data",
+        "Message": "Can you show me what data you have on me?",
+        "Id": 86
+    },
+    {
+        "Intention": "know_data",
+        "Message": "I'd like to know what I've shared with you.",
+        "Id": 87
+    },
+    {
+        "Intention": "know_data",
+        "Message": "Is there a way to view my stored preferences?",
+        "Id": 88
+    },
+    {
+        "Intention": "know_data",
+        "Message": "What details do you have from my past entries?",
+        "Id": 89
+    },
+    {
+        "Intention": "know_data",
+        "Message": "Can I get a summary of my data with you?",
+        "Id": 90
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "Can you help me edit my last journal entry?",
+        "Id": 91
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "I want to change the mood of my previous entry.",
+        "Id": 92
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "Please update my journal entry with new thoughts.",
+        "Id": 93
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "I need to modify the text in my last mood entry.",
+        "Id": 94
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "Can I change the date on my earlier journal entry?",
+        "Id": 95
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "I'd like to add more details to my last entry.",
+        "Id": 96
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "Please correct the mood associated with my previous entry.",
+        "Id": 97
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "I want to change the title of my last journal entry.",
+        "Id": 98
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "Can you help me rephrase my last mood board entry?",
+        "Id": 99
+    },
+    {
+        "Intention": "alter_entry",
+        "Message": "I need to delete a specific entry from my journal.",
+        "Id": 100
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "Can we talk about my last journal entry?",
+        "Id": 101
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "I'd like to revisit my thoughts from last week.",
+        "Id": 102
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "What insights can you share from my previous entries?",
+        "Id": 103
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "Help me reflect on my past journal entries.",
+        "Id": 104
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "Can you remind me what I wrote about my mood?",
+        "Id": 105
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "I'd love to discuss my feelings from my last journal entry.",
+        "Id": 106
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "What patterns do you see in my journal?",
+        "Id": 107
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "Can we explore my previous thoughts together?",
+        "Id": 108
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "I'd like to connect my current feelings to past entries.",
+        "Id": 109
+    },
+    {
+        "Intention": "recall_entry",
+        "Message": "Can you summarize my last few journal entries?",
+        "Id": 110
+    },
+    {
+        "Intention": "None",
+        "Message": "What's your favorite way to spend a rainy day?",
+        "Id": 111
     }
 ]
