@@ -14,6 +14,7 @@
 
 - **Python Version**: 3.10.11
 - **Dependencies**:  
+  Found also in requirements.txt
   List all the required libraries and frameworks.
 - **Environment Setup**:  
   Instructions for setting up the environment, such as creating a virtual environment or conda environment.
