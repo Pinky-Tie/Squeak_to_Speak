@@ -117,9 +117,7 @@ class MainChatbot:
                 )
             }}
 
-        self.agent_map = {
-            "order": self.add_memory_to_runnable(Agent1(llm=self.llm).agent_executor)
-        }
+
 
         self.rag = self.add_memory_to_runnable(
             RAGPipeline(
@@ -196,16 +194,7 @@ class MainChatbot:
         """
         return self.chain_map[intent]["reasoning"], self.chain_map[intent]["response"]
 
-    def get_agent(self, intent: str):
-        """Retrieve the agent based on user intent.
 
-        Args:
-            intent: The identified intent of the user input.
-
-        Returns:
-            The agent instance for the intent.
-        """
-        return self.agent_map[intent]
 
     def get_user_intent(self, user_input: Dict):
         """Classify the user intent based on the input text.
@@ -242,48 +231,7 @@ class MainChatbot:
 
 #FUNCOES PARA DAR HANDLE A CADA INTENTION   
 
-    def handle_product_information(self, user_input: Dict):
-        """Handle the product information intent by processing user input and providing a response.
 
-        Args:
-            user_input: The input text from the user.
-
-        Returns:
-            The content of the response after processing through the chains.
-        """
-        # Retrieve reasoning and response chains for the product information intent
-        reasoning_chain, response_chain = self.get_chain("product_information")
-
-        # Process user input through the reasoning chain
-        reasoning_output = reasoning_chain.invoke(user_input)
-
-        # Generate a response using the output of the reasoning chain
-        response = response_chain.invoke(reasoning_output, config=self.memory_config)
-
-        return response.content
-
-    def handle_order_intent(self, user_input: Dict):
-        """Handle the order intent by processing user input and providing a response.
-
-        Args:
-            user_input: The input text from the user.
-
-        Returns:
-            The content of the response after processing through the chains.
-        """
-        # Retrieve the agent for the order intent
-        agent = self.get_agent("order")
-
-        # Process user input through the agent
-        response = agent.invoke(
-            {
-                "customer_id": self.user_id,
-                "customer_input": user_input["customer_input"],
-            },
-            config=self.memory_config,
-        )
-
-        return response["output"]
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:
         """Handle unknown intents by providing a chitchat response.
@@ -295,16 +243,17 @@ class MainChatbot:
             The content of the response after processing through the new chain.
         """
         possible_intention = [
-        "review_user_memory",
-        "find_therapist",
-        "find_support_group",
-        "find_hotline",
-        "habit_alternatives",
-        "insert_mood",
-        "insert_journal",
-        "ask_missionvalues",
-        "ask_features",
-        "update_journal",
+        "review_user_memory"
+        "find_therapist"
+        "find_support_group"
+        "find_hotline"
+        "habit_alternatives"
+        "insert_mood"
+        "insert_journal"
+        "ask_missionvalues"
+        "ask_features"
+        "review_user_memory"
+        "update_journal"
         "chat_about_journal"
         ]
 
