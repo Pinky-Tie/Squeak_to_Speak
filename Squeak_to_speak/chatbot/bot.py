@@ -1,5 +1,6 @@
 # Import necessary classes and modules for chatbot functionality
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, List, Union
+from dateutil.parser import parse
 
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
@@ -235,6 +236,40 @@ class MainChatbot:
 
         return response
 
+    def extract_dates(self, text: str) -> Dict[str, Union[str, None]]:
+        """
+        Extracts dates from the input text.
+
+        Args:
+            text: The input text from the user.
+
+        Returns:
+            A dictionary with possible start_date and end_date.
+        """
+        words = text.split()
+        dates = [parse(word, fuzzy=True) for word in words if self.is_date(word)]
+        if len(dates) == 1:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": None}
+        elif len(dates) >= 2:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": dates[1].strftime('%Y-%m-%d')}
+        return {"start_date": None, "end_date": None}
+
+    def is_date(self, string: str) -> bool:
+        """
+        Checks if a string can be parsed as a date.
+
+        Args:
+            string: The input string.
+
+        Returns:
+            True if the string can be parsed as a date, False otherwise.
+        """
+        try:
+            parse(string, fuzzy=False)
+            return True
+        except ValueError:
+            return False
+
     def handle_recall_entry(self, user_input: Dict):
         """Handle the intent to recall past journal entries based on theme or date.
 
@@ -244,20 +279,27 @@ class MainChatbot:
         Returns:
             A list or structured view of relevant entries.
         """
+        # Extract dates from user input
+        dates = self.extract_dates(user_input["customer_input"])
+
         # Retrieve the chain for recalling entries
         retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
 
-        # Determine if the user wants to search by theme or date
-        if "theme" in user_input:
-            entries = retrieve_chain.query_relevant_entries(
-                user_input=user_input["theme"]
-            )
-        else:
+        # Set the appropriate Pinecone index based on user input
+        if "index_name" in user_input:
+            retrieve_chain.set_pinecone_index(user_input["index_name"])
+
+        # Determine if the user wants to search by date or theme
+        if dates["start_date"] or dates["end_date"]:
             entries = retrieve_chain.get_entries_by_date(
                 user_id=self.user_id,
                 entry_type=user_input.get("entry_type", "journal"),
-                start_date=user_input.get("start_date"),
-                end_date=user_input.get("end_date")
+                start_date=dates["start_date"],
+                end_date=dates["end_date"]
+            )
+        else:
+            entries = retrieve_chain.query_relevant_entries(
+                user_input=user_input["theme"]
             )
 
         # Format the entries for presentation
