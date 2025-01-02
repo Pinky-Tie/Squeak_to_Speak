@@ -4,17 +4,15 @@ from typing import Callable, Dict, Optional
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
 
-#from chatbot.agents.agent1 import Agent1
-from chatbot.chains.chain3 import ReasoningChain3, ResponseChain3
 from chatbot.memory import MemoryManager
 from chatbot.router.loader import load_intention_classifier
 
 from Squeak_to_speak.chatbot.agents.agent1 import Agent1
-from Squeak_to_speak.chatbot.chains.chain3 import ReasoningChain3, ResponseChain3
 from Squeak_to_speak.chatbot.memory import MemoryManager
 from Squeak_to_speak.chatbot.router.loader import load_intention_classifier
 from Squeak_to_speak.data.database_functions import DatabaseManager
 
+from Squeak_to_speak.chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from Squeak_to_speak.chatbot.chains.ask_features import RetrieveFeatures, PresentFeatures
 from Squeak_to_speak.chatbot.chains.ask_missionvalues import RetrieveCompanyInfo, PresentCompanyInfo
 from Squeak_to_speak.chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
@@ -111,8 +109,13 @@ class MainChatbot:
                     "identify": IdentifyJournalEntryToModify(),
                     "modify": ModifyJournalEntry(db_manager=DatabaseManager()),
                     "inform": InformUserOfJournalChange()
-                }
-            }
+                },
+                "chitchat": {
+                "reasoning": ChitChatClassifierChain(llm=self.llm),
+                "response": self.add_memory_to_runnable(
+                    ChitChatResponseChain(llm=self.llm)
+                )
+            }}
 
         self.agent_map = {
             "order": self.add_memory_to_runnable(Agent1(llm=self.llm).agent_executor)
@@ -129,20 +132,19 @@ class MainChatbot:
 
         # Map of intentions to their corresponding handlers
         self.intent_handlers: Dict[Optional[str], Callable[[Dict[str, str]], str]] = {
-            "support_information": self.handle_support_information,
-            'rec_therapist' : self.handle_rec_therapist,
-            'rec_group' : self.handle_rec_group,
-            'rec_hotline': self.handle_rec_hotline,
-            'alt_habit': self.handle_alt_habit,
-            'entry_journal_mood': self.handle_entry_journal_mood,
-            'entry_banner': self.handle_entry_banner,
-            'know_mission': self.handle_know_mission,
-            'know_services': self.handle_know_services,
-            'know_data': self.handle_know_data,
-            'alter_entry': self.handle_alter_entry,
-            'recall_entry': self.handle_recall_entry
+        "review_user_memory": self.handle_support_information,
+        "find_therapist": self.handle_rec_therapist,
+        "find_support_group": self.handle_rec_group,
+        "find_hotline": self.handle_rec_hotline,
+        "habit_alternatives": self.handle_alt_habit,
+        "insert_mood": self.handle_entry_journal_mood,
+        "insert_journal": self.handle_entry_banner,
+        "ask_missionvalues": self.handle_know_mission,
+        "ask_features": self.handle_know_services,
+        "review_user_memory": self.handle_know_data,
+        "update_journal": self.handle_alter_entry,
+        "chat_about_journal": self.handle_recall_entry
         }
-
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
 
@@ -293,17 +295,17 @@ class MainChatbot:
             The content of the response after processing through the new chain.
         """
         possible_intention = [
-            'rec_therapist',
-            'rec_group',
-            'rec_hotline',
-            'alt_habit',
-            'entry_journal_mood',
-            'entry_banner',
-            'know_mission',
-            'know_services',
-            'know_data',
-            'alter_entry',
-            'recall_entry'
+        "review_user_memory",
+        "find_therapist",
+        "find_support_group",
+        "find_hotline",
+        "habit_alternatives",
+        "insert_mood",
+        "insert_journal",
+        "ask_missionvalues",
+        "ask_features",
+        "update_journal",
+        "chat_about_journal"
         ]
 
         chitchat_reasoning_chain, _ = self.get_chain("chitchat")

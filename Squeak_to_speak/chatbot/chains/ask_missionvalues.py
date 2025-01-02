@@ -8,6 +8,12 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Pinecone
 from langchain.chains import RetrievalQA
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
 class RetrieveCompanyInfo:
     def __init__(self, pinecone_api_key: str, index_name: str, pdf_path: str):

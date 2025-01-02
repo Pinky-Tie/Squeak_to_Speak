@@ -5,6 +5,12 @@
 # Implementation: This chain queries an embedding database (Pinecone) for relevant entries. Retrieved entries are ranked for relevance and utility.
 from typing import List, Dict
 import pinecone
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
 class RetrieveRelevantEntries:
     def __init__(self, pinecone_index, embedding_model):

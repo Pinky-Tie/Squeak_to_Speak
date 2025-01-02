@@ -431,18 +431,24 @@ The chatbot should recall relevant journal or mood board entries and use that kn
    - If applicable, apply post-processing using an LLM to improve the accuracy of the router. Report accuracy on both the training and testing splits after post-processing.
 
 5. **Reporting Results**:
-   - Report the accuracy for each intention, as well as the overall accuracy. Accuracy should be calculated as the percentage of correct responses out of the total inputs for each intention.
 
 ### Results
 
-Present the accuracy results in a table format:
 
-| Intention            | Test Inputs | Correct | Incorrect | Accuracy (%) |
-| -------------------- | ----------- | ------- | --------- | ------------ |
-| Product Information  | 10          | 9       | 1         | 90%          |
-| Order Status         | 10          | 8       | 2         | 80%          |
-| Create Order         | 10          | 7       | 3         | 70%          |
-| **Average Accuracy** | 30          | 24      | 6         | 80%          |
+| Intention              | Test Inputs | Correct | Incorrect | Accuracy (%) |
+|------------------------|-------------|---------|-----------|--------------|
+| update_journal         | 4           | 2       | 2         | 50.0         |
+| find_support_group     | 3           | 2       | 1         | 66.67        |
+| ask_features           | 2           | 2       | 0         | 100.0        |
+| find_therapist         | 3           | 3       | 0         | 100.0        |
+| find_hotline           | 3           | 3       | 0         | 100.0        |
+| chat_about_journal     | 1           | 0       | 1         | 0.0          |
+| insert_mood            | 2           | 0       | 2         | 0.0          |
+| review_user_memory     | 1           | 0       | 1         | 0.0          |
+| insert_journal         | 2           | 2       | 0         | 100.0        |
+| ask_missionvalues      | 2           | 2       | 0         | 100.0        |
+| **Average Accuracy**   | 23          | 16      | 7         | 69.57        |
+
 
 ```
 

@@ -3,7 +3,7 @@ This file should be the entrypoint of your Streamlit App.
 """
 
 from dotenv import load_dotenv  # Import dotenv to load environment variables
-from Squeak_to_speak import MainChatbot  # Import the chatbot class
+from chatbot.bot import MainChatbot  # Import the chatbot class
 
 import streamlit as st
 

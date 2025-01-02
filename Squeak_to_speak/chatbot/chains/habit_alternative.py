@@ -4,6 +4,12 @@
 from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer
 import pinecone
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
 class RoutineAlternativesIndexer:
     def __init__(self, pinecone_api_key, pinecone_env):
