@@ -38,6 +38,7 @@
       python3 -m venv squeak-to-speak-env
 
   2. Activate the virtual environment:
+     
     - On Windows:
       squeak-to-speak-env\Scripts\activate
 
@@ -45,17 +46,21 @@
       source squeak-to-speak-env/bin/activate
 
   3. Install dependencies: Ensure that requirements.txt is available in the root of your repository and install the necessary packages by running:
-      pip install -r requirements.txt
+  
+    pip install -r requirements.txt
 
 
   Option 2: Using Conda Environment
   1. Create a conda environment:
+     
     conda create --name squeak-to-speak python=3.10.11
 
-  2. Activate the environment:
+  3. Activate the environment:
+
     conda activate squeak-to-speak
   
-  3. Install dependencies:
+  5. Install dependencies:
+
     pip install -r requirements.txt
 
 
@@ -64,7 +69,9 @@
 Once the environment is set up, you can run the chatbot locally as explained below.
 
 1. Run the Streamlit app by typing in the terminal:
-  streamlit run app.py
+
+    streamlit run app.py
+
 
 The app will start, and you can open your browser to http://localhost:8501 to interact with the Squeak to Speak chatbot.
 
