@@ -4,10 +4,10 @@ from typing import Callable, Dict, Optional
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
 
-from Squeak_to_speak.chatbot.agents.agent1 import Agent1
-from Squeak_to_speak.chatbot.chains.chain3 import ReasoningChain3, ResponseChain3
-from Squeak_to_speak.chatbot.memory import MemoryManager
-from Squeak_to_speak.chatbot.router.loader import load_intention_classifier
+#from chatbot.agents.agent1 import Agent1
+from chatbot.chains.chain3 import ReasoningChain3, ResponseChain3
+from chatbot.memory import MemoryManager
+from chatbot.router.loader import load_intention_classifier
 
 
 class MainChatbot:
