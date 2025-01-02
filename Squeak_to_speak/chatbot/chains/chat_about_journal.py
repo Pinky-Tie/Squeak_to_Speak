@@ -13,10 +13,12 @@ load_dotenv()
 pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
 class RetrieveRelevantEntries:
-    def __init__(self, pinecone_index, embedding_model, db_manager):
-        self.pinecone_index = pinecone_index
+    def __init__(self, embedding_model, db_manager):
         self.embedding_model = embedding_model
         self.db_manager = db_manager
+
+    def set_pinecone_index(self, index_name):
+        self.pinecone_index = pinecone.Index(index_name)
 
     def query_relevant_entries(self, user_input: str, top_k: int = 3) -> List[Dict]:
         """
