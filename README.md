@@ -15,25 +15,26 @@
   - **Python Version**: 3.10.11
   - **Dependencies**:  
     Found also in requirements.txt
-    langchain==0.3.9
-    langchain-openai==0.2.10
-    openai==1.55.3
-    pandas==2.2.3
-    pydantic==2.10.2
-    python-dotenv==1.0.1
-    streamlit==1.40.2
-    torch==2.5.1
-    transformers==4.46.3
-    langchain-pinecone==0.2.0
-    pinecone-client==5.0.1
-    semantic-router==0.0.72
-    langchain-community==0.3.4
-    python-dotenv==1.0.1
+    
+    - langchain v.0.3.9
+    - langchain-openai v.0.2.10
+    - openai v.1.55.3
+    - pandas v.2.2.3
+    - pydantic v.2.10.2
+    - python-dotenv v.1.0.1
+    - streamlit v.1.40.2
+    - torch v.2.5.1
+    - transformers v.4.46.3
+    - langchain-pinecone v.0.2.0
+    - pinecone-client v.5.0.1
+    - semantic-router v.0.0.72
+    - langchain-community v.0.3.4
+    - python-dotenv v.1.0.1
 
   - **Environment Setup**:
-  To set up your environment for testing the chatbot, follow these steps:
+To set up your environment for testing the chatbot, follow these steps:
 
-  Option 1: Using venv (virtual environment)
+  *Option 1: Using venv (virtual environment)*
   1. Create a virtual environment:
       python3 -m venv squeak-to-speak-env
 
@@ -50,7 +51,7 @@
     pip install -r requirements.txt
 
 
-  Option 2: Using Conda Environment
+  *Option 2: Using Conda Environment*
   1. Create a conda environment:
      
     conda create --name squeak-to-speak python=3.10.11
@@ -72,12 +73,12 @@ Once the environment is set up, you can run the chatbot locally as explained bel
 
     streamlit run app.py
 
-
 The app will start, and you can open your browser to http://localhost:8501 to interact with the Squeak to Speak chatbot.
 
 2. Log in to the platform, by browsing to the Login page. 
 The user account for testing is the following:
 *username* - *password*
+
 
 
 ## 3. Database Schema
@@ -116,7 +117,10 @@ Journal entries made by the users. Being "hiden" means that the message will not
 - date: Datetime - Date of the journal entry.
 - hide_yn: Bit - Indicates whether the journal entry is hidden (Boolean).
 - time: Datetime - Time of the journal entry.
-- Gratitude_entries Table
+  
+__Gratitude_entries Table__ :
+Gratitude quotes written by the users, to be shown in a rolling banner to all users.
+
 - id: Numeric (Primary Key) - Unique identifier for each gratitude entry.
 - date: Datetime - Date of the gratitude entry.
 - comment: Nvarchar(200) - Content of the gratitude entry.
@@ -155,19 +159,57 @@ __Support_groups Table (Subtype of Helpful_Info)__
 
 ### 4.1 Implemented Intentions
 
-**1: I want a recommendation for a healthcare professional**: Using details about the user's mental health needs, preferences, and location, deliver a personalized recommendation for a healthcare professional who matches their needs and preferences.
-**2: I want to know about support groups in my area**: Recommend support groups to both inform the user about the support available and also to help them connect with people who face similar problems.
-**3: I want a contact for an emergency or non-emergency hotline**: Provide contact information for relevant hotlines to quickly access support during emergencies or non-urgent situations.
-**4: I want an alternative to a habit I have**: Using details about a habit the user wishes to change, deliver practical and quick suggestions with healthier alternatives.
-**5: I want to make an entry in my journal or mood board**: Document the user's thoughts and feelings in a private journal or mood board to reflect, vent or track their mental health journey in a safe space.
-**6: I want to see my journal or mood board**: Allows the user to revisit past entries in their journal or mood board to reflect, recall and understand their experiences and emotions over time
-**7: I want to make an entry on the community gratitude banner**: Allows the user to anonymously share something they're grateful and/or happy for so that they can help brighten someone else’s day while fostering their own positivity.
-**8: I want to know more about Squeak to Speak mission and values**: Allows the user to learn more about Squeak to Speak as a company to build trust and confidence in its services.
-**9: I want to know what Squeak and Speak can do for me**: Allows the user to explore Squeak to Speak’s features to make the most of its capabilities.
-**10: I want to know what Squeak and Speak knows about me**: Review the data Squeak to Speak holds about the user to better understand what is collected and how it is used.
-**11: I want to delete data from my Journal or Mood Board**: Delete entries from the user's journal or mood board to maintain control over the information stored about them.
-**12: I want to alter data on my Journal or Mood Board**: Modify entries in the user's journal or mood board to correct errors and make necessary updates.
-**13: I want to talk to the Chatbot having the knowledge of what I wrote in my journal**: Communicate with Squeak to Speak’s assistant, leveraging its understanding of the user's journal and mood board to create more empathetic interactions.
+**1: I want a recommendation for a healthcare professional**
+
+Using details about the user's mental health needs, preferences, and location, deliver a personalized recommendation for a healthcare professional who matches their needs and preferences.
+
+**2: I want to know about support groups in my area**
+
+Recommend support groups to both inform the user about the support available and also to help them connect with people who face similar problems.
+
+**3: I want a contact for an emergency or non-emergency hotline**
+
+Provide contact information for relevant hotlines to quickly access support during emergencies or non-urgent situations.
+
+**4: I want an alternative to a habit I have**
+
+Using details about a habit the user wishes to change, deliver practical and quick suggestions with healthier alternatives.
+
+**5: I want to make an entry in my journal or mood board**
+
+Document the user's thoughts and feelings in a private journal or mood board to reflect, vent or track their mental health journey in a safe space.
+
+**6: I want to see my journal or mood board**
+
+Allows the user to revisit past entries in their journal or mood board to reflect, recall and understand their experiences and emotions over time
+
+**7: I want to make an entry on the community gratitude banner**
+
+Allows the user to anonymously share something they're grateful and/or happy for so that they can help brighten someone else’s day while fostering their own positivity.
+
+**8: I want to know more about Squeak to Speak mission and values**
+
+Allows the user to learn more about Squeak to Speak as a company to build trust and confidence in its services.
+
+**9: I want to know what Squeak and Speak can do for me**
+
+Allows the user to explore Squeak to Speak’s features to make the most of its capabilities.
+
+**10: I want to know what Squeak and Speak knows about me**
+
+Review the data Squeak to Speak holds about the user to better understand what is collected and how it is used.
+
+**11: I want to delete data from my Journal or Mood Board**
+
+Delete entries from the user's journal or mood board to maintain control over the information stored about them.
+
+**12: I want to alter data on my Journal or Mood Board**
+
+Modify entries in the user's journal or mood board to correct errors and make necessary updates.
+
+**13: I want to talk to the Chatbot having the knowledge of what I wrote in my journal**
+
+Communicate with Squeak to Speak’s assistant, leveraging its understanding of the user's journal and mood board to create more empathetic interactions.
 
 
 ### 4.2 How to Test Each Intention
@@ -342,7 +384,7 @@ The chatbot should allow the user to modify existing entries with new informatio
 The chatbot should recall relevant journal or mood board entries and use that knowledge to provide personalized and empathetic responses.
 
 
----
+
 
 ## 5. Intention Router
 
