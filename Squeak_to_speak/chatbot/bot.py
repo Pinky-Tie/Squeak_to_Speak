@@ -8,7 +8,23 @@ from Squeak_to_speak.chatbot.agents.agent1 import Agent1
 from Squeak_to_speak.chatbot.chains.chain3 import ReasoningChain3, ResponseChain3
 from Squeak_to_speak.chatbot.memory import MemoryManager
 from Squeak_to_speak.chatbot.router.loader import load_intention_classifier
+from Squeak_to_speak.data.database_functions import DatabaseManager
 
+from Squeak_to_speak.chatbot.chains.ask_features import RetrieveFeatures, PresentFeatures
+from Squeak_to_speak.chatbot.chains.ask_missionvalues import RetrieveCompanyInfo, PresentCompanyInfo
+from Squeak_to_speak.chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+from Squeak_to_speak.chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
+from Squeak_to_speak.chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
+from Squeak_to_speak.chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
+from Squeak_to_speak.chatbot.chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
+from Squeak_to_speak.chatbot.chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
+from Squeak_to_speak.chatbot.chains.habit_alternative import RoutineAlternativeRetriever, RoutineAlternativeOutputFormatter
+from Squeak_to_speak.chatbot.chains.insert_gratitude import GratitudeManager
+from Squeak_to_speak.chatbot.chains.insert_journal import JournalManager, JournalEntryResponse
+from Squeak_to_speak.chatbot.chains.insert_mood import RetrieveEntries, PresentEntries
+from Squeak_to_speak.chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
+from Squeak_to_speak.chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
+from Squeak_to_speak.chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 
 class MainChatbot:
     """A bot that handles customer service interactions by processing user inputs and
@@ -25,13 +41,72 @@ class MainChatbot:
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-            "product_information": {
-                "reasoning": ReasoningChain3(llm=self.llm),  # Reasoning chain
-                "response": self.add_memory_to_runnable(
-                    ResponseChain3(llm=self.llm)  # Response chain with memory
-                ),
+                "ask_features": {
+                    "retrieve": RetrieveFeatures(pinecone_api_key="your_api_key", index_name="features_index", pdf_path="path_to_pdf"),
+                    "present": PresentFeatures(prompt_template="Your template here")
+                },
+                "ask_missionvalues": {
+                    "retrieve": RetrieveCompanyInfo(pinecone_api_key="your_api_key", index_name="missionvalues_index", pdf_path="path_to_pdf"),
+                    "present": PresentCompanyInfo(prompt_template="Your template here")
+                },
+                "chat_about_journal": {
+                    "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
+                    "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
+                },
+                "delete_mood": {
+                    "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager()),
+                    "confirm": MoodBoardDeletionConfirmationFormatter()
+                },
+                "delete_journal": {
+                    "delete": JournalEntryDeleter(db_manager=DatabaseManager()),
+                    "confirm": DeletionConfirmationFormatter()
+                },
+                "find_hotline": {
+                    "identify": IdentifyHotlinePreferences(),
+                    "find": HotlineFinder(db_manager=DatabaseManager()),
+                    "output": HotlineOutputFormatter()
+                },
+                "find_therapist": {
+                    "identify": IdentifyUserPreferences(),
+                    "find": TherapistFinder(db_manager=DatabaseManager()),
+                    "output": TherapistOutputFormatter()
+                },
+                "find_support_group": {
+                    "identify": IdentifySupportGroupPreferences(),
+                    "find": SupportGroupFinder(db_manager=DatabaseManager()),
+                    "output": SupportGroupOutputFormatter()
+                },
+                "habit_alternatives": {
+                    "retrieve": RoutineAlternativeRetriever(pinecone_api_key="your_api_key", pinecone_env="your_pinecone_env"),
+                    "output": RoutineAlternativeOutputFormatter()
+                },
+                    "insert_mood": {
+                    "retrieve": RetrieveEntries(db_manager=DatabaseManager()),
+                    "present": PresentEntries()
+                },
+                "insert_journal": {
+                    "insert": JournalManager(db_manager=DatabaseManager()),
+                    "response": JournalEntryResponse()
+                },
+                "insert_gratitude": {
+                    "insert": GratitudeManager(db_manager=DatabaseManager()),
+                    "response": GratitudeManager(db_manager=DatabaseManager())
+                },
+                "review_user_memory": {
+                    "retrieve": RetrieveUserData(db_manager=DatabaseManager()),
+                    "present": PresentUserData(prompt_template="Your template here")
+                },
+                "update_mood": {
+                    "identify": IdentifyMoodBoardEntryToModify(),
+                    "modify": ModifyMoodBoardEntry(db_manager=DatabaseManager()),
+                    "inform": InformUserOfMoodBoardChange()
+                },
+                "update_journal": {
+                    "identify": IdentifyJournalEntryToModify(),
+                    "modify": ModifyJournalEntry(db_manager=DatabaseManager()),
+                    "inform": InformUserOfJournalChange()
+                }
             }
-        }
 
         self.agent_map = {
             "order": self.add_memory_to_runnable(Agent1(llm=self.llm).agent_executor)
