@@ -7,10 +7,10 @@ from langchain_openai import ChatOpenAI
 from chatbot.memory import MemoryManager
 from chatbot.router.loader import load_intention_classifier
 
-#from Squeak_to_speak.chatbot.agents.agent1 import Agent1
 from chatbot.memory import MemoryManager
 from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
+from chatbot.rag import RAGPipeline
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from chatbot.chains.ask_features import RetrieveFeatures, PresentFeatures
@@ -233,7 +233,25 @@ class MainChatbot:
             )
             return None
 
-#FUNCOES PARA DAR HANDLE A CADA INTENTION   
+#Functions to handle each intention
+
+    def handle_know_mission(self, user_input: Dict[str, str]) -> str:
+
+        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response
+
+    def handle_know_services(self, user_input: Dict[str, str]) -> str:
+
+        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response
+
+    def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
+
+        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response       
 
     def handle_find_therapist(self, user_input: Dict):
         """Handle the healthcare professional recommendation intent.
@@ -329,25 +347,7 @@ class MainChatbot:
 
         return response.content
 
-    def handle_habit_alternatives(self, user_input: Dict):
-        """Handle the intent to suggest an alternative to a habit.
 
-        Args:
-            user_input: The input text from the user describing their habit.
-
-        Returns:
-            A practical suggestion for an alternative to the habit.
-        """
-        # Retrieve reasoning and response chains for habit alternative intent
-        reasoning_chain, response_chain = self.get_chain("habit_alternatives")
-
-        # Process user input through the reasoning chain
-        reasoning_output = reasoning_chain.invoke(user_input)
-
-        # Generate a response using the output of the reasoning chain
-        response = response_chain.invoke(reasoning_output, config=self.memory_config)
-
-        return response.content
 
     '''  
     Falta fazer a chain para isto
