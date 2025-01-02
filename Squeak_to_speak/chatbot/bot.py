@@ -13,23 +13,18 @@ from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-from chatbot.chains.ask_features import RetrieveFeatures, PresentFeatures
-from chatbot.chains.ask_missionvalues import RetrieveCompanyInfo, PresentCompanyInfo
 from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
 from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
 from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
 from chatbot.chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
 from chatbot.chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
-from chatbot.chains.habit_alternative import RoutineAlternativeRetriever, RoutineAlternativeOutputFormatter
 from chatbot.chains.insert_gratitude import GratitudeManager
 from chatbot.chains.insert_journal import JournalManager, JournalEntryResponse
 from chatbot.chains.insert_mood import RetrieveEntries, PresentEntries
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
-from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 
 class MainChatbot:
@@ -47,14 +42,8 @@ class MainChatbot:
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-                "ask_features": {
-                    "retrieve": RetrieveFeatures(pinecone_api_key="your_api_key", index_name="features_index", pdf_path="path_to_pdf"),
-                    "present": PresentFeatures(prompt_template="Your template here")
-                },
-                "ask_missionvalues": {
-                    "retrieve": RetrieveCompanyInfo(pinecone_api_key="your_api_key", index_name="missionvalues_index", pdf_path="path_to_pdf"),
-                    "present": PresentCompanyInfo(prompt_template="Your template here")
-                },
+
+    
                 "chat_about_journal": {
                     "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
                     "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
@@ -82,10 +71,6 @@ class MainChatbot:
                     "find": SupportGroupFinder(db_manager=DatabaseManager()),
                     "output": SupportGroupOutputFormatter()
                 },
-                "habit_alternatives": {
-                    "retrieve": RoutineAlternativeRetriever(pinecone_api_key="your_api_key", pinecone_env="your_pinecone_env"),
-                    "output": RoutineAlternativeOutputFormatter()
-                },
                     "insert_mood": {
                     "retrieve": RetrieveEntries(db_manager=DatabaseManager()),
                     "present": PresentEntries()
@@ -111,14 +96,6 @@ class MainChatbot:
                     "identify": IdentifyJournalEntryToModify(),
                     "modify": ModifyJournalEntry(db_manager=DatabaseManager()),
                     "inform": InformUserOfJournalChange()
-                },
-                "view_journal": {
-                    "identify": RetrieveJournalEntries(db_manager=DatabaseManager()),
-                    "present": PresentJournalEntries()
-                },
-                "view_mood": {
-                    "identify": RetrieveMoodBoardEntries(db_manager=DatabaseManager()),
-                    "present": PresentMoodBoardEntries()
                 },
                 "chitchat": {
                 "reasoning": ChitChatClassifierChain(llm=self.llm),
@@ -155,9 +132,7 @@ class MainChatbot:
         "update_mood": self.handle_update_mood,
         "chat_about_journal": self.handle_recall_entry,
         "delete_journal":self.handle_delete_journal,
-        "delete_mood":self.handle_delete_mood,
-        "view_journal": self.handle_view_journal,
-        "view_mood": self.handle_view_mood,
+        "delete_mood":self.handle_delete_mood
         }
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
@@ -209,6 +184,8 @@ class MainChatbot:
             A tuple containing the reasoning and response chain instances for the intent.
         """
         return self.chain_map[intent]["reasoning"], self.chain_map[intent]["response"]
+
+
 
     def get_user_intent(self, user_input: Dict):
         """Classify the user intent based on the input text.
@@ -359,6 +336,8 @@ class MainChatbot:
 
 
 
+    '''  
+    Falta fazer a chain para isto
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
 
@@ -392,6 +371,8 @@ class MainChatbot:
         response = view_chain.invoke(user_input)
 
         return response.content
+
+    '''
 
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.
@@ -477,6 +458,7 @@ class MainChatbot:
         response = alter_chain.invoke(user_input)
 
         return response.content
+
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:
         """Handle unknown intents by providing a chitchat response.
