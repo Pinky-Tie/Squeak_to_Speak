@@ -420,7 +420,7 @@ The chatbot should recall relevant journal or mood board entries and use that kn
 
 2. **Data Splitting**:
 
-   - Split the dataset into training and testing sets (90/10), ensuring a balanced distribution of each intention across both sets.
+   - Split the dataset into training and testing sets (80/20), ensuring a balanced distribution of each intention across both sets.
 
 3. **Training the Semantic Router**:
 

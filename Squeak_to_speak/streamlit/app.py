@@ -1,7 +1,10 @@
 """
 This file should be the entrypoint of your Streamlit App.
 """
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from dotenv import load_dotenv  # Import dotenv to load environment variables
 from chatbot.bot import MainChatbot  # Import the chatbot class
 
@@ -50,8 +53,8 @@ if __name__ == "__main__":
     # Start the main interaction loop
     main(bot)
 
-def Homepage():
+'''def Homepage():
     st.title("Homepage")
 
 pg = st.navigation([st.Page(Homepage), st.Page("login_page.py"), st.Page("user_registration.py")])
-pg.run()
+pg.run()'''
