@@ -132,7 +132,8 @@ class MainChatbot:
         "update_mood": self.handle_update_mood,
         "chat_about_journal": self.handle_recall_entry,
         "delete_journal":self.handle_delete_journal,
-        "delete_mood":self.handle_delete_mood
+        "delete_mood":self.handle_delete_mood,
+        "chat_about_journal": self.handle_recall_entry
         }
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
@@ -231,6 +232,37 @@ class MainChatbot:
     def handle_know_services(self, user_input: Dict[str, str]) -> str:
 
         response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response
+
+    def handle_recall_entry(self, user_input: Dict):
+        """Handle the intent to recall past journal entries based on theme or date.
+
+        Args:
+            user_input: The input text specifying the desired entries.
+
+        Returns:
+            A list or structured view of relevant entries.
+        """
+        # Retrieve the chain for recalling entries
+        retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
+
+        # Determine if the user wants to search by theme or date
+        if "theme" in user_input:
+            entries = retrieve_chain.query_relevant_entries(
+                user_input=user_input["theme"]
+            )
+        else:
+            entries = retrieve_chain.get_entries_by_date(
+                user_id=self.user_id,
+                entry_type=user_input.get("entry_type", "journal"),
+                start_date=user_input.get("start_date"),
+                end_date=user_input.get("end_date")
+            )
+
+        # Format the entries for presentation
+        present_chain = self.get_chain("chat_about_journal")[1]  # Assuming the second chain is for presentation
+        response = present_chain.format_output(entries, user_input.get("entry_type", "journal"))
 
         return response
 
@@ -334,10 +366,6 @@ class MainChatbot:
 
         return response.content
 
-
-
-    '''  
-    Falta fazer a chain para isto
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
 
@@ -372,7 +400,6 @@ class MainChatbot:
 
         return response.content
 
-    '''
 
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.

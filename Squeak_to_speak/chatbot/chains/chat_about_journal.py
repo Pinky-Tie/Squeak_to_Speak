@@ -13,9 +13,10 @@ load_dotenv()
 pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
 class RetrieveRelevantEntries:
-    def __init__(self, pinecone_index, embedding_model):
+    def __init__(self, pinecone_index, embedding_model, db_manager):
         self.pinecone_index = pinecone_index
         self.embedding_model = embedding_model
+        self.db_manager = db_manager
 
     def query_relevant_entries(self, user_input: str, top_k: int = 3) -> List[Dict]:
         """
@@ -38,6 +39,28 @@ class RetrieveRelevantEntries:
             {"entry_id": result.id, "text": result.metadata['text'], "score": result.score}
             for result in query_results.matches
         ]
+
+    def get_entries_by_date(self, user_id, entry_type, start_date=None, end_date=None):
+        """
+        Retrieves entries for the user based on the type (journal or mood board) and optional date range.
+        """
+        table_name = "Journal_entries" if entry_type == "journal" else "Moodboard_entries"
+
+        query = f"""
+        SELECT entry_id, content, created_at
+        FROM {table_name}
+        WHERE user_id = :user_id
+        """
+        params = {"user_id": user_id}
+
+        if start_date:
+            query += " AND created_at >= :start_date"
+            params["start_date"] = start_date
+        if end_date:
+            query += " AND created_at <= :end_date"
+            params["end_date"] = end_date
+
+        return self.db_manager.select(query, params)
 
 
 # Chain 2
