@@ -28,6 +28,8 @@ from chatbot.chains.insert_mood import RetrieveEntries, PresentEntries
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 
 class MainChatbot:
@@ -110,6 +112,14 @@ class MainChatbot:
                     "modify": ModifyJournalEntry(db_manager=DatabaseManager()),
                     "inform": InformUserOfJournalChange()
                 },
+                "view_journal": {
+                    "identify": RetrieveJournalEntries(db_manager=DatabaseManager()),
+                    "present": PresentJournalEntries()
+                },
+                "view_mood": {
+                    "identify": RetrieveMoodBoardEntries(db_manager=DatabaseManager()),
+                    "present": PresentMoodBoardEntries()
+                },
                 "chitchat": {
                 "reasoning": ChitChatClassifierChain(llm=self.llm),
                 "response": self.add_memory_to_runnable(
@@ -145,7 +155,9 @@ class MainChatbot:
         "update_mood": self.handle_update_mood,
         "chat_about_journal": self.handle_recall_entry,
         "delete_journal":self.handle_delete_journal,
-        "delete_mood":self.handle_delete_mood
+        "delete_mood":self.handle_delete_mood,
+        "view_journal": self.handle_view_journal,
+        "view_mood": self.handle_view_mood,
         }
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
@@ -197,8 +209,6 @@ class MainChatbot:
             A tuple containing the reasoning and response chain instances for the intent.
         """
         return self.chain_map[intent]["reasoning"], self.chain_map[intent]["response"]
-
-
 
     def get_user_intent(self, user_input: Dict):
         """Classify the user intent based on the input text.
@@ -349,8 +359,6 @@ class MainChatbot:
 
 
 
-    '''  
-    Falta fazer a chain para isto
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
 
@@ -384,8 +392,6 @@ class MainChatbot:
         response = view_chain.invoke(user_input)
 
         return response.content
-
-    '''
 
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.
@@ -471,7 +477,6 @@ class MainChatbot:
         response = alter_chain.invoke(user_input)
 
         return response.content
-
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:
         """Handle unknown intents by providing a chitchat response.
