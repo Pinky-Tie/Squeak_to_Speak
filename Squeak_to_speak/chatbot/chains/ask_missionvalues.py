@@ -12,7 +12,7 @@ from langchain.chains import RetrievalQA
 class RetrieveCompanyInfo:
     def __init__(self, pinecone_api_key: str, index_name: str, pdf_path: str):
         # Initialize Pinecone connection and the PDF document loader
-        pinecone.init(api_key=pinecone_api_key, environment='us-west1-gcp')  # Or your specific Pinecone environment
+        pinecone.init(api_key=pinecone_api_key, environment='us-west1-gcp')  
         self.index_name = index_name
         
         # Load and split the PDF
