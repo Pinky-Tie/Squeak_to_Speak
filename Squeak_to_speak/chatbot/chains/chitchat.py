@@ -3,7 +3,7 @@ from langchain.schema.runnable.base import Runnable
 from langchain_core.output_parsers import StrOutputParser
 from pydantic import BaseModel, Field
 
-from chatbot.chains.base import PromptTemplate, generate_prompt_templates
+from .base import PromptTemplate, generate_prompt_templates
 
 
 class ChitChatResponseChain(Runnable):
