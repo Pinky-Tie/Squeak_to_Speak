@@ -44,13 +44,25 @@ class MainChatbot:
     routing them through configured reasoning and response chains.
     """
 
-    def __init__(self):
+    def _init_(self, user_id: int, conversation_id: int):
         """Initialize the bot with session and language model configurations."""
         # Initialize the memory manager to manage session history
         self.memory = MemoryManager()
 
         # Configure the language model with specific parameters for response generation
         self.llm = ChatOpenAI(temperature=0.0, model="gpt-4o-mini")
+
+        self.db_manager = DatabaseManager(conn)
+        self.journal_manager = JournalEntryManager(self.db_manager)
+        self.journal_response = JournalEntryResponse()
+        self.user_id = user_id
+        self.conversation_id = conversation_id
+        self.memory_config = {
+            "configurable": {
+                "user_id": self.user_id,
+                "conversation_id": self.conversation_id,
+            }
+        }
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
@@ -114,7 +126,6 @@ class MainChatbot:
                     ChitChatResponseChain(llm=self.llm)
                 )
             }}
-
 
 
         self.rag = self.add_memory_to_runnable(
@@ -468,7 +479,6 @@ class MainChatbot:
 
         return response.content
 
-
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.
 
@@ -567,7 +577,6 @@ class MainChatbot:
 
         response = chitchat_response_chain.invoke(user_input, config=self.memory_config)
         return response
-
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:
         """Handle unknown intents by providing a chitchat response.
