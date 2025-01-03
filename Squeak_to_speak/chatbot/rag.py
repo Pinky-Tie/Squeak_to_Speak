@@ -9,7 +9,7 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Index, Pinecone
 
-from chatbot.chains.base import PromptTemplate, generate_prompt_templates
+from .chains.base import PromptTemplate, generate_prompt_templates
 
 
 class RAGPipeline:
