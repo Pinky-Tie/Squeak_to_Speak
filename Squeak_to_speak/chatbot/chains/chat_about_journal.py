@@ -8,6 +8,7 @@ from pinecone import Index, Pinecone
 import os
 from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
+
 from ...data.database_functions import DatabaseManager
 
 load_dotenv()
@@ -17,6 +18,7 @@ class RetrieveRelevantEntries:
     def __init__(self, embedding_model,pinecone_index='journal-data', db_manager=DatabaseManager):
         self.embedding_model = embedding_model
         self.db_manager = db_manager
+
     pc = Pinecone()
     index: Index = pc.Index("journal-messages") 
     embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")

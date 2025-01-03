@@ -259,9 +259,7 @@ The chatbot should provide the appropriate hotline contact information based on 
 
 **Test Messages:**
 
-1. "I’ve been eating junk food late at night. Can you suggest a healthier alternative?"
-2. "I want to stop smoking. What can I do instead to cope with stress?"
-3. "I need help with an unhealthy habit where I overwork myself. How can I balance work and relaxation better?"
+1. "What are some good substitutes for my coffee addiction?"
 
 **Expected Behavior:**  
 The chatbot should offer practical and healthy alternatives to the user's habits, tailored to the specifics of their request.
