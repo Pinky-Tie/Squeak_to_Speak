@@ -1,8 +1,8 @@
 # Import necessary classes and modules for chatbot functionality
 from typing import Dict
 
-from chatbot.bot import MainChatbot
-from chatbot.router.auxiliar import add_message
+from .bot import MainChatbot
+from .router.auxiliar import add_message
 
 
 class DevChatbot(MainChatbot):
