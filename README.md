@@ -1,33 +1,92 @@
-# Squeak To Speak
+  # Squeak To Speak
 
-## 1. Project Overview
+  ## 1. Project Overview
 
-- **Company Name**: Squeak to Speak
-- **Group 11**: Joana Sanches, Margarida Sardinha, Margarida Marchão, Maria Santos, Renato Bernardino
-- **Description**:  
-  Squeak to Speak revolutionizes access to mental health resources through conversational AI that provides personalized and context-based recommendations. By including LLM technology, the AI assistant continuously adapts to user needs and preferences, creating a personalized and adaptable support path that encourages emotional growth and helps users connect with the most suitable mental health resources. This approach ensures a comfortable journey toward emotional well-being, making it easier for users to find the right support while also ensuring the effective use of human psychological resources.
----
+  - **Company Name**: Squeak to Speak
+  - **Group 11**: Joana Sanches, Margarida Sardinha, Margarida Marchão, Maria Santos, Renato Bernardino
+  - **Description**:  
+    Squeak to Speak revolutionizes access to mental health resources through conversational AI that provides personalized and context-based recommendations. By including LLM technology, the AI assistant continuously adapts to user needs and preferences, creating a personalized and adaptable support path that encourages emotional growth and helps users connect with the most suitable mental health resources. This approach ensures a comfortable journey toward emotional well-being, making it easier for users to find the right support while also ensuring the effective use of human psychological resources.
+  ---
 
-## 2. How to Test the Chatbot
+  ## 2. How to Test the Chatbot
 
-### 2.1 Prerequisites
+  ### 2.1 Prerequisites
 
-- **Python Version**: 3.10.11
-- **Dependencies**:  
-  List all the required libraries and frameworks.
-- **Environment Setup**:  
-  Instructions for setting up the environment, such as creating a virtual environment or conda environment.
+  - **Python Version**: 3.10.11
+  - **Dependencies**:  
+    Found also in requirements.txt
+    
+    - langchain v.0.3.9
+    - langchain-openai v.0.2.10
+    - openai v.1.55.3
+    - pandas v.2.2.3
+    - pydantic v.2.10.2
+    - python-dotenv v.1.0.1
+    - streamlit v.1.40.2
+    - torch v.2.5.1
+    - transformers v.4.46.3
+    - langchain-pinecone v.0.2.0
+    - pinecone-client v.5.0.1
+    - semantic-router v.0.0.72
+    - langchain-community v.0.3.4
+    - python-dotenv v.1.0.1
+
+  - **Environment Setup**:
+To set up your environment for testing the chatbot, follow these steps:
+
+  *Option 1: Using venv (virtual environment)*
+  1. Create a virtual environment:
+      python3 -m venv squeak-to-speak-env
+
+  2. Activate the virtual environment:
+     
+    - On Windows:
+      squeak-to-speak-env\Scripts\activate
+
+    - On macOS/Linux:
+      source squeak-to-speak-env/bin/activate
+
+  3. Install dependencies: Ensure that requirements.txt is available in the root of your repository and install the necessary packages by running:
+  
+    pip install -r requirements.txt
+
+
+  *Option 2: Using Conda Environment*
+  1. Create a conda environment:
+     
+    conda create --name squeak-to-speak python=3.10.11
+
+  3. Activate the environment:
+
+    conda activate squeak-to-speak
+  
+  5. Install dependencies:
+
+    pip install -r requirements.txt
+
 
 ### 2.2 How to Run the Chatbot
 
-Provide a clear, step-by-step guide on how to launch and interact with the chatbot. Include any necessary commands, parameters, or configurations. Groups should provide information of an existing user so i can test the chatbot using information of that user, i will also test the registration process.
+Once the environment is set up, you can run the chatbot locally as explained below.
+
+1. Run the Streamlit app by typing in the terminal:
+
+    streamlit run app.py
+
+The app will start, and you can open your browser to http://localhost:8501 to interact with the Squeak to Speak chatbot.
+
+2. Log in to the platform, by browsing to the Login page. 
+The user account for testing is the following:
+*username* - *password*
+
+
 
 ## 3. Database Schema
 
 ### 3.1 Database Overview and Schema Diagram
 This is the database operating behind the chatbot.
 
-![Alt text](database_schema.png "Database Schema")
+![Database Schema](database_schema.png "Database Schema")
 
 ### 3.2 Table Descriptions
 
@@ -58,7 +117,10 @@ Journal entries made by the users. Being "hiden" means that the message will not
 - date: Datetime - Date of the journal entry.
 - hide_yn: Bit - Indicates whether the journal entry is hidden (Boolean).
 - time: Datetime - Time of the journal entry.
-- Gratitude_entries Table
+  
+__Gratitude_entries Table__ :
+Gratitude quotes written by the users, to be shown in a rolling banner to all users.
+
 - id: Numeric (Primary Key) - Unique identifier for each gratitude entry.
 - date: Datetime - Date of the gratitude entry.
 - comment: Nvarchar(200) - Content of the gratitude entry.
@@ -97,39 +159,232 @@ __Support_groups Table (Subtype of Helpful_Info)__
 
 ### 4.1 Implemented Intentions
 
-List and briefly describe the user intentions that the chatbot is designed to handle. For example:
+**1: I want a recommendation for a healthcare professional**
 
-**1: I want a recommendation for a healthcare professional**:
-**2: I want to know about support groups in my area**:
-**3: I want a contact for an emergency or non-emergency hotline**:
-**4: I want an alternative to a habit I have**:
-**5: I want to make an entry in my journal or mood board**:
-**6: I want to see my journal or mood board**:
-**7: I want to make an entry on the community gratitude banner**:
-**8: I want to know more about Squeak to Speak mission and values**:
-**9: I want to know what Squeak and Speak can do for me**:
-**10: I want to know what Squeak and Speak knows about me**:
-**11: I want to delete data from my Journal or Mood Board**:
-**12: I want to alter data on my Journal or Mood Board**:
-**13: I want to talk to the Chatbot having the knowledge of what I wrote in my journal**:
+Using details about the user's mental health needs, preferences, and location, deliver a personalized recommendation for a healthcare professional who matches their needs and preferences.
+
+**2: I want to know about support groups in my area**
+
+Recommend support groups to both inform the user about the support available and also to help them connect with people who face similar problems.
+
+**3: I want a contact for an emergency or non-emergency hotline**
+
+Provide contact information for relevant hotlines to quickly access support during emergencies or non-urgent situations.
+
+**4: I want an alternative to a habit I have**
+
+Using details about a habit the user wishes to change, deliver practical and quick suggestions with healthier alternatives.
+
+**5: I want to make an entry in my journal or mood board**
+
+Document the user's thoughts and feelings in a private journal or mood board to reflect, vent or track their mental health journey in a safe space.
+
+**6: I want to see my journal or mood board**
+
+Allows the user to revisit past entries in their journal or mood board to reflect, recall and understand their experiences and emotions over time
+
+**7: I want to make an entry on the community gratitude banner**
+
+Allows the user to anonymously share something they're grateful and/or happy for so that they can help brighten someone else’s day while fostering their own positivity.
+
+**8: I want to know more about Squeak to Speak mission and values**
+
+Allows the user to learn more about Squeak to Speak as a company to build trust and confidence in its services.
+
+**9: I want to know what Squeak and Speak can do for me**
+
+Allows the user to explore Squeak to Speak’s features to make the most of its capabilities.
+
+**10: I want to know what Squeak and Speak knows about me**
+
+Review the data Squeak to Speak holds about the user to better understand what is collected and how it is used.
+
+**11: I want to delete data from my Journal or Mood Board**
+
+Delete entries from the user's journal or mood board to maintain control over the information stored about them.
+
+**12: I want to alter data on my Journal or Mood Board**
+
+Modify entries in the user's journal or mood board to correct errors and make necessary updates.
+
+**13: I want to talk to the Chatbot having the knowledge of what I wrote in my journal**
+
+Communicate with Squeak to Speak’s assistant, leveraging its understanding of the user's journal and mood board to create more empathetic interactions.
 
 
 ### 4.2 How to Test Each Intention
 
 For each intention, provide 3 examples of test messages that users can use to verify the chatbot's functionality. Include both typical and edge-case inputs to ensure the chatbot handles various scenarios.
 
-#### Product Information
+#### 1. I want a recommendation for a healthcare professional
 
 **Test Messages:**
 
-1. "Tell me about the latest phone models."
-2. "Give me more details about the tablet in your store."
-3. "What products do you offer in the electronics section?"
+1. "Can you recommend a therapist who specializes in anxiety and is based in Lisbon?"
+2. "I'm looking for a therapist who can help with both depression and marriage issues. Can you find one?"
+3. "I need a healthcare professional who can help me with bipolar disorder. Does the recommendation include online options?"
 
 **Expected Behavior:**  
-The chatbot should retrieve and present information about the specific product or category the user is inquiring about.
+The chatbot should provide a personalized recommendation for a healthcare professional that fits the user’s specified needs and location, including any relevant options such as online services.
 
 ---
+
+#### 2. I want to know about support groups in my area
+
+**Test Messages:**
+
+1. "Are there any support groups for people struggling with anxiety in Lisbon?"
+2. "Can you tell me if there are any grief support groups near me?"
+3. "I need a support group for people who have dealt with childhood trauma. Do you have anything like that?"
+
+**Expected Behavior:**  
+The chatbot should provide information about local support groups that match the user's needs, including details like group type and location.
+
+---
+
+#### 3. I want a contact for an emergency or non-emergency hotline
+
+**Test Messages:**
+
+1. "What’s the contact for a suicide prevention hotline in my area?"
+2. "I need the contact for a mental health crisis hotline in Lisbon, please."
+3. "Can you provide the contact for a non-emergency mental health helpline that operates after hours?"
+
+**Expected Behavior:**  
+The chatbot should provide the appropriate hotline contact information based on the urgency and location specified by the user.
+
+---
+
+#### 4. I want an alternative to a habit I have
+
+**Test Messages:**
+
+1. "I’ve been eating junk food late at night. Can you suggest a healthier alternative?"
+2. "I want to stop smoking. What can I do instead to cope with stress?"
+3. "I need help with an unhealthy habit where I overwork myself. How can I balance work and relaxation better?"
+
+**Expected Behavior:**  
+The chatbot should offer practical and healthy alternatives to the user's habits, tailored to the specifics of their request.
+
+---
+
+#### 5. I want to make an entry in my journal or mood board
+
+**Test Messages:**
+
+1. "Can you add an entry in my journal saying that I'm feeling overwhelmed today?"
+2. "Can you add a mood board entry with a quote I liked today?"
+3. "I want to write about my anxiety, but I don’t know how to express it. Can you help me get started?"
+
+**Expected Behavior:**  
+The chatbot should add a new entry to the user's journal or mood board based on their input and ensure it is saved for future reference.
+
+---
+
+#### 6. I want to see my journal or mood board
+
+**Test Messages:**
+
+1. "Can you show me what I wrote in my journal last week?"
+2. "Can I look at all my entries about stress from the past month?"
+3. "I forgot if I wrote anything positive in my mood board last week. Can you check?"
+
+**Expected Behavior:**  
+The chatbot should retrieve and display relevant entries from the user's journal or mood board, allowing them to review their past thoughts and emotions.
+
+---
+
+#### 7. I want to make an entry on the community gratitude banner
+
+**Test Messages:**
+
+1. "I want to share that I’m grateful for my family. Can you add that to the gratitude banner?"
+2. "I want to share something really personal that I'm thankful for. Can it remain anonymous?"
+3. "Can I add an entry about how grateful I am for this service?"
+
+**Expected Behavior:**  
+The chatbot should add an entry to the community gratitude banner, ensuring it respects any privacy preferences.
+
+---
+
+#### 8. I want to know more about Squeak to Speak mission and values
+
+**Test Messages:**
+
+1. "Can you tell me more about what Squeak to Speak stands for?"
+2. "How does Squeak to Speak incorporate mental health awareness into its mission?"
+3. "What values drive the development of Squeak to Speak’s AI assistant?"
+
+**Expected Behavior:**  
+The chatbot should provide clear information about the company's mission, values, and how they align with its services and technology.
+
+---
+
+#### 9. I want to know what Squeak and Speak can do for me
+
+**Test Messages:**
+
+1. "What features does Squeak to Speak offer for managing mental health?"
+2. "Can I use Squeak to Speak to find mental health professionals and attend support groups?"
+3. "What can Squeak to Speak do to help me with stress and anxiety management?"
+
+**Expected Behavior:**  
+The chatbot should outline the key features and capabilities of Squeak to Speak, helping the user understand how it can assist them with their mental health.
+
+---
+
+#### 10. I want to know what Squeak and Speak knows about me
+
+**Test Messages:**
+
+1. "Can you tell me what information Squeak to Speak holds about my mental health?"
+2. "What kind of data does Squeak to Speak keep about my journal entries and mood board?"
+3. "I want to know if Squeak to Speak tracks any personal information, like my preferences or location."
+
+**Expected Behavior:**  
+The chatbot should provide transparency about the data Squeak to Speak collects, how it's used, and what the user can review or modify.
+
+---
+
+#### 11. I want to delete data from my Journal or Mood Board
+
+**Test Messages:**
+
+1. "Can you delete the last entry from my journal?"
+2. "I want to delete an entire month of entries from my mood board. Can you do that?"
+3. "Can you permanently remove all my journal entries from the past year?"
+
+**Expected Behavior:**  
+The chatbot should delete the requested data from the journal or mood board and confirm the deletion.
+
+---
+
+#### 12. I want to alter data on my Journal or Mood Board
+
+**Test Messages:**
+
+1. "Can you update my journal entry from yesterday to reflect how I feel now?"
+2. "I want to edit my mood board entry to add that I’m feeling more positive."
+3. "Can you change the date on my journal entry from last week to today’s date?"
+
+**Expected Behavior:**  
+The chatbot should allow the user to modify existing entries with new information, ensuring the updates are correctly saved.
+
+---
+
+#### 13. I want to talk to the Chatbot having the knowledge of what I wrote in my journal
+
+**Test Messages:**
+
+1. "Can you help me reflect on my journal entries about stress?"
+2. "Can you remember what I wrote last month about feeling overwhelmed?"
+3. "Can you pull up some of my past journal entries on mental health challenges so we can talk about them?"
+
+**Expected Behavior:**  
+The chatbot should recall relevant journal or mood board entries and use that knowledge to provide personalized and empathetic responses.
+
+
+
 
 ## 5. Intention Router
 
@@ -165,7 +420,7 @@ The chatbot should retrieve and present information about the specific product o
 
 2. **Data Splitting**:
 
-   - Split the dataset into training and testing sets (90/10), ensuring a balanced distribution of each intention across both sets.
+   - Split the dataset into training and testing sets (80/20), ensuring a balanced distribution of each intention across both sets.
 
 3. **Training the Semantic Router**:
 
@@ -176,18 +431,24 @@ The chatbot should retrieve and present information about the specific product o
    - If applicable, apply post-processing using an LLM to improve the accuracy of the router. Report accuracy on both the training and testing splits after post-processing.
 
 5. **Reporting Results**:
-   - Report the accuracy for each intention, as well as the overall accuracy. Accuracy should be calculated as the percentage of correct responses out of the total inputs for each intention.
 
 ### Results
 
-Present the accuracy results in a table format:
 
-| Intention            | Test Inputs | Correct | Incorrect | Accuracy (%) |
-| -------------------- | ----------- | ------- | --------- | ------------ |
-| Product Information  | 10          | 9       | 1         | 90%          |
-| Order Status         | 10          | 8       | 2         | 80%          |
-| Create Order         | 10          | 7       | 3         | 70%          |
-| **Average Accuracy** | 30          | 24      | 6         | 80%          |
+| Intention              | Test Inputs | Correct | Incorrect | Accuracy (%) |
+|------------------------|-------------|---------|-----------|--------------|
+| update_journal         | 4           | 2       | 2         | 50.0         |
+| find_support_group     | 3           | 2       | 1         | 66.67        |
+| ask_features           | 2           | 2       | 0         | 100.0        |
+| find_therapist         | 3           | 3       | 0         | 100.0        |
+| find_hotline           | 3           | 3       | 0         | 100.0        |
+| chat_about_journal     | 1           | 0       | 1         | 0.0          |
+| insert_mood            | 2           | 0       | 2         | 0.0          |
+| review_user_memory     | 1           | 0       | 1         | 0.0          |
+| insert_journal         | 2           | 2       | 0         | 100.0        |
+| ask_missionvalues      | 2           | 2       | 0         | 100.0        |
+| **Average Accuracy**   | 23          | 16      | 7         | 69.57        |
+
 
 ```
 
