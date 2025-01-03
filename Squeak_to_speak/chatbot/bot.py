@@ -43,11 +43,19 @@ class MainChatbot:
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-
-    
                 "chat_about_journal": {
-                    "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
-                    "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
+                    "retrieve": RetrieveRelevantEntries(embedding_model="sentence-transformers/all-MiniLM-L6-v2"),
+                    "generate": GenerateEmpatheticResponse(prompt_template="""
+                        You are a helpful and empathetic assistant. Use the following journal entries to generate a thoughtful and empathetic response to the user's query.
+                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
+                        Use three sentences maximum and keep the answer as concise as possible.
+
+                        {context}
+
+                        Question: {customer_input}
+
+                        Helpful Answer:
+                    """)
                 },
                 "delete_mood": {
                     "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager()),
