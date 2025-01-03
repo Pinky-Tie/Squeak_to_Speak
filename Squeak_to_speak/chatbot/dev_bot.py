@@ -1,8 +1,8 @@
 # Import necessary classes and modules for chatbot functionality
 from typing import Dict
 
-from Squeak_to_speak.chatbot.bot import MainChatbot
-from Squeak_to_speak.chatbot.router.auxiliar import add_message
+from chatbot.bot import MainChatbot
+from chatbot.router.auxiliar import add_message
 
 
 class DevChatbot(MainChatbot):

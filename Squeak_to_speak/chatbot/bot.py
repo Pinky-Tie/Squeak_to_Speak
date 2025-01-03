@@ -1,13 +1,31 @@
 # Import necessary classes and modules for chatbot functionality
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, List, Union
+from dateutil.parser import parse
 
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
 
-from Squeak_to_speak.chatbot.agents.agent1 import Agent1
-from Squeak_to_speak.chatbot.chains.chain3 import ReasoningChain3, ResponseChain3
-from Squeak_to_speak.chatbot.memory import MemoryManager
-from Squeak_to_speak.chatbot.router.loader import load_intention_classifier
+from chatbot.memory import MemoryManager
+from chatbot.router.loader import load_intention_classifier
+
+from chatbot.memory import MemoryManager
+from chatbot.router.loader import load_intention_classifier
+from data.database_functions import DatabaseManager
+from chatbot.rag import RAGPipeline
+
+from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
+from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
+from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
+from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
+from chatbot.chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
+from chatbot.chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
+from chatbot.chains.insert_gratitude import GratitudeManager
+from chatbot.chains.insert_journal import JournalManager, JournalEntryResponse
+from chatbot.chains.insert_mood import RetrieveEntries, PresentEntries
+from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
+from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
+from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 
 
 class MainChatbot:
@@ -25,17 +43,69 @@ class MainChatbot:
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-            "product_information": {
-                "reasoning": ReasoningChain3(llm=self.llm),  # Reasoning chain
-                "response": self.add_memory_to_runnable(
-                    ResponseChain3(llm=self.llm)  # Response chain with memory
-                ),
-            }
-        }
 
-        self.agent_map = {
-            "order": self.add_memory_to_runnable(Agent1(llm=self.llm).agent_executor)
-        }
+    
+                "chat_about_journal": {
+                    "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
+                    "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
+                },
+                "delete_mood": {
+                    "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager()),
+                    "confirm": MoodBoardDeletionConfirmationFormatter()
+                },
+                "delete_journal": {
+                    "delete": JournalEntryDeleter(db_manager=DatabaseManager()),
+                    "confirm": DeletionConfirmationFormatter()
+                },
+                "find_hotline": {
+                    "identify": IdentifyHotlinePreferences(),
+                    "find": HotlineFinder(db_manager=DatabaseManager()),
+                    "output": HotlineOutputFormatter()
+                },
+                "find_therapist": {
+                    "identify": IdentifyUserPreferences(),
+                    "find": TherapistFinder(db_manager=DatabaseManager()),
+                    "output": TherapistOutputFormatter()
+                },
+                "find_support_group": {
+                    "identify": IdentifySupportGroupPreferences(),
+                    "find": SupportGroupFinder(db_manager=DatabaseManager()),
+                    "output": SupportGroupOutputFormatter()
+                },
+                    "insert_mood": {
+                    "retrieve": RetrieveEntries(db_manager=DatabaseManager()),
+                    "present": PresentEntries()
+                },
+                "insert_journal": {
+                    "insert": JournalManager(db_manager=DatabaseManager()),
+                    "response": JournalEntryResponse()
+                },
+                "insert_gratitude": {
+                    "insert": GratitudeManager(db_manager=DatabaseManager()),
+                    "response": GratitudeManager(db_manager=DatabaseManager())
+                },
+                "review_user_memory": {
+                    "retrieve": RetrieveUserData(db_manager=DatabaseManager()),
+                    "present": PresentUserData(prompt_template="Your template here")
+                },
+                "update_mood": {
+                    "identify": IdentifyMoodBoardEntryToModify(),
+                    "modify": ModifyMoodBoardEntry(db_manager=DatabaseManager()),
+                    "inform": InformUserOfMoodBoardChange()
+                },
+                "update_journal": {
+                    "identify": IdentifyJournalEntryToModify(),
+                    "modify": ModifyJournalEntry(db_manager=DatabaseManager()),
+                    "inform": InformUserOfJournalChange()
+                },
+                "chitchat": {
+                "reasoning": ChitChatClassifierChain(llm=self.llm),
+                "response": self.add_memory_to_runnable(
+                    ChitChatResponseChain(llm=self.llm)
+                )
+            }}
+
+
 
         self.rag = self.add_memory_to_runnable(
             RAGPipeline(
@@ -48,20 +118,24 @@ class MainChatbot:
 
         # Map of intentions to their corresponding handlers
         self.intent_handlers: Dict[Optional[str], Callable[[Dict[str, str]], str]] = {
-            "support_information": self.handle_support_information,
-            'rec_therapist' : self.handle_rec_therapist,
-            'rec_group' : self.handle_rec_group,
-            'rec_hotline': self.handle_rec_hotline,
-            'alt_habit': self.handle_alt_habit,
-            'entry_journal_mood': self.handle_entry_journal_mood,
-            'entry_banner': self.handle_entry_banner,
-            'know_mission': self.handle_know_mission,
-            'know_services': self.handle_know_services,
-            'know_data': self.handle_know_data,
-            'alter_entry': self.handle_alter_entry,
-            'recall_entry': self.handle_recall_entry
+        "review_user_memory": self.handle_support_information,
+        "find_therapist": self.handle_find_therapist,
+        "find_support_group": self.handle_find_support_group,
+        "find_hotline": self.handle_find_hotline,
+        "habit_alternatives": self.handle_habit_alternatives,
+        "insert_mood": self.handle_insert_mood,
+        "insert_journal": self.handle_insert_journal,
+        "insert_gratitude": self.handle_insert_gratitude,
+        "ask_missionvalues": self.handle_know_mission,
+        "ask_features": self.handle_know_services,
+        "review_user_memory": self.handle_know_data,
+        "update_journal": self.handle_update_journal,
+        "update_mood": self.handle_update_mood,
+        "chat_about_journal": self.handle_recall_entry,
+        "delete_journal":self.handle_delete_journal,
+        "delete_mood":self.handle_delete_mood,
+        "chat_about_journal": self.handle_recall_entry
         }
-
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
 
@@ -113,17 +187,6 @@ class MainChatbot:
         """
         return self.chain_map[intent]["reasoning"], self.chain_map[intent]["response"]
 
-    def get_agent(self, intent: str):
-        """Retrieve the agent based on user intent.
-
-        Args:
-            intent: The identified intent of the user input.
-
-        Returns:
-            The agent instance for the intent.
-        """
-        return self.agent_map[intent]
-
     def get_user_intent(self, user_input: Dict):
         """Classify the user intent based on the input text.
 
@@ -157,10 +220,119 @@ class MainChatbot:
             )
             return None
 
-#FUNCOES PARA DAR HANDLE A CADA INTENTION   
+    def get_random_gratitude_message(self) -> str:
+        """
+        Retrieves a random gratitude message from the gratitude_entries table.
 
-    def handle_product_information(self, user_input: Dict):
-        """Handle the product information intent by processing user input and providing a response.
+        Returns:
+            A random gratitude message.
+        """
+        query = """
+        SELECT content
+        FROM gratitude_entries
+        ORDER BY RANDOM()
+        LIMIT 1
+        """
+        result = self.db_manager.select(query)
+        if result:
+            return result[0]['content']
+        else:
+            return "No gratitude messages found."
+
+#Functions to handle each intention
+
+    def handle_know_mission(self, user_input: Dict[str, str]) -> str:
+
+        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response
+
+    def handle_know_services(self, user_input: Dict[str, str]) -> str:
+
+        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response
+
+    def extract_dates(self, text: str) -> Dict[str, Union[str, None]]:
+        """
+        Extracts dates from the input text.
+
+        Args:
+            text: The input text from the user.
+
+        Returns:
+            A dictionary with possible start_date and end_date.
+        """
+        words = text.split()
+        dates = [parse(word, fuzzy=True) for word in words if self.is_date(word)]
+        if len(dates) == 1:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": None}
+        elif len(dates) >= 2:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": dates[1].strftime('%Y-%m-%d')}
+        return {"start_date": None, "end_date": None}
+
+    def is_date(self, string: str) -> bool:
+        """
+        Checks if a string can be parsed as a date.
+
+        Args:
+            string: The input string.
+
+        Returns:
+            True if the string can be parsed as a date, False otherwise.
+        """
+        try:
+            parse(string, fuzzy=False)
+            return True
+        except ValueError:
+            return False
+
+    def handle_recall_entry(self, user_input: Dict):
+        """Handle the intent to recall past journal entries based on theme or date.
+
+        Args:
+            user_input: The input text specifying the desired entries.
+
+        Returns:
+            A list or structured view of relevant entries.
+        """
+        # Extract dates from user input
+        dates = self.extract_dates(user_input["customer_input"])
+
+        # Retrieve the chain for recalling entries
+        retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
+
+        # Set the appropriate Pinecone index based on user input
+        if "index_name" in user_input:
+            retrieve_chain.set_pinecone_index(user_input["index_name"])
+
+        # Determine if the user wants to search by date or theme
+        if dates["start_date"] or dates["end_date"]:
+            entries = retrieve_chain.get_entries_by_date(
+                user_id=self.user_id,
+                entry_type=user_input.get("entry_type", "journal"),
+                start_date=dates["start_date"],
+                end_date=dates["end_date"]
+            )
+        else:
+            entries = retrieve_chain.query_relevant_entries(
+                user_input=user_input["theme"]
+            )
+
+        # Format the entries for presentation
+        present_chain = self.get_chain("chat_about_journal")[1]  # Assuming the second chain is for presentation
+        response = present_chain.format_output(entries, user_input.get("entry_type", "journal"))
+
+        return response
+
+    def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
+
+        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+
+        return response       
+
+    def handle_find_therapist(self, user_input: Dict):
+        """Handle the healthcare professional recommendation intent.
 
         Args:
             user_input: The input text from the user.
@@ -168,8 +340,8 @@ class MainChatbot:
         Returns:
             The content of the response after processing through the chains.
         """
-        # Retrieve reasoning and response chains for the product information intent
-        reasoning_chain, response_chain = self.get_chain("product_information")
+        # Retrieve reasoning and response chains for the healthcare recommendation intent
+        reasoning_chain, response_chain = self.get_chain("find_therapist")
 
         # Process user input through the reasoning chain
         reasoning_output = reasoning_chain.invoke(user_input)
@@ -179,8 +351,8 @@ class MainChatbot:
 
         return response.content
 
-    def handle_order_intent(self, user_input: Dict):
-        """Handle the order intent by processing user input and providing a response.
+    def handle_find_support_group(self, user_input: Dict):
+        """Handle the support group recommendation intent.
 
         Args:
             user_input: The input text from the user.
@@ -188,19 +360,191 @@ class MainChatbot:
         Returns:
             The content of the response after processing through the chains.
         """
-        # Retrieve the agent for the order intent
-        agent = self.get_agent("order")
+        # Retrieve reasoning and response chains for the support group recommendation intent
+        reasoning_chain, response_chain = self.get_chain("find_support_group")
 
-        # Process user input through the agent
-        response = agent.invoke(
-            {
-                "customer_id": self.user_id,
-                "customer_input": user_input["customer_input"],
-            },
-            config=self.memory_config,
-        )
+        # Process user input through the reasoning chain
+        reasoning_output = reasoning_chain.invoke(user_input)
 
-        return response["output"]
+        # Generate a response using the output of the reasoning chain
+        response = response_chain.invoke(reasoning_output, config=self.memory_config)
+
+        return response.content
+
+    def handle_find_hotline(self, user_input: Dict):
+        """Handle the emergency or non-emergency hotline contact intent.
+
+        Args:
+            user_input: The input text from the user.
+
+        Returns:
+            The content of the response after processing through the chains.
+        """
+        # Retrieve reasoning and response chains for the hotline contact intent
+        reasoning_chain, response_chain = self.get_chain("find_hotline")
+
+        # Process user input through the reasoning chain
+        reasoning_output = reasoning_chain.invoke(user_input)
+
+        # Generate a response using the output of the reasoning chain
+        response = response_chain.invoke(reasoning_output, config=self.memory_config)
+
+        return response.content
+
+    def handle_insert_journal(self, user_input: Dict):
+        """Handle the intent to make an entry in the journal.
+
+        Args:
+            user_input: The input text from the user.
+
+        Returns:
+            Confirmation message after successfully processing the journal entry.
+        """
+        # Retrieve the chain for journal entry creation
+        entry_chain = self.get_chain("insert_journal")
+
+        # Process the user input through the entry chain
+        response = entry_chain.invoke(user_input)
+
+        return response.content
+
+    def handle_insert_mood(self, user_input: Dict):
+        """Handle the intent to make an entry in the mood board.
+
+        Args:
+            user_input: The input text from the user.
+
+        Returns:
+            Confirmation message after successfully processing the mood board entry.
+        """
+        # Retrieve the chain for mood board entry creation
+        entry_chain = self.get_chain("insert_mood")
+
+        # Process the user input through the entry chain
+        response = entry_chain.invoke(user_input)
+
+        return response.content
+
+    def handle_view_journal(self, user_input: Dict):
+        """Handle the intent to view past journal entries.
+
+        Args:
+            user_input: The input text specifying the desired journal entries.
+
+        Returns:
+            A list or structured view of relevant journal entries.
+        """
+        # Retrieve the chain for viewing journal entries
+        view_chain = self.get_chain("view_journal")
+
+        # Query the chain for the requested journal entries
+        response = view_chain.invoke(user_input)
+
+        return response.content
+    
+    def handle_view_mood(self, user_input: Dict):
+        """Handle the intent to view past mood board entries.
+
+        Args:
+            user_input: The input text specifying the desired mood board entries.
+
+        Returns:
+            A list or structured view of relevant mood board entries.
+        """
+        # Retrieve the chain for viewing mood board entries
+        view_chain = self.get_chain("view_mood")
+
+        # Query the chain for the requested mood board entries
+        response = view_chain.invoke(user_input)
+
+        return response.content
+
+
+    def handle_insert_gratitude(self, user_input: Dict):
+        """Handle the intent to make an entry on the community gratitude banner.
+
+        Args:
+            user_input: The input text from the user expressing gratitude or positivity.
+
+        Returns:
+            Confirmation message after successfully posting to the gratitude banner.
+        """
+        # Retrieve the chain for creating a gratitude banner entry
+        entry_chain = self.get_chain("insert_gratitude")
+
+        # Process the user input through the entry chain
+        response = entry_chain.invoke(user_input)
+
+        return response.content
+
+    def handle_delete_journal(self, user_input: Dict):
+        """Handle the intent to delete data from the user's journal.
+
+        Args:
+            user_input: The input text specifying the journal entry to delete.
+
+        Returns:
+            Confirmation message after successfully deleting the journal entry.
+        """
+        # Retrieve the chain for deleting a journal entry
+        delete_chain = self.get_chain("delete_journal")
+
+        # Process the user input through the delete chain
+        response = delete_chain.invoke(user_input)
+
+        return response.content
+
+    def handle_delete_mood(self, user_input: Dict):
+        """Handle the intent to delete data from the user's mood board.
+
+        Args:
+            user_input: The input text specifying the mood board entry to delete.
+
+        Returns:
+            Confirmation message after successfully deleting the mood board entry.
+        """
+        # Retrieve the chain for deleting a mood board entry
+        delete_chain = self.get_chain("delete_mood")
+
+        # Process the user input through the delete chain
+        response = delete_chain.invoke(user_input)
+
+        return response.content
+
+    def handle_update_journal(self, user_input: Dict):
+        """Handle the intent to alter data in the user's journal.
+
+        Args:
+            user_input: The input text specifying the journal entry to alter and new data.
+
+        Returns:
+            Confirmation message after successfully updating the journal entry.
+        """
+        # Retrieve the chain for altering a journal entry
+        alter_chain = self.get_chain("update_journal")
+
+        # Process the user input through the alter chain
+        response = alter_chain.invoke(user_input)
+
+        return response.content
+
+    def handle_update_mood(self, user_input: Dict):
+        """Handle the intent to alter data in the user's mood board.
+
+        Args:
+            user_input: The input text specifying the mood board entry to alter and new data.
+
+        Returns:
+            Confirmation message after successfully updating the mood board entry.
+        """
+        # Retrieve the chain for altering a mood board entry
+        alter_chain = self.get_chain("update_mood")
+
+        # Process the user input through the alter chain
+        response = alter_chain.invoke(user_input)
+
+        return response.content
+
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:
         """Handle unknown intents by providing a chitchat response.
@@ -212,17 +556,18 @@ class MainChatbot:
             The content of the response after processing through the new chain.
         """
         possible_intention = [
-            'rec_therapist',
-            'rec_group',
-            'rec_hotline',
-            'alt_habit',
-            'entry_journal_mood',
-            'entry_banner',
-            'know_mission',
-            'know_services',
-            'know_data',
-            'alter_entry',
-            'recall_entry'
+        "review_user_memory"
+        "find_therapist"
+        "find_support_group"
+        "find_hotline"
+        "habit_alternatives"
+        "insert_mood"
+        "insert_journal"
+        "ask_missionvalues"
+        "ask_features"
+        "review_user_memory"
+        "update_journal"
+        "chat_about_journal"
         ]
 
         chitchat_reasoning_chain, _ = self.get_chain("chitchat")
