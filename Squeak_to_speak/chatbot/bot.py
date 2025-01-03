@@ -43,12 +43,11 @@ class MainChatbot:
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-
-    
                 "chat_about_journal": {
                     "retrieve": RetrieveRelevantEntries(embedding_model="sentence-transformers/all-MiniLM-L6-v2"),
                     "generate": GenerateEmpatheticResponse(prompt_template="""
                         You are a helpful and empathetic assistant. Use the following journal entries to generate a thoughtful and empathetic response to the user's query.
+
                         If you don't know the answer, just say that you don't know, don't try to make up an answer.
                         Use three sentences maximum and keep the answer as concise as possible.
 
@@ -96,7 +95,17 @@ class MainChatbot:
                 },
                 "review_user_memory": {
                     "retrieve": RetrieveUserData(db_manager=DatabaseManager()),
-                    "present": PresentUserData(prompt_template="Your template here")
+                    "present": PresentUserData(prompt_template="""
+                        Use the following user data to generate a summary of the user's memory.
+                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
+                        Use three sentences maximum and keep the answer as concise as possible.
+
+                        {context}
+
+                        Question: {customer_input}
+
+                        Helpful Answer:
+                    """)
                 },
                 "update_mood": {
                     "identify": IdentifyMoodBoardEntryToModify(),
