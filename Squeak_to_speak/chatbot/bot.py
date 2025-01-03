@@ -47,7 +47,17 @@ class MainChatbot:
     
                 "chat_about_journal": {
                     "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
-                    "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
+                    "generate": GenerateEmpatheticResponse(prompt_template="""
+                        Use the following journal entries to generate an empathetic response to the user's query.
+                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
+                        Use three sentences maximum and keep the answer as concise as possible.
+
+                        {context}
+
+                        Question: {customer_input}
+
+                        Helpful Answer:
+                    """)
                 },
                 "delete_mood": {
                     "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager()),
@@ -86,7 +96,17 @@ class MainChatbot:
                 },
                 "review_user_memory": {
                     "retrieve": RetrieveUserData(db_manager=DatabaseManager()),
-                    "present": PresentUserData(prompt_template="Your template here")
+                    "present": PresentUserData(prompt_template="""
+                        Use the following user data to generate a summary of the user's memory.
+                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
+                        Use three sentences maximum and keep the answer as concise as possible.
+
+                        {context}
+
+                        Question: {customer_input}
+
+                        Helpful Answer:
+                    """)
                 },
                 "update_mood": {
                     "identify": IdentifyMoodBoardEntryToModify(),
