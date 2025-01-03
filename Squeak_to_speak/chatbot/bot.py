@@ -187,8 +187,6 @@ class MainChatbot:
         """
         return self.chain_map[intent]["reasoning"], self.chain_map[intent]["response"]
 
-
-
     def get_user_intent(self, user_input: Dict):
         """Classify the user intent based on the input text.
 
@@ -221,6 +219,25 @@ class MainChatbot:
                 f"I'm sorry, I didn't understand that. The intention type is {intention_type}."
             )
             return None
+
+    def get_random_gratitude_message(self) -> str:
+        """
+        Retrieves a random gratitude message from the gratitude_entries table.
+
+        Returns:
+            A random gratitude message.
+        """
+        query = """
+        SELECT content
+        FROM gratitude_entries
+        ORDER BY RANDOM()
+        LIMIT 1
+        """
+        result = self.db_manager.select(query)
+        if result:
+            return result[0]['content']
+        else:
+            return "No gratitude messages found."
 
 #Functions to handle each intention
 
