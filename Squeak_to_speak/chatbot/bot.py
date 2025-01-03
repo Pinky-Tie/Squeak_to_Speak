@@ -5,27 +5,27 @@ from dateutil.parser import parse
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
 
-from chatbot.memory import MemoryManager
-from chatbot.router.loader import load_intention_classifier
+from .memory import MemoryManager
+from .router.loader import load_intention_classifier
 
-from chatbot.memory import MemoryManager
-from chatbot.router.loader import load_intention_classifier
-from data.database_functions import DatabaseManager
-from chatbot.rag import RAGPipeline
+from .memory import MemoryManager
+from .router.loader import load_intention_classifier
+from ..data.database_functions import DatabaseManager
+from .rag import RAGPipeline
 
-from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
-from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
-from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
-from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
-from chatbot.chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
-from chatbot.chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
-from chatbot.chains.insert_gratitude import GratitudeManager
-from chatbot.chains.insert_journal import JournalManager, JournalEntryResponse
-from chatbot.chains.insert_mood import RetrieveEntries, PresentEntries
-from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
-from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
-from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+from .chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
+from .chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+from .chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
+from .chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
+from .chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
+from .chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
+from .chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
+from .chains.insert_gratitude import GratitudeManager
+from .chains.insert_journal import JournalManager, JournalEntryResponse
+from .chains.insert_mood import RetrieveEntries, PresentEntries
+from .chains.review_user_memory import RetrieveUserData, PresentUserData
+from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
+from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 
 
 class MainChatbot:
