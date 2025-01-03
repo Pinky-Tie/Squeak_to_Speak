@@ -27,10 +27,13 @@ from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
 import sqlite3
-db_file = r'D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
+db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db"
 
 # Connect to the SQLite database
 conn = sqlite3.connect(db_file)
@@ -42,13 +45,25 @@ class MainChatbot:
     routing them through configured reasoning and response chains.
     """
 
-    def __init__(self):
+    def __init__(self, user_id: int, conversation_id: int):
         """Initialize the bot with session and language model configurations."""
         # Initialize the memory manager to manage session history
         self.memory = MemoryManager()
 
         # Configure the language model with specific parameters for response generation
         self.llm = ChatOpenAI(temperature=0.0, model="gpt-4o-mini")
+
+        self.db_manager = DatabaseManager(conn)
+        self.journal_manager = JournalManager(self.db_manager)
+        self.journal_response = JournalEntryResponse()
+        self.user_id = user_id
+        self.conversation_id = conversation_id
+        self.memory_config = {
+            "configurable": {
+                "user_id": self.user_id,
+                "conversation_id": self.conversation_id,
+            }
+        }
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
@@ -86,8 +101,8 @@ class MainChatbot:
                     "present": PresentEntries()
                 },
                 "insert_journal": {
-                    "insert": JournalManager(db_manager=DatabaseManager(conn), llm=self.llm),
-                    "response": JournalEntryResponse()
+                    "insert": self.journal_manager,
+                    "response": self.journal_response
                 },
                 "insert_gratitude": {
                     "insert": GratitudeManager(db_manager=DatabaseManager(conn)),
@@ -114,6 +129,8 @@ class MainChatbot:
                 )
             }}
 
+
+        
 
 
         self.rag = self.add_memory_to_runnable(
@@ -147,21 +164,7 @@ class MainChatbot:
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
 
-    def user_login(self, user_id: str, conversation_id: str) -> None:
-        """Log in a user by setting the user and conversation identifiers.
 
-        Args:
-            user_id: Identifier for the user.
-            conversation_id: Identifier for the conversation.
-        """
-        self.user_id = user_id
-        self.conversation_id = conversation_id
-        self.memory_config = {
-            "configurable": {
-                "user_id": self.user_id,
-                "conversation_id": self.conversation_id,
-            }
-        }
 
     def add_memory_to_runnable(self, original_runnable):
         """Wrap a runnable with session history functionality.
@@ -399,22 +402,16 @@ class MainChatbot:
 
         return response.content
 
-    def handle_insert_journal(self, user_input: Dict):
-        """Handle the intent to make an entry in the journal.
+    def handle_insert_journal(self, user_input: Dict[str, str]) -> str:
+        """Handles journal entry intent by processing user input and providing a response."""
+        user_message = user_input.get("message", "")
+        # Step 1: Process user message with the reasoning chain
+        result = self.journal_manager.process(user_id=self.user_id, user_message=user_message)
 
-        Args:
-            user_input: The input text from the user.
+        # Step 2: Generate response with the response chain
+        response = self.journal_response.generate(result["success"])
 
-        Returns:
-            Confirmation message after successfully processing the journal entry.
-        """
-        # Retrieve the chain for journal entry creation
-        entry_chain = self.get_chain("insert_journal")
-
-        # Process the user input through the entry chain
-        response = entry_chain.invoke(user_input)
-
-        return response.content
+        return response
 
     def handle_insert_mood(self, user_input: Dict):
         """Handle the intent to make an entry in the mood board.

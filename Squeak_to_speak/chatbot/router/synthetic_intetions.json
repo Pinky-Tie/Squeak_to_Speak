@@ -6,7 +6,7 @@
     },
     {
         "Intention": "find_therapist",
-        "Message": "I'm looking for a counselor who specializes in grief therapy.",
+        "Message": "I'm looking for a counselor who specializes in grief support.",
         "Id": 2
     },
     {
@@ -31,22 +31,22 @@
     },
     {
         "Intention": "find_therapist",
-        "Message": "I'm seeking a therapist who focuses on family issues.",
+        "Message": "I'm seeking a therapist for couples counseling in my area.",
         "Id": 7
     },
     {
         "Intention": "find_therapist",
-        "Message": "What are my options for finding a therapist in Los Angeles?",
+        "Message": "What are my options for finding a local therapist?",
         "Id": 8
     },
     {
         "Intention": "find_therapist",
-        "Message": "I need help with depression; can you recommend someone?",
+        "Message": "I need help finding a therapist who specializes in depression.",
         "Id": 9
     },
     {
         "Intention": "find_therapist",
-        "Message": "Looking for a therapist who works with teens in my area.",
+        "Message": "Can you help me find a therapist who works with teens?",
         "Id": 10
     },
     {
@@ -76,27 +76,27 @@
     },
     {
         "Intention": "find_support_group",
-        "Message": "How can I join a support group for social anxiety?",
+        "Message": "I need information on support groups for stress management.",
         "Id": 16
     },
     {
         "Intention": "find_support_group",
-        "Message": "What are the meeting times for local support groups?",
+        "Message": "Where can I find support groups for new parents?",
         "Id": 17
     },
     {
         "Intention": "find_support_group",
-        "Message": "Can you recommend any support groups for caregivers?",
+        "Message": "Are there any LGBTQ+ support groups in my vicinity?",
         "Id": 18
     },
     {
         "Intention": "find_support_group",
-        "Message": "I need information on support groups for eating disorders.",
+        "Message": "What are the meeting times for local support groups?",
         "Id": 19
     },
     {
         "Intention": "find_support_group",
-        "Message": "Are there any LGBTQ+ support groups in my vicinity?",
+        "Message": "How can I join a support group for social anxiety?",
         "Id": 20
     },
     {
@@ -126,127 +126,127 @@
     },
     {
         "Intention": "find_hotline",
-        "Message": "What hotline should I call for anxiety support?",
+        "Message": "Please give me the contact info for a local mental health hotline.",
         "Id": 26
     },
     {
         "Intention": "find_hotline",
-        "Message": "Please give me the contact info for a local mental health hotline.",
+        "Message": "What hotline should I call for addiction support?",
         "Id": 27
     },
     {
         "Intention": "find_hotline",
-        "Message": "I need a hotline for substance abuse issues.",
+        "Message": "I need a hotline for anxiety support, can you help?",
         "Id": 28
     },
     {
         "Intention": "find_hotline",
-        "Message": "Can you share the number for a crisis intervention hotline?",
+        "Message": "Can you list some hotlines for emotional support?",
         "Id": 29
     },
     {
         "Intention": "find_hotline",
-        "Message": "What are the hotlines available for emotional support?",
+        "Message": "What are the numbers for non-emergency mental health hotlines?",
         "Id": 30
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "What are some healthier alternatives to my daily soda habit?",
+        "Message": "What are some healthier alternatives to smoking?",
         "Id": 31
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "I'm looking to replace my evening snacking with something healthier.",
+        "Message": "I'm looking to replace my soda habit with something better.",
         "Id": 32
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "Can you suggest sustainable alternatives to my plastic water bottle usage?",
+        "Message": "Can you suggest sustainable alternatives to fast food?",
         "Id": 33
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "What are some good substitutes for my coffee addiction?",
+        "Message": "What can I do instead of binge-watching TV?",
         "Id": 34
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "I want to find a healthier option for my late-night binge-watching snacks.",
+        "Message": "I want to find a better alternative to my late-night snacking.",
         "Id": 35
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "What can I do instead of scrolling on my phone before bed?",
+        "Message": "What are some good substitutes for my daily coffee?",
         "Id": 36
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "I'm trying to cut down on fast food; what are some healthier options?",
+        "Message": "How can I replace my habit of procrastinating?",
         "Id": 37
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "Can you recommend alternatives to my daily chocolate cravings?",
+        "Message": "I'm trying to cut down on my screen time; any suggestions?",
         "Id": 38
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "What are some eco-friendly alternatives to my disposable utensils?",
+        "Message": "What healthier options can I choose instead of junk food?",
         "Id": 39
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "I want to replace my sugary breakfast with something nutritious.",
+        "Message": "Can you help me find alternatives to my daily energy drinks?",
         "Id": 40
     },
     {
         "Intention": "insert_mood",
-        "Message": "I felt really anxious today and needed to express it.",
+        "Message": "I felt really anxious today and need to jot it down.",
         "Id": 41
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today was overwhelming; I want to jot down my feelings.",
+        "Message": "Today was overwhelming; I want to capture my feelings.",
         "Id": 42
     },
     {
         "Intention": "insert_mood",
-        "Message": "I'm grateful for my friends; they always lift my spirits.",
+        "Message": "I'm grateful for my friends; I want to reflect on that.",
         "Id": 43
     },
     {
         "Intention": "insert_mood",
-        "Message": "Feeling a bit lost lately; I need to reflect on that.",
+        "Message": "Feeling a bit lost lately; I need to write about it.",
         "Id": 44
     },
     {
         "Intention": "insert_mood",
-        "Message": "I had a great day; I want to capture this joy.",
+        "Message": "I had a great day; I want to remember this feeling.",
         "Id": 45
     },
     {
         "Intention": "insert_mood",
-        "Message": "I'm feeling hopeful about the future; I want to note that.",
+        "Message": "I'm feeling hopeful today; I want to document this mood.",
         "Id": 46
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today was tough; I need to write about my struggles.",
+        "Message": "I experienced a lot of joy today; I need to note it.",
         "Id": 47
     },
     {
         "Intention": "insert_mood",
-        "Message": "I felt proud of myself today; I want to remember this moment.",
+        "Message": "Today was tough; I want to express my frustrations.",
         "Id": 48
     },
     {
         "Intention": "insert_mood",
-        "Message": "I experienced a lot of stress today; I need to vent.",
+        "Message": "I felt proud of my achievements today; I want to write it down.",
         "Id": 49
     },
     {
         "Intention": "insert_mood",
-        "Message": "I want to record my thoughts on self-care and relaxation.",
+        "Message": "I need to record my feelings of sadness from this week.",
         "Id": 50
     },
     {
@@ -256,47 +256,47 @@
     },
     {
         "Intention": "insert_journal",
-        "Message": "Today, I found joy in a beautiful sunset.",
+        "Message": "Today, I felt joy in the little things, like a warm cup of coffee.",
         "Id": 52
     },
     {
         "Intention": "insert_journal",
-        "Message": "I'm thankful for the little moments of laughter in my day.",
+        "Message": "I'm thankful for the beautiful sunset I witnessed this evening.",
         "Id": 53
     },
     {
         "Intention": "insert_journal",
-        "Message": "Grateful for the kindness of strangers that brightens my day.",
+        "Message": "Grateful for the kindness of strangers that brightened my day.",
         "Id": 54
     },
     {
         "Intention": "insert_journal",
-        "Message": "I appreciate the love and warmth of my family.",
+        "Message": "I appreciate the laughter shared with my family this weekend.",
         "Id": 55
     },
     {
         "Intention": "insert_journal",
-        "Message": "Feeling thankful for the opportunity to learn something new.",
+        "Message": "Feeling thankful for my health and the ability to enjoy life.",
         "Id": 56
     },
     {
         "Intention": "insert_journal",
-        "Message": "I'm grateful for my health and the ability to move.",
+        "Message": "I'm grateful for the opportunity to learn something new every day.",
         "Id": 57
     },
     {
         "Intention": "insert_journal",
-        "Message": "Today, I felt joy in a simple cup of coffee.",
+        "Message": "Thankful for the moments of peace I find in nature.",
         "Id": 58
     },
     {
         "Intention": "insert_journal",
-        "Message": "I'm thankful for the beauty of nature around me.",
+        "Message": "I cherish the memories made with loved ones this past year.",
         "Id": 59
     },
     {
         "Intention": "insert_journal",
-        "Message": "Grateful for the moments of peace I find in meditation.",
+        "Message": "Grateful for the small victories that keep me motivated.",
         "Id": 60
     },
     {
@@ -306,7 +306,7 @@
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Can you tell me about the values of Squeak to Speak?",
+        "Message": "Can you tell me about the values that guide Squeak to Speak?",
         "Id": 62
     },
     {
@@ -331,22 +331,22 @@
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Can you explain the commitment to mental health at Squeak to Speak?",
+        "Message": "Can you explain the commitment of Squeak to Speak to mental health?",
         "Id": 67
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "What values guide the work of Squeak to Speak?",
+        "Message": "What principles does Squeak to Speak stand for?",
         "Id": 68
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Tell me about the story behind Squeak to Speak.",
+        "Message": "What is the story behind Squeak to Speak's founding?",
         "Id": 69
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "What is Squeak to Speak's approach to mental health advocacy?",
+        "Message": "How does Squeak to Speak support mental health initiatives?",
         "Id": 70
     },
     {
@@ -356,7 +356,7 @@
     },
     {
         "Intention": "ask_features",
-        "Message": "Can you explain how the chatbot can help me with my mental health?",
+        "Message": "Can you tell me how the chatbot can help with my mental health?",
         "Id": 72
     },
     {
@@ -371,32 +371,32 @@
     },
     {
         "Intention": "ask_features",
-        "Message": "What functionalities does the platform provide for mental wellness?",
+        "Message": "What functionalities does Squeak to Speak provide for users?",
         "Id": 75
     },
     {
         "Intention": "ask_features",
-        "Message": "Tell me about the features that assist with emotional well-being.",
+        "Message": "I'd like to know more about the features of Squeak to Speak.",
         "Id": 76
     },
     {
         "Intention": "ask_features",
-        "Message": "What can I do with the Squeak to Speak chatbot?",
+        "Message": "What can I do with the Squeak to Speak platform?",
         "Id": 77
     },
     {
         "Intention": "ask_features",
-        "Message": "How does Squeak to Speak support users in their mental health journey?",
+        "Message": "How does Squeak to Speak assist users with mental health issues?",
         "Id": 78
     },
     {
         "Intention": "ask_features",
-        "Message": "What are the main features of Squeak to Speak?",
+        "Message": "Can you explain the features available in Squeak to Speak?",
         "Id": 79
     },
     {
         "Intention": "ask_features",
-        "Message": "Can you give me an overview of the platform's functionalities?",
+        "Message": "What are the main functionalities of the Squeak to Speak chatbot?",
         "Id": 80
     },
     {
@@ -421,7 +421,7 @@
     },
     {
         "Intention": "review_user_memory",
-        "Message": "I want to check what information you have on file.",
+        "Message": "I'd like to check what information you have on file.",
         "Id": 85
     },
     {
@@ -436,67 +436,67 @@
     },
     {
         "Intention": "review_user_memory",
-        "Message": "I'd like to access my past journal entries.",
+        "Message": "Can I access my past journal entries?",
         "Id": 88
     },
     {
         "Intention": "review_user_memory",
-        "Message": "Can you show me my preferences and settings?",
+        "Message": "Show me the preferences you've saved for me.",
         "Id": 89
     },
     {
         "Intention": "review_user_memory",
-        "Message": "What have I shared with you so far?",
+        "Message": "I'd like to review my interaction history.",
         "Id": 90
     },
     {
         "Intention": "update_journal",
-        "Message": "Can you help me change my last journal entry's mood to 'hopeful'?",
+        "Message": "Can you help me update my last journal entry?",
         "Id": 91
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to update my gratitude entry to include a specific event.",
+        "Message": "I want to change the mood of my entry from sad to hopeful.",
         "Id": 92
     },
     {
         "Intention": "update_journal",
-        "Message": "Please edit my last entry to reflect my current feelings.",
+        "Message": "Please edit my entry about yesterday's events.",
         "Id": 93
     },
     {
         "Intention": "update_journal",
-        "Message": "Change the text of my previous mood entry to be more positive.",
+        "Message": "I need to add more details to my gratitude entry.",
         "Id": 94
     },
     {
         "Intention": "update_journal",
-        "Message": "I'd like to modify my journal entry about yesterday's events.",
+        "Message": "Can I change the text in my mood board entry?",
         "Id": 95
     },
     {
         "Intention": "update_journal",
-        "Message": "Can I update the mood associated with my last entry?",
+        "Message": "I'd like to update the date on my last journal entry.",
         "Id": 96
     },
     {
         "Intention": "update_journal",
-        "Message": "Please revise my entry to add more details about my day.",
+        "Message": "Please modify my entry to reflect my current feelings.",
         "Id": 97
     },
     {
         "Intention": "update_journal",
-        "Message": "I need to change the date on my last journal entry.",
+        "Message": "I want to change the title of my journal entry.",
         "Id": 98
     },
     {
         "Intention": "update_journal",
-        "Message": "Update my entry to express my gratitude for my friends.",
+        "Message": "Can you help me rephrase my last entry?",
         "Id": 99
     },
     {
         "Intention": "update_journal",
-        "Message": "I'd like to correct a typo in my last journal entry.",
+        "Message": "I need to correct a typo in my journal entry.",
         "Id": 100
     },
     {
@@ -506,52 +506,122 @@
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I'd like to reflect on my feelings from last week.",
+        "Message": "I'd like to reflect on my recent thoughts.",
         "Id": 102
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "What insights can you share from my previous entries?",
+        "Message": "What insights can you share from my journal?",
         "Id": 103
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "Help me understand my mood patterns from my journal.",
+        "Message": "Help me understand my feelings from last week.",
         "Id": 104
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "Can you remind me what I wrote about my goals?",
+        "Message": "Can you remind me what I wrote about gratitude?",
         "Id": 105
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "Let's discuss the positive moments I recorded recently.",
+        "Message": "Let's discuss my mood entries from last month.",
         "Id": 106
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "How have my thoughts evolved over the past month?",
+        "Message": "What patterns do you see in my journal?",
         "Id": 107
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "Can we explore the challenges I mentioned in my journal?",
+        "Message": "Can we explore my thoughts on stress management?",
         "Id": 108
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I'd like to revisit my gratitude entries.",
+        "Message": "I'd like to revisit my entry about my goals.",
         "Id": 109
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "What themes do you see in my journal entries?",
+        "Message": "What did I say about my achievements recently?",
         "Id": 110
     },
     {
-        "Intention": "None",
-        "Message": "What's your favorite way to spend a rainy day?",
+        "Intention": "insert_gratitude",
+        "Message": "I'm grateful for my supportive friends.",
         "Id": 111
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "Thankful for the little moments of joy today.",
+        "Id": 112
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "I appreciate the kindness of strangers.",
+        "Id": 113
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "Grateful for my health and well-being.",
+        "Id": 114
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "Thank you for the beautiful weather this week.",
+        "Id": 115
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "I'm thankful for the opportunity to learn new things.",
+        "Id": 116
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "Grateful for my family and their love.",
+        "Id": 117
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "I appreciate the help I received during a tough time.",
+        "Id": 118
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "Thankful for the laughter shared with loved ones.",
+        "Id": 119
+    },
+    {
+        "Intention": "insert_gratitude",
+        "Message": "I am grateful for the peace I found today.",
+        "Id": 120
+    },
+    {
+        "Intention": "None",
+        "Message": "What's your favorite movie of all time?",
+        "Id": 121
+    },
+    {
+        "Intention": "None",
+        "Message": "I wonder how many stars are in the universe.",
+        "Id": 122
+    },
+    {
+        "Intention": "None",
+        "Message": "Do you think pineapple belongs on pizza?",
+        "Id": 123
+    },
+    {
+        "Intention": "None",
+        "Message": "I really enjoy rainy days; they feel so cozy.",
+        "Id": 124
+    },
+    {
+        "Intention": "None",
+        "Message": "What do you think about the latest tech trends?",
+        "Id": 125
     }
 ]

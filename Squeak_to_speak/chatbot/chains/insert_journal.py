@@ -3,18 +3,22 @@
 # Chain 1
 # Goal: Insert journal entry into the user’s journal or mood board on the database
 # Implementation: This chain validates the user input, structures it for input in the database and completes that same input, finishing the process when it receives confirmation from the database.
-from chatbot.chains.base import PromptTemplate as PromptT
-from chatbot.chains.base import  generate_prompt_templates
+from typing import Dict
 from pydantic import BaseModel
-from langchain.prompts import PromptTemplate
-from langchain.output_parsers import PydanticOutputParser
-import datetime
+from datetime import datetime
+import sqlite3
+class JournalEntry(BaseModel):
+    user_id: int
+    message: str
+    date: str
+    hide_yn: bool
+    time: str
 
 
 
+ 
 
-
-
+# Reasoning Chain
 # JournalEntry model
 class JournalEntry(BaseModel):
     user_id: int
@@ -60,7 +64,7 @@ class JournalManager:
 
         # Create journal entry object
         entry = JournalEntry(
-            user_id=user_id,
+            user_id=int(user_id),
             message=user_message,
             date=date,
             hide_yn=hide_yn,
