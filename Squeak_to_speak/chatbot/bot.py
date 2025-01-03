@@ -26,6 +26,11 @@ from .chains.insert_mood import RetrieveEntries, PresentEntries
 from .chains.review_user_memory import RetrieveUserData, PresentUserData
 from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+import sqlite3
+db_file = r'C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
+# Connect to the SQLite database
+conn = sqlite3.connect(db_file)
+db_manager = DatabaseManager(conn)
 
 
 class MainChatbot:
@@ -322,8 +327,8 @@ class MainChatbot:
         retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
 
         # Set the appropriate Pinecone index based on user input
-        if "index_name" in user_input:
-            retrieve_chain.set_pinecone_index(user_input["index_name"])
+        #if "index_name" in user_input:
+            #retrieve_chain.set_pinecone_index(user_input["index_name"])
 
         # Determine if the user wants to search by date or theme
         if dates["start_date"] or dates["end_date"]:
