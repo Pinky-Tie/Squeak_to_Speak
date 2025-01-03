@@ -28,6 +28,15 @@ from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJo
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 
 
+#databse connection
+import sqlite3
+db_file = r'D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
+
+# Connect to the SQLite database
+conn = sqlite3.connect(db_file)
+db_manager = DatabaseManager(conn)
+
+
 class MainChatbot:
     """A bot that handles customer service interactions by processing user inputs and
     routing them through configured reasoning and response chains.
@@ -45,57 +54,57 @@ class MainChatbot:
         self.chain_map = {
 
     
-                "chat_about_journal": {
+                '''"chat_about_journal": {
                     "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
                     "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
-                },
+                },'''
                 "delete_mood": {
-                    "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager()),
+                    "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager(conn)),
                     "confirm": MoodBoardDeletionConfirmationFormatter()
                 },
                 "delete_journal": {
-                    "delete": JournalEntryDeleter(db_manager=DatabaseManager()),
+                    "delete": JournalEntryDeleter(db_manager=DatabaseManager(conn)),
                     "confirm": DeletionConfirmationFormatter()
                 },
                 "find_hotline": {
                     "identify": IdentifyHotlinePreferences(),
-                    "find": HotlineFinder(db_manager=DatabaseManager()),
+                    "find": HotlineFinder(db_manager=DatabaseManager(conn)),
                     "output": HotlineOutputFormatter()
                 },
                 "find_therapist": {
                     "identify": IdentifyUserPreferences(),
-                    "find": TherapistFinder(db_manager=DatabaseManager()),
+                    "find": TherapistFinder(db_manager=DatabaseManager(conn)),
                     "output": TherapistOutputFormatter()
                 },
                 "find_support_group": {
                     "identify": IdentifySupportGroupPreferences(),
-                    "find": SupportGroupFinder(db_manager=DatabaseManager()),
+                    "find": SupportGroupFinder(db_manager=DatabaseManager(conn)),
                     "output": SupportGroupOutputFormatter()
                 },
                     "insert_mood": {
-                    "retrieve": RetrieveEntries(db_manager=DatabaseManager()),
+                    "retrieve": RetrieveEntries(db_manager=DatabaseManager(conn)),
                     "present": PresentEntries()
                 },
                 "insert_journal": {
-                    "insert": JournalManager(db_manager=DatabaseManager()),
+                    "insert": JournalManager(db_manager=DatabaseManager(conn), llm=self.llm),
                     "response": JournalEntryResponse()
                 },
                 "insert_gratitude": {
-                    "insert": GratitudeManager(db_manager=DatabaseManager()),
-                    "response": GratitudeManager(db_manager=DatabaseManager())
+                    "insert": GratitudeManager(db_manager=DatabaseManager(conn)),
+                    "response": GratitudeManager(db_manager=DatabaseManager(conn))
                 },
                 "review_user_memory": {
-                    "retrieve": RetrieveUserData(db_manager=DatabaseManager()),
+                    "retrieve": RetrieveUserData(db_manager=DatabaseManager(conn)),
                     "present": PresentUserData(prompt_template="Your template here")
                 },
                 "update_mood": {
                     "identify": IdentifyMoodBoardEntryToModify(),
-                    "modify": ModifyMoodBoardEntry(db_manager=DatabaseManager()),
+                    "modify": ModifyMoodBoardEntry(db_manager=DatabaseManager(conn)),
                     "inform": InformUserOfMoodBoardChange()
                 },
                 "update_journal": {
                     "identify": IdentifyJournalEntryToModify(),
-                    "modify": ModifyJournalEntry(db_manager=DatabaseManager()),
+                    "modify": ModifyJournalEntry(db_manager=DatabaseManager(conn)),
                     "inform": InformUserOfJournalChange()
                 },
                 "chitchat": {
@@ -109,7 +118,7 @@ class MainChatbot:
 
         self.rag = self.add_memory_to_runnable(
             RAGPipeline(
-                index_name="rag",
+                index_name="pdf-data",
                 embeddings_model="text-embedding-3-small",
                 llm=self.llm,
                 memory=True,
@@ -118,7 +127,7 @@ class MainChatbot:
 
         # Map of intentions to their corresponding handlers
         self.intent_handlers: Dict[Optional[str], Callable[[Dict[str, str]], str]] = {
-        "review_user_memory": self.handle_support_information,
+        #"review_user_memory": self.handle_support_information,
         "find_therapist": self.handle_find_therapist,
         "find_support_group": self.handle_find_support_group,
         "find_hotline": self.handle_find_hotline,
@@ -128,13 +137,12 @@ class MainChatbot:
         "insert_gratitude": self.handle_insert_gratitude,
         "ask_missionvalues": self.handle_know_mission,
         "ask_features": self.handle_know_services,
-        "review_user_memory": self.handle_know_data,
         "update_journal": self.handle_update_journal,
         "update_mood": self.handle_update_mood,
-        "chat_about_journal": self.handle_recall_entry,
+        #"chat_about_journal": self.handle_recall_entry,
         "delete_journal":self.handle_delete_journal,
         "delete_mood":self.handle_delete_mood,
-        "chat_about_journal": self.handle_recall_entry
+        'chitchat':self.handle_chitchat_intent
         }
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
@@ -243,7 +251,7 @@ class MainChatbot:
 
     def handle_know_mission(self, user_input: Dict[str, str]) -> str:
 
-        response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
+        response = self.rag.ma(user_input,index_name = "pdf-data", config=self.memory_config)
 
         return response
 
@@ -287,7 +295,7 @@ class MainChatbot:
         except ValueError:
             return False
 
-    def handle_recall_entry(self, user_input: Dict):
+    '''def handle_recall_entry(self, user_input: Dict):
         """Handle the intent to recall past journal entries based on theme or date.
 
         Args:
@@ -323,7 +331,7 @@ class MainChatbot:
         present_chain = self.get_chain("chat_about_journal")[1]  # Assuming the second chain is for presentation
         response = present_chain.format_output(entries, user_input.get("entry_type", "journal"))
 
-        return response
+        return response'''
 
     def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
 
@@ -544,6 +552,20 @@ class MainChatbot:
         response = alter_chain.invoke(user_input)
 
         return response.content
+    
+    def handle_chitchat_intent(self, user_input: Dict[str, str]) -> str:
+        """Handle the chitchat intent by providing a response.
+
+        Args:
+            user_input: The input text from the user.
+
+        Returns:
+            The content of the response after processing through the chitchat chain.
+        """
+        _, chitchat_response_chain = self.get_chain("chitchat")
+
+        response = chitchat_response_chain.invoke(user_input, config=self.memory_config)
+        return response
 
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:

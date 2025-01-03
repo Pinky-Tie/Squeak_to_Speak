@@ -4,9 +4,10 @@
 # Goal: Use RAG to retrieve information related to the users' input
 # Implementation: This chain queries an embedding database (Pinecone) for relevant entries. Retrieved entries are ranked for relevance and utility.
 from typing import List, Dict
-import pinecone
+from pinecone import Index, Pinecone
 import os
 from dotenv import load_dotenv
+from langchain_openai import OpenAIEmbeddings
 
 
 load_dotenv()
@@ -17,8 +18,9 @@ class RetrieveRelevantEntries:
         self.embedding_model = embedding_model
         self.db_manager = db_manager
 
-    def set_pinecone_index(self, index_name):
-        self.pinecone_index = pinecone.Index(index_name)
+    pc = Pinecone()
+    index: Index = pc.Index("journal-messages") 
+    embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
     def query_relevant_entries(self, user_input: str, top_k: int = 3) -> List[Dict]:
         """

@@ -7,7 +7,6 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from dotenv import load_dotenv  # Import dotenv to load environment variables
 from chatbot.bot import MainChatbot  # Import the chatbot class
-
 import streamlit as st
 import time
 
@@ -61,14 +60,14 @@ if __name__ == "__main__":
     print("Bot initialized. Type 'exit' or 'quit' to end the conversation.")
 
     # Display the rotating banner of random gratitude messages
-    st.title("Rotating Banner of Gratitude Messages")
-    display_rotating_banner(bot)
+    '''st.title("Rotating Banner of Gratitude Messages")
+    display_rotating_banner(bot)'''
 
     # Start the main interaction loop
     main(bot)
 
-'''def Homepage():
+def Homepage():
     st.title("Homepage")
 
 pg = st.navigation([st.Page(Homepage), st.Page("login_page.py"), st.Page("user_registration.py")])
-pg.run()'''
+pg.run()
