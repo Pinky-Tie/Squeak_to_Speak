@@ -17,7 +17,7 @@ from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
 #Maria
-"""
+
 from .chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from .chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from .chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
@@ -32,8 +32,7 @@ from .chains.review_user_memory import RetrieveUserData, PresentUserData
 from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 import sqlite3
-db_file = r'C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
-# Connect to the SQLite database
+db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db" # Connect to the SQLite database
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
 """
@@ -64,7 +63,7 @@ db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db"
 
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
-
+"""
 
 class MainChatbot:
     """A bot that handles customer service interactions by processing user inputs and
