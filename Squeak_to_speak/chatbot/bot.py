@@ -97,7 +97,6 @@ class MainChatbot:
         self.chitchat_response_chain = self.add_memory_to_runnable(ChitChatResponseChain(llm=self.llm))
         
         # Map of intentions to their corresponding chains
-        # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
             "delete_mood": {
                 "delete": self.mood_board_entry_deleter,
