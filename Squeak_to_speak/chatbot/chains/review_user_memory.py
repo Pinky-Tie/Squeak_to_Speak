@@ -10,22 +10,51 @@ class RetrieveUserData:
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def retrieve_data(self, user_id: int, start_date: str = None, end_date: str = None) -> List[Dict]:
+    def retrieve_user_info(self, user_id: int) -> Dict:
         """
-        Retrieves relevant entries from the database for the user within the specified date range.
-        If no date range is specified, all data for the user is retrieved.
+        Retrieves user information from the user database.
         """
-        # If no dates are provided, use the current date as the range
+        query = """
+        SELECT * FROM Users
+        WHERE user_id = :user_id
+        """
+        params = {"user_id": user_id}
+        result = self.db_manager.fetch_one(query, params)
+        return result if result else {"error": "No user information found."}
+
+    def retrieve_journal_entries(self, user_id: int, start_date: str = None, end_date: str = None) -> List[Dict]:
+        """
+        Retrieves journal entries for the user within the specified date range.
+        If no date range is specified, all journal entries for the user are retrieved.
+        """
         if not start_date:
-            start_date = datetime.now().strftime('%Y-%m-%d')
+            start_date = '2024-12-01'
         if not end_date:
             end_date = datetime.now().strftime('%Y-%m-%d')
-        
-        # Query the database for journal and mood board entries in the given date range
+
         query = """
         SELECT * FROM Journal_entries
         WHERE user_id = :user_id AND created_at BETWEEN :start_date AND :end_date
-        UNION
+        """
+        params = {
+            "user_id": user_id,
+            "start_date": start_date,
+            "end_date": end_date,
+        }
+        results = self.db_manager.fetch_all(query, params)
+        return results if results else []
+
+    def retrieve_mood_board_entries(self, user_id: int, start_date: str = None, end_date: str = None) -> List[Dict]:
+        """
+        Retrieves mood board entries for the user within the specified date range.
+        If no date range is specified, all mood board entries for the user are retrieved.
+        """
+        if not start_date:
+            start_date = '1970-01-01'
+        if not end_date:
+            end_date = datetime.now().strftime('%Y-%m-%d')
+
+        query = """
         SELECT * FROM Mood_board_entries
         WHERE user_id = :user_id AND created_at BETWEEN :start_date AND :end_date
         """
@@ -34,28 +63,19 @@ class RetrieveUserData:
             "start_date": start_date,
             "end_date": end_date,
         }
-        
-        # Fetch the data from the database
-        journal_results = self.db_manager.select(query, params)
-        
-        return journal_results
+        results = self.db_manager.fetch_all(query, params)
+        return results if results else []
 
-
-# Chain 2
-# Goal: Present information to the user
-# Implementation: This chain receives as inputs the user input, user information and chat memory and generates a final output using a prompt template.
-class PresentUserData:
-    def __init__(self, prompt_template: str):
-        self.prompt_template = prompt_template
-
-    def format_data(self, user_input: str, retrieved_data: List[Dict]) -> str:
+    def retrieve_data(self, user_id: int, start_date: str = None, end_date: str = None) -> Dict:
         """
-        Formats the retrieved user data into a readable output using a prompt template.
+        Retrieves all relevant data for the user, including user information, journal entries, and mood board entries.
         """
-        # Structure the retrieved data for display
-        formatted_data = "\n".join([f"Entry: {entry['entry_text']} | Date: {entry['created_at']}" for entry in retrieved_data])
-        
-        # Generate the final prompt to present the data to the user
-        prompt = self.prompt_template.format(user_input=user_input, data=formatted_data)
-        
-        return prompt
+        user_info = self.retrieve_user_info(user_id)
+        journal_entries = self.retrieve_journal_entries(user_id, start_date, end_date)
+        mood_board_entries = self.retrieve_mood_board_entries(user_id, start_date, end_date)
+
+        return {
+            "user_info": user_info,
+            "journal_entries": journal_entries,
+            "mood_board_entries": mood_board_entries
+        }
