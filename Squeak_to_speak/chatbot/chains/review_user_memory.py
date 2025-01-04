@@ -79,3 +79,25 @@ class RetrieveUserData:
             "journal_entries": journal_entries,
             "mood_board_entries": mood_board_entries
         }
+
+class PresentUserData:
+    def format_output(self, data: Dict) -> str:
+        """
+        Formats the retrieved user data for presentation.
+        """
+        if "error" in data["user_info"]:
+            return data["user_info"]["error"]
+
+        formatted_output = "User Information:\n"
+        for key, value in data["user_info"].items():
+            formatted_output += f"{key}: {value}\n"
+
+        formatted_output += "\nJournal Entries:\n"
+        for entry in data["journal_entries"]:
+            formatted_output += f"Date: {entry['created_at']}\nContent: {entry['content']}\n\n"
+
+        formatted_output += "\nMood Board Entries:\n"
+        for entry in data["mood_board_entries"]:
+            formatted_output += f"Date: {entry['created_at']}\nContent: {entry['content']}\n\n"
+
+        return formatted_output

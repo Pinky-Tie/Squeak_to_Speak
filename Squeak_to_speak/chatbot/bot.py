@@ -17,7 +17,7 @@ from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-# from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
 from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
 from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
@@ -29,6 +29,8 @@ from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 #databse connection
 import sqlite3
@@ -78,13 +80,13 @@ class MainChatbot:
         self.identify_support_group_preferences = IdentifySupportGroupPreferences()
         self.support_group_finder = SupportGroupFinder(db_manager=self.db_manager)
         self.support_group_output_formatter = SupportGroupOutputFormatter()
-        #self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        #self.present_journal_entries = PresentJournalEntries()
+        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        self.present_journal_entries = PresentJournalEntries()
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
-        #self.gratitude_manager = GratitudeManager(db_manager=self.db_manager)
+        self.gratitude_manager = GratitudeEntryManager(db_manager=self.db_manager)
         self.retrieve_user_data = RetrieveUserData(db_manager=self.db_manager)
-        #self.present_user_data = PresentUserData(prompt_template="Your template here")
+        self.present_user_data = PresentUserData()
         self.identify_mood_board_entry_to_modify = IdentifyMoodBoardEntryToModify()
         self.modify_mood_board_entry = ModifyMoodBoardEntry(db_manager=self.db_manager)
         self.inform_user_of_mood_board_change = InformUserOfMoodBoardChange()
@@ -94,6 +96,65 @@ class MainChatbot:
         self.chitchat_classifier_chain = ChitChatClassifierChain(llm=self.llm)
         self.chitchat_response_chain = self.add_memory_to_runnable(ChitChatResponseChain(llm=self.llm))
         
+        # Map of intentions to their corresponding chains
+        # Map intent names to their corresponding reasoning and response chains
+        self.chain_map = {
+            "delete_mood": {
+                "delete": self.mood_board_entry_deleter,
+                "confirm": self.mood_board_deletion_confirmation_formatter
+            },
+            "delete_journal": {
+                "delete": self.journal_entry_deleter,
+                "confirm": self.deletion_confirmation_formatter
+            },
+            "find_hotline": {
+                "identify": self.identify_hotline_preferences,
+                "find": self.hotline_finder,
+                "output": self.hotline_output_formatter
+            },
+            "find_therapist": {
+                "identify": self.identify_user_preferences,
+                "find": self.therapist_finder,
+                "output": self.therapist_output_formatter
+            },
+            "find_support_group": {
+                "identify": self.identify_support_group_preferences,
+                "find": self.support_group_finder,
+                "output": self.support_group_output_formatter
+            },
+            "insert_mood": {
+                "retrieve": self.retrieve_journal_entries,
+                "present": self.present_journal_entries
+            },
+            "insert_journal": {
+                "insert": self.journal_manager,
+                "response": self.journal_entry_response
+            },
+            "insert_gratitude": {
+                "insert": self.gratitude_manager,
+                "response": self.gratitude_manager
+            },
+            "review_user_memory": {
+                "retrieve": self.retrieve_user_data,
+                "present": self.present_user_data
+            },
+            "update_mood": {
+                "identify": self.identify_mood_board_entry_to_modify,
+                "modify": self.modify_mood_board_entry,
+                "inform": self.inform_user_of_mood_board_change
+            },
+            "update_journal": {
+                "identify": self.identify_journal_entry_to_modify,
+                "modify": self.modify_journal_entry,
+                "inform": self.inform_user_of_journal_change
+            },
+            "chitchat": {
+                "reasoning": self.chitchat_classifier_chain,
+                "response": self.chitchat_response_chain
+            }
+        }
+
+
         self.rag = self.add_memory_to_runnable(
             RAGPipeline(
                 index_name="pdf-data",
