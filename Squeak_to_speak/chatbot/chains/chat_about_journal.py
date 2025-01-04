@@ -9,6 +9,9 @@ import os
 from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 
+import sys
+import os
+
 from Squeak_to_speak.data.database_functions import DatabaseManager
 
 load_dotenv()

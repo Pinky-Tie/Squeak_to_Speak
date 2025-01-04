@@ -53,10 +53,13 @@ from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoo
 from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
 from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
 import sqlite3
-db_file = r'D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
+db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db"
 
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
@@ -175,6 +178,8 @@ class MainChatbot:
             }
         }
 
+        
+
 
         self.rag = self.add_memory_to_runnable(
             RAGPipeline(
@@ -207,21 +212,7 @@ class MainChatbot:
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
 
-    def user_login(self, user_id: str, conversation_id: str) -> None:
-        """Log in a user by setting the user and conversation identifiers.
 
-        Args:
-            user_id: Identifier for the user.
-            conversation_id: Identifier for the conversation.
-        """
-        self.user_id = user_id
-        self.conversation_id = conversation_id
-        self.memory_config = {
-            "configurable": {
-                "user_id": self.user_id,
-                "conversation_id": self.conversation_id,
-            }
-        }
 
     def add_memory_to_runnable(self, original_runnable):
         """Wrap a runnable with session history functionality.

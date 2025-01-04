@@ -22,9 +22,10 @@ class JournalEntryManager:
         date = now.strftime("%Y-%m-%d")
         time = now.strftime("%H:%M")
 
+        print(user_message)
         # Create journal entry object
         entry = JournalEntry(
-            user_id=user_id,
+            user_id=int(user_id),
             message=user_message,
             date=date,
             hide_yn=hide_yn,
