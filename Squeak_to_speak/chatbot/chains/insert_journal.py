@@ -9,11 +9,10 @@ from pydantic import BaseModel
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 import datetime
-
-
-
-
-
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from data.database_functions import DatabaseManager
 
 # JournalEntry model
 class JournalEntry(BaseModel):
@@ -23,28 +22,8 @@ class JournalEntry(BaseModel):
     hide_yn: bool
     time: str
 
-# DatabaseManager provided in the prompt
-class DatabaseManager:
-    def __init__(self, conn):
-        self.conn = conn
-
-    def insert(self, table_name, data):
-        placeholders = ", ".join(f":{key}" for key in data.keys())
-        columns = ", ".join(data.keys())
-        query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute(query, data)
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Error inserting into {table_name}: {e}")
-            return False
-        finally:
-            cursor.close()
-
 # Reasoning Chain
-class JournalManager:
+class JournalEntryManager:
     def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
 

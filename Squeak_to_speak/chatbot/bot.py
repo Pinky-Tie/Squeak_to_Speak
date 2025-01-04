@@ -1,17 +1,20 @@
 # Import necessary classes and modules for chatbot functionality
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from typing import Callable, Dict, Optional, List, Union
 from dateutil.parser import parse
 
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
 
-from .memory import MemoryManager
-from .router.loader import load_intention_classifier
+from chatbot.memory import MemoryManager
+from chatbot.router.loader import load_intention_classifier
 
-from .memory import MemoryManager
-from .router.loader import load_intention_classifier
-from ..data.database_functions import DatabaseManager
-from .rag import RAGPipeline
+from chatbot.memory import MemoryManager
+from chatbot.router.loader import load_intention_classifier
+from data.database_functions import DatabaseManager
+from chatbot.rag import RAGPipeline
 
 from .chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from .chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
@@ -27,8 +30,15 @@ from .chains.review_user_memory import RetrieveUserData, PresentUserData
 from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 import sqlite3
+db_file = r'C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
+# Connect to the SQLite database
+conn = sqlite3.connect(db_file)
+db_manager = DatabaseManager(conn)
 
-db_file = "Squeak_to_speak.data.database.squeaktospeak_db.db" # Connect to the SQLite database
+
+#databse connection
+import sqlite3
+db_file = r'D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
 
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
@@ -49,22 +59,11 @@ class MainChatbot:
 
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-                "chat_about_journal": {
-                    "retrieve": RetrieveRelevantEntries(embedding_model="sentence-transformers/all-MiniLM-L6-v2"),
-                    "generate": GenerateEmpatheticResponse(prompt_template="""
-                        You are a helpful and empathetic assistant. Use the following journal entries to generate a thoughtful and empathetic response to the user's query.
-
-                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
-                        Use three sentences maximum and keep the answer as concise as possible.
-
-                        {context}
-
-                        Question: {customer_input}
-
-                        Helpful Answer:
-                    """)
-                },
-
+    
+                '''"chat_about_journal": {
+                    "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
+                    "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
+                },'''
                 "delete_mood": {
                     "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager(conn)),
                     "confirm": MoodBoardDeletionConfirmationFormatter()
@@ -101,18 +100,9 @@ class MainChatbot:
                     "response": GratitudeManager(db_manager=DatabaseManager(conn))
                 },
                 "review_user_memory": {
-                    "retrieve": RetrieveUserData(db_manager=DatabaseManager()),
-                    "present": PresentUserData(prompt_template="""
-                        Use the following user data to generate a summary of the user's memory.
-                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
-                        Use three sentences maximum and keep the answer as concise as possible.
-
-                        {context}
-
-                        Question: {customer_input}
-
-                        Helpful Answer:
-                    """)},
+                    "retrieve": RetrieveUserData(db_manager=DatabaseManager(conn)),
+                    "present": PresentUserData(prompt_template="Your template here")
+                },
                 "update_mood": {
                     "identify": IdentifyMoodBoardEntryToModify(),
                     "modify": ModifyMoodBoardEntry(db_manager=DatabaseManager(conn)),
@@ -327,8 +317,8 @@ class MainChatbot:
         retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
 
         # Set the appropriate Pinecone index based on user input
-        #if "index_name" in user_input:
-            #retrieve_chain.set_pinecone_index(user_input["index_name"])
+        if "index_name" in user_input:
+            retrieve_chain.set_pinecone_index(user_input["index_name"])
 
         # Determine if the user wants to search by date or theme
         if dates["start_date"] or dates["end_date"]:
