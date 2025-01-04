@@ -5,15 +5,13 @@
         {
             "name": "review_user_memory",
             "utterances": [
-                "What details do you keep about my usage?",
-                "What preferences do you have stored for me?",
-                "Please provide a summary of my stored data.",
-                "I want to check what information you have on file.",
-                "Can I see the data you've collected about me?",
-                "I'd like to review my previous interactions, please.",
-                "Can you show me my preferences and settings?",
-                "I'd like to access my past journal entries.",
-                "Can you show me my journal entries?"
+                "What details do you have regarding my previous interactions?",
+                "Can you show me my stored preferences?",
+                "What insights do you have from my past entries?",
+                "Can I access the data you have on my mental health journey?",
+                "What data do you have on me?",
+                "Can I see the information you have collected about me?",
+                "What information do you keep about my usage?"
             ],
             "description": "The user wants to review the data that Squeak to Speak has collected about them.",
             "function_schemas": null,
@@ -24,13 +22,12 @@
         {
             "name": "find_therapist",
             "utterances": [
-                "I need a mental health professional who understands PTSD.",
-                "I'm seeking a therapist who focuses on family issues.",
-                "I'm looking for a counselor who specializes in grief therapy.",
-                "Are there any therapists available for online sessions?",
-                "Can you suggest a therapist who accepts insurance?",
-                "Can you recommend a therapist for anxiety in New York?",
-                "Looking for a therapist who works with teens in my area."
+                "Help me find a therapist that focuses on trauma and offers online sessions.",
+                "Help me find a therapist that works with teens and is within my budget.",
+                "Help me find a therapist that can help with depression and is in my area.",
+                "Help me find a therapist that specializes in anxiety and is affordable.",
+                "Help me find a therapist that accepts insurance and is located in downtown.",
+                "Help me find a therapist that is accepting new clients and has good reviews."
             ],
             "description": "The user wants to receive a personalized recommendation for a healthcare professional.",
             "function_schemas": null,
@@ -41,13 +38,15 @@
         {
             "name": "find_support_group",
             "utterances": [
-                "I need information on support groups for eating disorders.",
-                "How can I join a support group for social anxiety?",
-                "Can you recommend any support groups for caregivers?",
-                "Im looking for grief support groups in my area.",
-                "Are there in-person support groups for PTSD nearby?",
-                "Are there any LGBTQ+ support groups in my vicinity?",
-                "Can you help me find addiction support groups locally?"
+                "Help me find a support group that focuses on mental health for teens.",
+                "Help me find a support group that addresses PTSD in my city.",
+                "Help me find a support group that focuses on anxiety in New York.",
+                "Help me find a support group that meets online for depression.",
+                "Help me find a support group that focuses on parenting challenges in Chicago.",
+                "Help me find a support group that supports addiction recovery near me.",
+                "Help me find a support group that discusses stress management in Los Angeles.",
+                "Help me find a support group that deals with grief in my area.",
+                "Help me find a support group that meets weekly for social anxiety."
             ],
             "description": "The user wants to find support groups in their vicinity.",
             "function_schemas": null,
@@ -58,13 +57,15 @@
         {
             "name": "find_hotline",
             "utterances": [
-                "I need a hotline for substance abuse issues.",
-                "Can you share the number for a crisis intervention hotline?",
-                "Can you help me find a general counseling hotline?",
-                "What are the hotlines available for emotional support?",
-                "Can you provide me with a hotline for immediate crisis support?",
-                "What hotline should I call for anxiety support?",
-                "I need the contact for a mental health hotline, please."
+                "Help me find a hotline that is available 24/7 for emergencies.",
+                "Help me find a hotline that provides general counseling services.",
+                "Help me find a hotline that can help with depression.",
+                "Help me find a hotline that can assist with abuse situations.",
+                "Help me find a hotline that offers immediate crisis support.",
+                "Help me find a hotline that provides support for grief.",
+                "Help me find a hotline that offers LGBTQ+ support services.",
+                "Help me find a hotline that focuses on addiction support.",
+                "Help me find a hotline that specializes in mental health issues."
             ],
             "description": "The user wants to access the contact information for emergency or non-emergency hotlines.",
             "function_schemas": null,
@@ -75,16 +76,14 @@
         {
             "name": "habit_alternatives",
             "utterances": [
-                "What are some good substitutes for my coffee addiction?",
-                "What are some healthier alternatives to my daily soda habit?",
-                "What are some eco-friendly alternatives to my disposable utensils?",
-                "I want to find a healthier option for my late-night binge-watching snacks.",
-                "What can I do instead of scrolling on my phone before bed?",
-                "I'm looking to replace my evening snacking with something healthier.",
-                "Can you suggest sustainable alternatives to my plastic water bottle usage?",
-                "Can you recommend alternatives to my daily chocolate cravings?",
-                "I want to replace my sugary breakfast with something nutritious.",
-                "I'm trying to cut down on fast food; what are some healthier options?"
+                "Suggest an alternative for drinking soda every day.",
+                "Suggest an alternative for procrastinating on my tasks.",
+                "Suggest an alternative for spending too much time on social media.",
+                "Suggest an alternative for binge-watching TV shows.",
+                "Suggest an alternative for scrolling on my phone at night.",
+                "Suggest an alternative for eating junk food when I'm stressed.",
+                "Suggest an alternative for eating out for lunch every day.",
+                "Suggest an alternative for using plastic bags for shopping."
             ],
             "description": "The user wants to find a healthier or more sustainable alternative to a habit they currently have.",
             "function_schemas": null,
@@ -95,14 +94,15 @@
         {
             "name": "insert_mood",
             "utterances": [
-                "I experienced a lot of stress today; I need to vent.",
-                "I'm grateful for my friends; they always lift my spirits.",
-                "Today was overwhelming; I want to jot down my feelings.",
-                "I felt really anxious today and needed to express it.",
-                "I want to record my thoughts on self-care and relaxation.",
-                "Today was tough; I need to write about my struggles.",
-                "I felt proud of myself today; I want to remember this moment.",
-                "I had a great day; I want to capture this joy."
+                "Today, I feel really happy and content.",
+                "Today, I feel motivated to achieve my goals.",
+                "Today, I feel overwhelmed with everything going on.",
+                "Today, I feel sad and need some comfort.",
+                "Today, I feel excited about starting a new project.",
+                "Today, I feel grateful for my supportive friends.",
+                "Today, I feel a bit anxious about my upcoming presentation.",
+                "Today, I feel frustrated with my current situation.",
+                "Today, I feel relaxed and at peace."
             ],
             "description": "The user wants to record their thoughts, feelings, or reflections by making an entry in their journal or mood board.",
             "function_schemas": null,
@@ -113,14 +113,32 @@
         {
             "name": "insert_journal",
             "utterances": [
-                "Grateful for the moments of peace I find in meditation.",
-                "I'm grateful for my health and the ability to move.",
-                "I'm thankful for the little moments of laughter in my day.",
-                "Grateful for the kindness of strangers that brightens my day.",
-                "Feeling thankful for the opportunity to learn something new.",
-                "I'm grateful for the support of my friends during tough times.",
-                "Today, I felt joy in a simple cup of coffee.",
-                "I'm thankful for the beauty of nature around me."
+                "I want to add to my journal today: I felt overwhelmed but managed to stay positive.",
+                "I want to add to my journal today: I felt really anxious about my presentation.",
+                "I want to add to my journal today: I enjoyed a peaceful walk in the park.",
+                "I want to add to my journal today: I am proud of myself for sticking to my goals.",
+                "I want to add to my journal today: I struggled with my emotions but found some clarity.",
+                "I want to add to my journal today: I learned something new that excited me.",
+                "I want to add to my journal today: I'm grateful for my supportive friends.",
+                "I want to add to my journal today: Today was exhausting, but I accomplished a lot.",
+                "I want to add to my journal today: I felt a sense of accomplishment after finishing my project."
+            ],
+            "description": "The user wants to contribute a message of gratitude or positivity to the community gratitude banner.",
+            "function_schemas": null,
+            "llm": null,
+            "score_threshold": 0.5,
+            "metadata": {}
+        },
+        {
+            "name": "insert_gratitude",
+            "utterances": [
+                "I am grateful for the opportunity to learn something new today.",
+                "I am grateful for the beautiful sunset I saw today.",
+                "I am grateful for the kindness of strangers I experienced this week.",
+                "I am grateful for the small victories that made my day brighter.",
+                "I am grateful for the support of my friends during tough times.",
+                "I am grateful for the peaceful moments I found in nature.",
+                "I am grateful for the warm cup of coffee that started my day."
             ],
             "description": "The user wants to contribute a message of gratitude or positivity to the community gratitude banner.",
             "function_schemas": null,
@@ -131,14 +149,13 @@
         {
             "name": "ask_missionvalues",
             "utterances": [
-                "I'd like to know the vision behind Squeak to Speak.",
-                "Can you explain the commitment to mental health at Squeak to Speak?",
-                "Tell me about the story behind Squeak to Speak.",
-                "What are the goals of Squeak to Speak?",
-                "What is Squeak to Speak's approach to mental health advocacy?",
-                "What inspired the creation of Squeak to Speak?",
-                "What values guide the work of Squeak to Speak?",
-                "How does Squeak to Speak prioritize user privacy?"
+                "What commitment does Squeak to Speak have towards mental health?",
+                "Can you explain the goals of Squeak to Speak?",
+                "What is the mission of Squeak to Speak?",
+                "What are the core values of Squeak to Speak?",
+                "Tell me about the privacy values of Squeak to Speak.",
+                "I'd like to know the story behind Squeak to Speak.",
+                "How does Squeak to Speak support mental health?"
             ],
             "description": "The user wants to learn about the mission, vision, and values of Squeak to Speak.",
             "function_schemas": null,
@@ -149,14 +166,15 @@
         {
             "name": "ask_features",
             "utterances": [
-                "How can I benefit from using Squeak to Speak?",
-                "What are the main features of Squeak to Speak?",
-                "Can you explain how the chatbot can help me with my mental health?",
-                "Tell me about the features that assist with emotional well-being.",
-                "Can you give me an overview of the platform's functionalities?",
-                "What tools are available on Squeak to Speak for users?",
-                "How does Squeak to Speak support users in their mental health journey?",
-                "What features does Squeak to Speak offer for mental health support?"
+                "What features does your chatbot offer for support?",
+                "How does your chatbot assist users with mental health?",
+                "How can your chatbot help me manage my emotions?",
+                "What can your chatbot do for my mental health?",
+                "Tell me how I can benefit from using your chatbot.",
+                "Can you explain the functionalities of your chatbot?",
+                "Can you provide an overview of your chatbot's capabilities?",
+                "What services does your chatbot provide for mental wellness?",
+                "Tell me about your chatbot's features."
             ],
             "description": "The user wants an overview of the features and functionalities of Squeak to Speak.",
             "function_schemas": null,
@@ -167,15 +185,13 @@
         {
             "name": "review_user_memory",
             "utterances": [
-                "What details do you keep about my usage?",
-                "What preferences do you have stored for me?",
-                "Please provide a summary of my stored data.",
-                "I want to check what information you have on file.",
-                "Can I see the data you've collected about me?",
-                "I'd like to review my previous interactions, please.",
-                "Can you show me my preferences and settings?",
-                "I'd like to access my past journal entries.",
-                "Can you show me my journal entries?"
+                "What details do you have regarding my previous interactions?",
+                "Can you show me my stored preferences?",
+                "What insights do you have from my past entries?",
+                "Can I access the data you have on my mental health journey?",
+                "What data do you have on me?",
+                "Can I see the information you have collected about me?",
+                "What information do you keep about my usage?"
             ],
             "description": "The user wants to review the data that Squeak to Speak has collected about them.",
             "function_schemas": null,
@@ -186,12 +202,12 @@
         {
             "name": "update_journal",
             "utterances": [
-                "I want to update my gratitude entry to include a specific event.",
-                "Please revise my entry to add more details about my day.",
-                "I'd like to modify my journal entry about yesterday's events.",
-                "Change the text of my previous mood entry to be more positive.",
-                "I need to change the date on my last journal entry.",
-                "Update my entry to express my gratitude for my friends."
+                "I want to change a journal entry on my birthday.",
+                "I want to change a journal entry about my feelings yesterday.",
+                "I want to change a journal entry regarding my family.",
+                "I want to change a journal entry about my health.",
+                "I want to change a journal entry on my recent trip.",
+                "I want to change a journal entry from last month."
             ],
             "description": "The user wants to modify an existing entry in their journal or mood board.",
             "function_schemas": null,
@@ -200,17 +216,107 @@
             "metadata": {}
         },
         {
+            "name": "update_mood",
+            "utterances": [
+                "I want to change my mood from frustrated to calm.",
+                "I want to change my mood entry to include feeling more relaxed.",
+                "I want to change my mood to reflect my current anxiety levels.",
+                "I want to change my mood entry to show I'm feeling grateful.",
+                "I want to change my mood from happy to anxious.",
+                "I want to change my mood entry to indicate I'm feeling better.",
+                "I want to change my mood description to more accurately show my stress.",
+                "I want to change my mood from sad to hopeful.",
+                "I want to change my mood on last Friday to excited."
+            ],
+            "description": "The user wants to modify an existing entry in their mood board.",
+            "function_schemas": null,
+            "llm": null,
+            "score_threshold": 0.5,
+            "metadata": {}
+        },
+        {
+            "name": "view_journal",
+            "utterances": [
+                "How was my day on the 20th of September?",
+                "How was my day on the 15th of last month?",
+                "How was my day on the 5th?",
+                "How did I feel on the first day of spring?",
+                "How was my day on the 10th?",
+                "How did I feel on the last Friday?",
+                "How was my day on the 30th?",
+                "How did I feel on my birthday?",
+                "How was my day on July 4th?",
+                "How was my day on October 1st?"
+            ],
+            "description": "The user wants to view past entries in their journal.",
+            "function_schemas": null,
+            "llm": null,
+            "score_threshold": 0.5,
+            "metadata": {}
+        },
+        {
+            "name": "view_mood",
+            "utterances": [
+                "How did I feel last week?",
+                "How did I feel on the day I graduated?",
+                "How did I feel on the first day of spring?",
+                "How did I feel on the last day of work?",
+                "How did I feel on the day I moved?",
+                "How did I feel during the holidays?",
+                "How did I feel on the day of my presentation?",
+                "How did I feel on the day I got my pet?"
+            ],
+            "description": "The user wants to view past entries in their mood board.",
+            "function_schemas": null,
+            "llm": null,
+            "score_threshold": 0.5,
+            "metadata": {}
+        },
+        {
+            "name": "delete_journal",
+            "utterances": [
+                "Delete my journal entry about my family.",
+                "Delete my journal entry on September 15th.",
+                "Delete my journal entry on my birthday.",
+                "Delete my journal entry on the 10th.",
+                "Delete my journal entry about my vacation.",
+                "Delete my journal entry regarding my job."
+            ],
+            "description": "The user wants to delete an existing entry in their journal.",
+            "function_schemas": null,
+            "llm": null,
+            "score_threshold": 0.5,
+            "metadata": {}
+        },
+        {
+            "name": "delete_mood",
+            "utterances": [
+                "Delete my mood entry for today.",
+                "Delete my mood on the 12th of September.",
+                "Delete my mood from last month.",
+                "Delete my mood entry from two days ago.",
+                "Delete my mood on March 15.",
+                "Delete my mood on October 5th.",
+                "Delete my mood entry from last week.",
+                "Delete my mood on the 20th."
+            ],
+            "description": "The user wants to delete an existing entry in their mood board.",
+            "function_schemas": null,
+            "llm": null,
+            "score_threshold": 0.5,
+            "metadata": {}
+        },
+        {
             "name": "chat_about_journal",
             "utterances": [
-                "How have my thoughts evolved over the past month?",
-                "Let's discuss the positive moments I recorded recently.",
-                "I'd like to reflect on my feelings from last week.",
-                "I'd like to revisit my gratitude entries.",
-                "What themes do you see in my journal entries?",
-                "Can you remind me what I wrote about my goals?",
-                "Can we talk about my last journal entry?",
-                "Help me understand my mood patterns from my journal.",
-                "Can we explore the challenges I mentioned in my journal?"
+                "I want to talk about how I felt on September 15.",
+                "I want to talk about how I felt on the day I went hiking.",
+                "I want to talk about how I felt on the day I met my friend.",
+                "I want to talk about how I felt on the day I got my promotion.",
+                "I want to talk about how I felt on the last rainy day.",
+                "I want to talk about how I felt on the day I watched that movie.",
+                "I want to talk about how I felt on the day I visited the museum.",
+                "I want to talk about how I felt on the day I completed my project."
             ],
             "description": "The user wants to engage in a conversation with the chatbot, leveraging the knowledge of their past journal entries.",
             "function_schemas": null,
