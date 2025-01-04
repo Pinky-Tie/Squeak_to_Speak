@@ -17,7 +17,7 @@ from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-# from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
 from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
 from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
@@ -29,6 +29,8 @@ from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 #databse connection
 import sqlite3
@@ -64,68 +66,93 @@ class MainChatbot:
             }
         }
 
+        # Initialize handlers for each intent
+        self.mood_board_entry_deleter = MoodBoardEntryDeleter(db_manager=self.db_manager)
+        self.mood_board_deletion_confirmation_formatter = MoodBoardDeletionConfirmationFormatter()
+        self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
+        self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
+        self.identify_hotline_preferences = IdentifyHotlinePreferences()
+        self.hotline_finder = HotlineFinder(db_manager=self.db_manager)
+        self.hotline_output_formatter = HotlineOutputFormatter()
+        self.identify_user_preferences = IdentifyUserPreferences()
+        self.therapist_finder = TherapistFinder(db_manager=self.db_manager)
+        self.therapist_output_formatter = TherapistOutputFormatter()
+        self.identify_support_group_preferences = IdentifySupportGroupPreferences()
+        self.support_group_finder = SupportGroupFinder(db_manager=self.db_manager)
+        self.support_group_output_formatter = SupportGroupOutputFormatter()
+        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        self.present_journal_entries = PresentJournalEntries()
+        self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
+        self.journal_entry_response = JournalEntryResponse()
+        self.gratitude_manager = GratitudeEntryManager(db_manager=self.db_manager)
+        self.retrieve_user_data = RetrieveUserData(db_manager=self.db_manager)
+        self.present_user_data = PresentUserData()
+        self.identify_mood_board_entry_to_modify = IdentifyMoodBoardEntryToModify()
+        self.modify_mood_board_entry = ModifyMoodBoardEntry(db_manager=self.db_manager)
+        self.inform_user_of_mood_board_change = InformUserOfMoodBoardChange()
+        self.identify_journal_entry_to_modify = IdentifyJournalEntryToModify()
+        self.modify_journal_entry = ModifyJournalEntry(db_manager=self.db_manager)
+        self.inform_user_of_journal_change = InformUserOfJournalChange()
+        self.chitchat_classifier_chain = ChitChatClassifierChain(llm=self.llm)
+        self.chitchat_response_chain = self.add_memory_to_runnable(ChitChatResponseChain(llm=self.llm))
+        
+        # Map of intentions to their corresponding chains
         # Map intent names to their corresponding reasoning and response chains
         self.chain_map = {
-    
-                '''"chat_about_journal": {
-                    "retrieve": RetrieveRelevantEntries(pinecone_index="your_pinecone_index", embedding_model="your_embedding_model"),
-                    "generate": GenerateEmpatheticResponse(prompt_template="Your template here")
-                },'''
-                "delete_mood": {
-                    "delete": MoodBoardEntryDeleter(db_manager=DatabaseManager(conn)),
-                    "confirm": MoodBoardDeletionConfirmationFormatter()
-                },
-                "delete_journal": {
-                    "delete": JournalEntryDeleter(db_manager=DatabaseManager(conn)),
-                    "confirm": DeletionConfirmationFormatter()
-                },
-                "find_hotline": {
-                    "identify": IdentifyHotlinePreferences(),
-                    "find": HotlineFinder(db_manager=DatabaseManager(conn)),
-                    "output": HotlineOutputFormatter()
-                },
-                "find_therapist": {
-                    "identify": IdentifyUserPreferences(),
-                    "find": TherapistFinder(db_manager=DatabaseManager(conn)),
-                    "output": TherapistOutputFormatter()
-                },
-                "find_support_group": {
-                    "identify": IdentifySupportGroupPreferences(),
-                    "find": SupportGroupFinder(db_manager=DatabaseManager(conn)),
-                    "output": SupportGroupOutputFormatter()
-                },
-                    "insert_mood": {
-                    "retrieve": RetrieveEntries(db_manager=DatabaseManager(conn)),
-                    "present": PresentEntries()
-                },
-                "insert_journal": {
-                    "insert": JournalManager(db_manager=DatabaseManager(conn), llm=self.llm),
-                    "response": JournalEntryResponse()
-                },
-                "insert_gratitude": {
-                    "insert": GratitudeManager(db_manager=DatabaseManager(conn)),
-                    "response": GratitudeManager(db_manager=DatabaseManager(conn))
-                },
-                "review_user_memory": {
-                    "retrieve": RetrieveUserData(db_manager=DatabaseManager(conn)),
-                    "present": PresentUserData(prompt_template="Your template here")
-                },
-                "update_mood": {
-                    "identify": IdentifyMoodBoardEntryToModify(),
-                    "modify": ModifyMoodBoardEntry(db_manager=DatabaseManager(conn)),
-                    "inform": InformUserOfMoodBoardChange()
-                },
-                "update_journal": {
-                    "identify": IdentifyJournalEntryToModify(),
-                    "modify": ModifyJournalEntry(db_manager=DatabaseManager(conn)),
-                    "inform": InformUserOfJournalChange()
-                },
-                "chitchat": {
-                "reasoning": ChitChatClassifierChain(llm=self.llm),
-                "response": self.add_memory_to_runnable(
-                    ChitChatResponseChain(llm=self.llm)
-                )
-            }}
+            "delete_mood": {
+                "delete": self.mood_board_entry_deleter,
+                "confirm": self.mood_board_deletion_confirmation_formatter
+            },
+            "delete_journal": {
+                "delete": self.journal_entry_deleter,
+                "confirm": self.deletion_confirmation_formatter
+            },
+            "find_hotline": {
+                "identify": self.identify_hotline_preferences,
+                "find": self.hotline_finder,
+                "output": self.hotline_output_formatter
+            },
+            "find_therapist": {
+                "identify": self.identify_user_preferences,
+                "find": self.therapist_finder,
+                "output": self.therapist_output_formatter
+            },
+            "find_support_group": {
+                "identify": self.identify_support_group_preferences,
+                "find": self.support_group_finder,
+                "output": self.support_group_output_formatter
+            },
+            "insert_mood": {
+                "retrieve": self.retrieve_journal_entries,
+                "present": self.present_journal_entries
+            },
+            "insert_journal": {
+                "insert": self.journal_manager,
+                "response": self.journal_entry_response
+            },
+            "insert_gratitude": {
+                "insert": self.gratitude_manager,
+                "response": self.gratitude_manager
+            },
+            "review_user_memory": {
+                "retrieve": self.retrieve_user_data,
+                "present": self.present_user_data
+            },
+            "update_mood": {
+                "identify": self.identify_mood_board_entry_to_modify,
+                "modify": self.modify_mood_board_entry,
+                "inform": self.inform_user_of_mood_board_change
+            },
+            "update_journal": {
+                "identify": self.identify_journal_entry_to_modify,
+                "modify": self.modify_journal_entry,
+                "inform": self.inform_user_of_journal_change
+            },
+            "chitchat": {
+                "reasoning": self.chitchat_classifier_chain,
+                "response": self.chitchat_response_chain
+            }
+        }
 
 
         self.rag = self.add_memory_to_runnable(
@@ -442,37 +469,67 @@ class MainChatbot:
 
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
-
+    
         Args:
             user_input: The input text specifying the desired journal entries.
-
+    
         Returns:
             A list or structured view of relevant journal entries.
         """
-        # Retrieve the chain for viewing journal entries
-        view_chain = self.get_chain("view_journal")
+        retrieve_chain = self.get_chain("view_journal")[0] 
+        present_chain = self.get_chain("view_journal")[1]
 
-        # Query the chain for the requested journal entries
-        response = view_chain.invoke(user_input)
-
-        return response.content
+        if "search_type" not in user_input:
+            # Prompt the user to choose between searching by date or topic
+            return retrieve_chain.prompt_for_search_type()
+        elif user_input["search_type"] == "date" and "date" not in user_input:
+            # Prompt the user for the date if not provided
+            return retrieve_chain.prompt_for_date()
+        elif user_input["search_type"] == "topic" and "topic" not in user_input:
+            # Prompt the user for the topic if not provided
+            return retrieve_chain.prompt_for_topic()
+        elif user_input["search_type"] == "date":
+            # Retrieve the journal entries for the specified date
+            entries = retrieve_chain.get_entries_by_date(self.user_id, user_input["date"])
+        elif user_input["search_type"] == "topic":
+            # Retrieve the journal entries for the specified topic
+            entries = retrieve_chain.get_entries_by_topic(self.user_id, user_input["topic"])
+        
+        # Format the entries for presentation
+        response = present_chain.format_output(entries)
+        return response
     
     def handle_view_mood(self, user_input: Dict):
         """Handle the intent to view past mood board entries.
-
+    
         Args:
             user_input: The input text specifying the desired mood board entries.
-
+    
         Returns:
             A list or structured view of relevant mood board entries.
         """
-        # Retrieve the chain for viewing mood board entries
-        view_chain = self.get_chain("view_mood")
-
-        # Query the chain for the requested mood board entries
-        response = view_chain.invoke(user_input)
-
-        return response.content
+        retrieve_chain = self.get_chain("view_mood")[0]
+        present_chain = self.get_chain("view_mood")[1]
+    
+        if "search_type" not in user_input:
+            # Prompt the user to choose between searching by date or topic
+            return retrieve_chain.prompt_for_search_type()
+        elif user_input["search_type"] == "date" and "date" not in user_input:
+            # Prompt the user for the date if not provided
+            return retrieve_chain.prompt_for_date()
+        elif user_input["search_type"] == "topic" and "topic" not in user_input:
+            # Prompt the user for the topic if not provided
+            return retrieve_chain.prompt_for_topic()
+        elif user_input["search_type"] == "date":
+            # Retrieve the mood board entries for the specified date
+            entries = retrieve_chain.get_entries_by_date(self.user_id, user_input["date"])
+        elif user_input["search_type"] == "topic":
+            # Retrieve the mood board entries for the specified topic
+            entries = retrieve_chain.get_entries_by_topic(self.user_id, user_input["topic"])
+        
+        # Format the entries for presentation
+        response = present_chain.format_output(entries)
+        return response
 
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.
@@ -591,8 +648,27 @@ class MainChatbot:
         else:
             # Process the user input through the modify chain
             response = modify_chain.modify_entry(user_input["entry_id"], user_input["new_content"])
-            confirmation_formatter = self.get_chain("update_mood")[2]  # Assuming the third chain is for confirmation
+            confirmation_formatter = self.get_chain("update_mood")[2]
             return confirmation_formatter.format_output(response)
+    
+    def handle_review_user_memory(self, user_input: Dict):
+        """Handle the intent to review all data related to the user.
+    
+        Args:
+            user_input: The input text specifying the request to review user data.
+    
+        Returns:
+            A structured view of all relevant user data.
+        """
+        retrieve_chain = self.get_chain("review_user_memory")[0]  # Assuming the first chain is for retrieval
+        present_chain = self.get_chain("review_user_memory")[1]  # Assuming the second chain is for presentation
+    
+        # Retrieve all relevant data for the user
+        data = retrieve_chain.retrieve_data(self.user_id)
+    
+        # Format the data for presentation
+        response = present_chain.format_output(data)
+        return response
     
     def handle_chitchat_intent(self, user_input: Dict[str, str]) -> str:
         """Handle the chitchat intent by providing a response.
@@ -676,15 +752,28 @@ class MainChatbot:
         # Route the input based on the identified intention
         handler = self.intent_handlers.get(intention, self.handle_unknown_intent)
         
-        # Check if the handler is for deleting or updating a journal/mood entry and handle multi-step interaction
-        if intention in ["delete_journal", "delete_mood", "update_journal", "update_mood"] and "date" not in user_input:
-        # Prompt for the date
-            return handler(user_input)
-        elif intention in ["delete_journal", "delete_mood", "update_journal", "update_mood"] and "date" in user_input and "new_content" not in user_input:
-        # Process the next step for updating a journal/mood entry
-            return handler({"customer_input": user_input["customer_input"], "date": user_input["date"]})
-        elif intention in ["update_journal", "update_mood"] and "date" in user_input and "new_content" in user_input:
-        # Process the final step for updating a journal/mood entry
-            return handler({"customer_input": user_input["customer_input"], "date": user_input["date"], "new_content": user_input["new_content"]})
-    
+        # Check if the handler is for viewing, deleting, or updating a journal/mood entry and handle multi-step interaction
+        if intention in ["view_journal", "view_mood", "delete_journal", "delete_mood", "update_journal", "update_mood"]:
+            if "search_type" not in user_input and intention in ["view_journal", "view_mood"]:
+                # Prompt for the search type if not provided
+                return handler(user_input)
+            elif "date" not in user_input and "topic" not in user_input:
+                # Prompt for the date or topic if not provided
+                return handler(user_input)
+            elif "date" in user_input and "new_content" not in user_input and intention in ["update_journal", "update_mood"]:
+                # Process the next step for updating a journal/mood entry
+                return handler({"customer_input": user_input["customer_input"], "date": user_input["date"]})
+            elif "topic" in user_input and "new_content" not in user_input and intention in ["update_journal", "update_mood"]:
+                # Process the next step for updating a journal/mood entry
+                return handler({"customer_input": user_input["customer_input"], "topic": user_input["topic"]})
+            elif "date" in user_input and "new_content" in user_input and intention in ["update_journal", "update_mood"]:
+                # Process the final step for updating a journal/mood entry
+                return handler({"customer_input": user_input["customer_input"], "date": user_input["date"], "new_content": user_input["new_content"]})
+            elif "date" in user_input and intention in ["view_journal", "view_mood"]:
+                # Process the final step for viewing a journal/mood entry by date
+                return handler({"customer_input": user_input["customer_input"], "date": user_input["date"]})
+            elif "topic" in user_input and intention in ["view_journal", "view_mood"]:
+                # Process the final step for viewing a journal/mood entry by topic
+                return handler({"customer_input": user_input["customer_input"], "topic": user_input["topic"]})
+        
         return handler(user_input)
