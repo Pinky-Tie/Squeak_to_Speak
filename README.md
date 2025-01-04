@@ -86,7 +86,7 @@ The user account for testing is the following:
 ### 3.1 Database Overview and Schema Diagram
 This is the database operating behind the chatbot.
 
-![Database Schema](database_schema.png "Database Schema")
+![Database Schema](database_schema.jpg "Database Schema")
 
 ### 3.2 Table Descriptions
 
