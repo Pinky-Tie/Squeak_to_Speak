@@ -2,17 +2,10 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
-from pydantic import BaseModel
+from chains.models import MoodEntry
 import datetime
 
 # User Story: I want to revisit past entries in my journal or mood board to reflect, recall and understand my experiences and emotions over time.
-
-# MoodEntry model
-class MoodEntry(BaseModel):
-    user_id: int
-    mood: str
-    date: str
-    description: str
 
 # Chain 1
 # Goal: Retrieve the entries the users want to see

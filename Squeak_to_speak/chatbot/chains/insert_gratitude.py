@@ -4,6 +4,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
+from chains.models import GratitudeEntry
 
 # User Story: I want to anonymously share something I’m grateful and/or happy for so that I can help brighten someone else’s day while fostering my own positivity.
 
@@ -11,12 +12,6 @@ from data.database_functions import DatabaseManager
 # Goal: Insert the users' gratitude message into the database
 # Implementation: This chain transforms the user’s input into an object that can be inserted into the database. The Chain ends with confirmation of insertion from the database.
 
-# GratitudeEntry model
-class GratitudeEntry(BaseModel):
-    date: str
-    comment: str
-
-# Reasoning Chain
 class GratitudeEntryManager:
     def __init__(self, db_manager:DatabaseManager):
         self.db_manager = db_manager

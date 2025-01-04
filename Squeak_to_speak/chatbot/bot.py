@@ -411,22 +411,17 @@ class MainChatbot:
 
         return response.content
 
-    def handle_insert_journal(self, user_input: Dict):
-        """Handle the intent to make an entry in the journal.
-
-        Args:
-            user_input: The input text from the user.
-
-        Returns:
-            Confirmation message after successfully processing the journal entry.
+    def handle_insert_journal(self, user_input: Dict[str, str]) -> str:
         """
-        # Retrieve the chain for journal entry creation
-        entry_chain = self.get_chain("insert_journal")
+        Handles journal entry intent by processing user input and providing a response."""
+        user_message = user_input.get("message", "")
+        # Step 1: Process user message with the reasoning chain
+        result = self.journal_manager.process(user_id=self.user_id, user_message=user_message)
 
-        # Process the user input through the entry chain
-        response = entry_chain.invoke(user_input)
+        # Step 2: Generate response with the response chain
+        response = self.journal_response.generate(result["success"])
 
-        return response.content
+        return response
 
     def handle_insert_mood(self, user_input: Dict):
         """Handle the intent to make an entry in the mood board.
@@ -497,7 +492,8 @@ class MainChatbot:
         return response.content
 
     def handle_delete_journal(self, user_input: Dict):
-        """Handle the intent to delete data from the user's journal.
+        """
+        Handle the intent to delete data from the user's journal.
 
         Args:
             user_input: The input text specifying the journal entry to delete.
@@ -505,64 +501,98 @@ class MainChatbot:
         Returns:
             Confirmation message after successfully deleting the journal entry.
         """
-        # Retrieve the chain for deleting a journal entry
-        delete_chain = self.get_chain("delete_journal")
+        delete_chain = self.get_chain("delete_journal")[0]
 
-        # Process the user input through the delete chain
-        response = delete_chain.invoke(user_input)
-
-        return response.content
+        if "date" not in user_input:
+            # Prompt the user for the date if not provided
+            return delete_chain.prompt_for_date()
+        else:
+            # Process the user input through the delete chain
+            response = delete_chain.process(self.user_id, user_input["date"])
+            confirmation_formatter = self.get_chain("delete_journal")[1]  # Assuming the second chain is for confirmation
+            return confirmation_formatter.format_output(response, user_input["date"])
 
     def handle_delete_mood(self, user_input: Dict):
-        """Handle the intent to delete data from the user's mood board.
-
+        """
+        Handle the intent to delete data from the user's mood board.
+    
         Args:
             user_input: The input text specifying the mood board entry to delete.
-
+    
         Returns:
             Confirmation message after successfully deleting the mood board entry.
         """
-        # Retrieve the chain for deleting a mood board entry
-        delete_chain = self.get_chain("delete_mood")
-
-        # Process the user input through the delete chain
-        response = delete_chain.invoke(user_input)
-
-        return response.content
+        delete_chain = self.get_chain("delete_mood")[0]
+    
+        if "date" not in user_input:
+            # Prompt the user for the date if not provided
+            return delete_chain.prompt_for_date()
+        else:
+            # Process the user input through the delete chain
+            response = delete_chain.process(self.user_id, user_input["date"])
+            confirmation_formatter = self.get_chain("delete_mood")[1]
+            return confirmation_formatter.format_output(response, user_input["date"])
 
     def handle_update_journal(self, user_input: Dict):
         """Handle the intent to alter data in the user's journal.
-
+    
         Args:
             user_input: The input text specifying the journal entry to alter and new data.
-
+    
         Returns:
             Confirmation message after successfully updating the journal entry.
         """
-        # Retrieve the chain for altering a journal entry
-        alter_chain = self.get_chain("update_journal")
-
-        # Process the user input through the alter chain
-        response = alter_chain.invoke(user_input)
-
-        return response.content
+        identify_chain = self.get_chain("update_journal")[0]
+        modify_chain = self.get_chain("update_journal")[1] 
+        if "date" not in user_input:
+            # Prompt the user for the date if not provided
+            return identify_chain.prompt_for_date()
+        elif "new_content" not in user_input:
+            # Retrieve the entry to modify
+            entry = identify_chain.get_entry_to_modify(self.user_id, user_input["date"], self.db_manager)
+            if entry:
+                # Store the entry ID in the user input for the next step
+                user_input["entry_id"] = entry["entry_id"]
+                # Prompt the user for the new content
+                return modify_chain.prompt_for_new_content()
+            else:
+                return f"No journal entry found for date {user_input['date']}."
+        else:
+            # Process the user input through the modify chain
+            response = modify_chain.modify_entry(user_input["entry_id"], user_input["new_content"])
+            confirmation_formatter = self.get_chain("update_journal")[2]  # Assuming the third chain is for confirmation
+            return confirmation_formatter.format_output(response)
 
     def handle_update_mood(self, user_input: Dict):
         """Handle the intent to alter data in the user's mood board.
-
+    
         Args:
             user_input: The input text specifying the mood board entry to alter and new data.
-
+    
         Returns:
             Confirmation message after successfully updating the mood board entry.
         """
-        # Retrieve the chain for altering a mood board entry
-        alter_chain = self.get_chain("update_mood")
-
-        # Process the user input through the alter chain
-        response = alter_chain.invoke(user_input)
-
-        return response.content
+        identify_chain = self.get_chain("update_mood")[0]
+        modify_chain = self.get_chain("update_mood")[1] 
+    
+        if "date" not in user_input:
+            # Prompt the user for the date if not provided
+            return identify_chain.prompt_for_date()
+        elif "new_content" not in user_input:
+            # Retrieve the entry to modify
+            entry = identify_chain.get_entry_to_modify(self.user_id, user_input["date"], self.db_manager)
+            if entry:
+                # Store the entry ID in the user input for the next step
+                user_input["entry_id"] = entry["entry_id"]
+                # Prompt the user for the new content
+                return modify_chain.prompt_for_new_content()
+            else:
+                return f"No mood board entry found for date {user_input['date']}."
+        else:
+            # Process the user input through the modify chain
+            response = modify_chain.modify_entry(user_input["entry_id"], user_input["new_content"])
+            confirmation_formatter = self.get_chain("update_mood")[2]  # Assuming the third chain is for confirmation
+            return confirmation_formatter.format_output(response)
     
     def handle_chitchat_intent(self, user_input: Dict[str, str]) -> str:
         """Handle the chitchat intent by providing a response.
@@ -631,18 +661,30 @@ class MainChatbot:
 
     def process_user_input(self, user_input: Dict[str, str]) -> str:
         """Process user input by routing through the appropriate intention pipeline.
-
+    
         Args:
             user_input: The input text from the user.
-
+    
         Returns:
             The content of the response after processing through the chains.
         """
         # Classify the user's intent based on their input
         intention = self.get_user_intent(user_input)
-
+    
         print("Intent:", intention)
-
+    
         # Route the input based on the identified intention
         handler = self.intent_handlers.get(intention, self.handle_unknown_intent)
+        
+        # Check if the handler is for deleting or updating a journal/mood entry and handle multi-step interaction
+        if intention in ["delete_journal", "delete_mood", "update_journal", "update_mood"] and "date" not in user_input:
+        # Prompt for the date
+            return handler(user_input)
+        elif intention in ["delete_journal", "delete_mood", "update_journal", "update_mood"] and "date" in user_input and "new_content" not in user_input:
+        # Process the next step for updating a journal/mood entry
+            return handler({"customer_input": user_input["customer_input"], "date": user_input["date"]})
+        elif intention in ["update_journal", "update_mood"] and "date" in user_input and "new_content" in user_input:
+        # Process the final step for updating a journal/mood entry
+            return handler({"customer_input": user_input["customer_input"], "date": user_input["date"], "new_content": user_input["new_content"]})
+    
         return handler(user_input)
