@@ -13,5 +13,11 @@ st.logo("visual_assets\Logo_main.png", size="large")
 
 
 # Initialize st.session_state.authentication_status to False
-st.session_state.authentication_status= False
-menu(start=True) 
+#st.session_state.authentication_status= False
+#menu(start=True) 
+
+st.session_state.authentication_status = True
+st.session_state.username = "m@gmail.com"
+st.session_state.name = "maria"
+
+menu(change=True) 
