@@ -8,6 +8,7 @@ from pinecone import Index, Pinecone
 import os
 from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
+
 import sys
 import os
 from data.database_functions import DatabaseManager

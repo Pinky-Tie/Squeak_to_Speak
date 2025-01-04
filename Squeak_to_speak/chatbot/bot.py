@@ -11,8 +11,6 @@ from langchain_openai import ChatOpenAI
 from chatbot.memory import MemoryManager
 from chatbot.router.loader import load_intention_classifier
 
-from chatbot.memory import MemoryManager
-from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
