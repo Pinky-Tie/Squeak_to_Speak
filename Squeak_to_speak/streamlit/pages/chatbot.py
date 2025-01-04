@@ -7,6 +7,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 from Squeak_to_speak.chatbot.bot import MainChatbot
 load_dotenv()
+from Squeak_to_speak.data.data_func import get_user_id
 
 
 # Redirect to homepage.py if not logged in
@@ -108,7 +109,10 @@ def main(user_input):
         bot: An instance of the MainChatbot.
     """
     try:
-        bot= MainChatbot()
+        user_id = get_user_id(st.session_state.username)
+
+
+        bot= MainChatbot(user_id = int(user_id), conversation_id = 1)
         # Process the user's input using the bot and display the response
         response = bot.process_user_input({"customer_input": prompt})
         print(f"Response type: {type(response)}")

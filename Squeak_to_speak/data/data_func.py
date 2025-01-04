@@ -11,11 +11,11 @@ def connect_database():
     Returns:
         The connection and cursor.
     """
-    base_dir = Path(__file__).parent  
-    db_path = base_dir / "database" / "squeaktospeak_db.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    return conn, cursor
+    db_file = r"D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db"
+
+    conn_1 = sqlite3.connect(db_file)
+    cursor_1 = conn_1.cursor()
+    return conn_1, cursor_1
 
 def retrieve_data():
     """
@@ -24,22 +24,21 @@ def retrieve_data():
     Returns:
         dict: A dictionary where each key is a column name and values are lists of column data.
     """
-    conn, cursor=connect_database()
+    conn_2, cursor_2=connect_database()
 
     # Retrieve all table names
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = cursor.fetchall()
+    cursor_2.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor_2.fetchall()
 
-    # Assuming you know the table name, for example, 'users'
-    table_name = "users"  # Replace this with your actual table name
+    table_name = "users"  
 
     # Retrieve column names
-    cursor.execute(f"PRAGMA table_info({table_name});")
-    columns = [col[1] for col in cursor.fetchall()]
+    cursor_2.execute(f"PRAGMA table_info({table_name});")
+    columns = [col[1] for col in cursor_2.fetchall()]
 
     # Retrieve data from the table
-    cursor.execute(f"SELECT * FROM {table_name}")
-    rows = cursor.fetchall()
+    cursor_2.execute(f"SELECT * FROM {table_name}")
+    rows = cursor_2.fetchall()
 
     # Create a dictionary for each column
     column_data = {col: [] for col in columns}
@@ -47,7 +46,7 @@ def retrieve_data():
         for idx, value in enumerate(row):
             column_data[columns[idx]].append(value)
     
-    conn.close()
+    conn_2.close()
     return column_data
 
 def is_email_unique(email):
@@ -77,15 +76,42 @@ def add_user(username, email, password, country):
     Returns:
         bool: True if the user was added successfully, False otherwise.
     """
-    conn, cursor=connect_database()
+    conn, cursor = connect_database()
+
+    # Get the maximum user_id currently in the table
+    cursor.execute("SELECT MAX(user_id) FROM users")
+    max_user_id = cursor.fetchone()[0]
+
+    # If there are no users, start with user_id = 1
+    new_user_id = (max_user_id or 0) + 1
+
+    # Insert the new user with the calculated user_id
     cursor.execute(
-        "INSERT INTO users (username, email, password, country) VALUES (?, ?, ?, ?)",
-        (username, email, password, country)
+        "INSERT INTO users (user_id, username, email, password, country) VALUES (?, ?, ?, ?, ?)",
+        (new_user_id, username, email, password, country)
     )
+
     conn.commit()
     conn.close()
     return True
 
+
+
+def get_user_id(email):
+    """
+    Get the user ID for a given email address.
+
+    Args:
+        email (str): The email address of the user.
+
+    Returns:
+        int: The user ID if the email is found, None otherwise.
+    """
+    conn, cursor=connect_database()
+    cursor.execute("SELECT user_id FROM users WHERE email = ?;", (email,))
+    user_id_row = cursor.fetchone()
+    conn.close()
+    return user_id_row[0] if user_id_row else None
 
 def get_jornal_entries(email, target_date=None):
     """
@@ -104,16 +130,9 @@ def get_jornal_entries(email, target_date=None):
     if not target_date:
         target_date = datetime.now().strftime("%Y-%m-%d")
 
-    # Step 1: Get the user_id for the given email
-    cursor.execute("SELECT user_id FROM users WHERE email = ?;", (email,))
-    user_id_row = cursor.fetchone()
+   
 
-    if not user_id_row:
-        print("No user found with the given email.")
-        conn.close()
-        return False
-
-    user_id = user_id_row[0]
+    user_id = get_user_id(email)
 
     # Step 2: Get mood and description for the given user_id and date
     query = """

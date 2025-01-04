@@ -2,10 +2,13 @@ import datetime
 from pydantic import BaseModel
 import sys
 import os
+from pydantic import BaseModel
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
-from chains.models import GratitudeEntry
-
+class GratitudeEntry(BaseModel):
+    date: str
+    comment: str
 # User Story: I want to anonymously share something I’m grateful and/or happy for so that I can help brighten someone else’s day while fostering my own positivity.
 
 # Chain 1

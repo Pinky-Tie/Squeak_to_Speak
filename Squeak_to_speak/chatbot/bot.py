@@ -16,36 +16,12 @@ from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
-#Maria
-"""
-from .chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-from .chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
-from .chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
-from .chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
-from .chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
-from .chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
-from .chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
-from .chains.insert_gratitude import GratitudeManager
-from .chains.insert_journal import JournalManager, JournalEntryResponse
-from .chains.insert_mood import RetrieveEntries, PresentEntries
-from .chains.review_user_memory import RetrieveUserData, PresentUserData
-from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
-from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-import sqlite3
-db_file = r'C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
-# Connect to the SQLite database
-conn = sqlite3.connect(db_file)
-db_manager = DatabaseManager(conn)
-"""
+
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
 from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
-from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
-from chatbot.chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
-from chatbot.chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
-from chatbot.chains.insert_gratitude import GratitudeEntryManager
+from chatbot.chains.insert_gratitude import GratitudeEntryManager, GratitudeEntryResponse
 from chatbot.chains.insert_journal import JournalEntryManager, JournalEntryResponse
 from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
@@ -60,7 +36,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
 import sqlite3
-db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db"
+db_file = r"D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db"
 
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
@@ -71,7 +47,7 @@ class MainChatbot:
     routing them through configured reasoning and response chains.
     """
 
-    def _init_(self, user_id: int, conversation_id: int):
+    def __init__(self, user_id: int, conversation_id: int):
         """Initialize the bot with session and language model configurations."""
         # Initialize the memory manager to manage session history
         self.memory = MemoryManager()
@@ -91,25 +67,34 @@ class MainChatbot:
             }
         }
 
+        self.rag = self.add_memory_to_runnable(
+            RAGPipeline(
+                index_name="pdf-data",
+                embeddings_model="text-embedding-3-small",
+                llm=self.llm,
+                memory=True,
+            ).rag_chain
+        )
+        
+
         # Initialize handlers for each intent
         self.mood_board_entry_deleter = MoodBoardEntryDeleter(db_manager=self.db_manager)
         self.mood_board_deletion_confirmation_formatter = MoodBoardDeletionConfirmationFormatter()
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
-        self.identify_hotline_preferences = IdentifyHotlinePreferences()
-        self.hotline_finder = HotlineFinder(db_manager=self.db_manager)
-        self.hotline_output_formatter = HotlineOutputFormatter()
-        self.identify_user_preferences = IdentifyUserPreferences()
-        self.therapist_finder = TherapistFinder(db_manager=self.db_manager)
-        self.therapist_output_formatter = TherapistOutputFormatter()
-        self.identify_support_group_preferences = IdentifySupportGroupPreferences()
-        self.support_group_finder = SupportGroupFinder(db_manager=self.db_manager)
-        self.support_group_output_formatter = SupportGroupOutputFormatter()
         self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
         self.present_journal_entries = PresentJournalEntries()
+
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
+        
+
         self.gratitude_manager = GratitudeEntryManager(db_manager=self.db_manager)
+        self.gratitude_entry_response = GratitudeEntryResponse()
+
+        self.mood_manager = MoodEntryManager(db_manager=self.db_manager)
+        self.mood_entry_response = MoodEntryResponse()
+
         self.retrieve_user_data = RetrieveUserData(db_manager=self.db_manager)
         self.present_user_data = PresentUserData()
         self.identify_mood_board_entry_to_modify = IdentifyMoodBoardEntryToModify()
@@ -132,21 +117,7 @@ class MainChatbot:
                 "delete": self.journal_entry_deleter,
                 "confirm": self.deletion_confirmation_formatter
             },
-            "find_hotline": {
-                "identify": self.identify_hotline_preferences,
-                "find": self.hotline_finder,
-                "output": self.hotline_output_formatter
-            },
-            "find_therapist": {
-                "identify": self.identify_user_preferences,
-                "find": self.therapist_finder,
-                "output": self.therapist_output_formatter
-            },
-            "find_support_group": {
-                "identify": self.identify_support_group_preferences,
-                "find": self.support_group_finder,
-                "output": self.support_group_output_formatter
-            },
+
             "insert_mood": {
                 "retrieve": self.retrieve_journal_entries,
                 "present": self.present_journal_entries
@@ -181,15 +152,6 @@ class MainChatbot:
 
         
 
-
-        self.rag = self.add_memory_to_runnable(
-            RAGPipeline(
-                index_name="pdf-data",
-                embeddings_model="text-embedding-3-small",
-                llm=self.llm,
-                memory=True,
-            ).rag_chain
-        )
 
         # Map of intentions to their corresponding handlers
         self.intent_handlers: Dict[Optional[str], Callable[[Dict[str, str]], str]] = {
@@ -383,8 +345,9 @@ class MainChatbot:
         present_chain = self.get_chain("chat_about_journal")[1]  # Assuming the second chain is for presentation
         response = present_chain.format_output(entries, user_input.get("entry_type", "journal"))
 
-        return response'''
-
+        return response
+        '''
+    
     def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
 
         response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
@@ -392,69 +355,25 @@ class MainChatbot:
         return response       
 
     def handle_find_therapist(self, user_input: Dict):
-        """Handle the healthcare professional recommendation intent.
+        response = self.rag.invoke(user_input,index_name = "therapists", config=self.memory_config)
 
-        Args:
-            user_input: The input text from the user.
-
-        Returns:
-            The content of the response after processing through the chains.
-        """
-        # Retrieve reasoning and response chains for the healthcare recommendation intent
-        reasoning_chain, response_chain = self.get_chain("find_therapist")
-
-        # Process user input through the reasoning chain
-        reasoning_output = reasoning_chain.invoke(user_input)
-
-        # Generate a response using the output of the reasoning chain
-        response = response_chain.invoke(reasoning_output, config=self.memory_config)
-
-        return response.content
+        return response 
 
     def handle_find_support_group(self, user_input: Dict):
-        """Handle the support group recommendation intent.
+        response = self.rag.invoke(user_input,index_name = "support-group", config=self.memory_config)
 
-        Args:
-            user_input: The input text from the user.
-
-        Returns:
-            The content of the response after processing through the chains.
-        """
-        # Retrieve reasoning and response chains for the support group recommendation intent
-        reasoning_chain, response_chain = self.get_chain("find_support_group")
-
-        # Process user input through the reasoning chain
-        reasoning_output = reasoning_chain.invoke(user_input)
-
-        # Generate a response using the output of the reasoning chain
-        response = response_chain.invoke(reasoning_output, config=self.memory_config)
-
-        return response.content
+        return response 
 
     def handle_find_hotline(self, user_input: Dict):
-        """Handle the emergency or non-emergency hotline contact intent.
+        response = self.rag.invoke(user_input,index_name = "hotlines", config=self.memory_config)
 
-        Args:
-            user_input: The input text from the user.
-
-        Returns:
-            The content of the response after processing through the chains.
-        """
-        # Retrieve reasoning and response chains for the hotline contact intent
-        reasoning_chain, response_chain = self.get_chain("find_hotline")
-
-        # Process user input through the reasoning chain
-        reasoning_output = reasoning_chain.invoke(user_input)
-
-        # Generate a response using the output of the reasoning chain
-        response = response_chain.invoke(reasoning_output, config=self.memory_config)
-
-        return response.content
+        return response
 
     def handle_insert_journal(self, user_input: Dict[str, str]) -> str:
         """
         Handles journal entry intent by processing user input and providing a response."""
-        user_message = user_input.get("message", "")
+        
+        user_message = user_input.get("customer_input", "")
         # Step 1: Process user message with the reasoning chain
         result = self.journal_manager.process(user_id=self.user_id, user_message=user_message)
 
@@ -472,13 +391,13 @@ class MainChatbot:
         Returns:
             Confirmation message after successfully processing the mood board entry.
         """
-        # Retrieve the chain for mood board entry creation
-        entry_chain = self.get_chain("insert_mood")
+        user_message = user_input.get("customer_input", "")
+        # Step 1: Process user message with the reasoning chain
+        result = self.mood_manager.process(user_id=self.user_id, user_message=user_message)
 
-        # Process the user input through the entry chain
-        response = entry_chain.invoke(user_input)
-
-        return response.content
+        # Step 2: Generate response with the response chain
+        response = self.mood_entry_response.generate(result["success"])
+        return response
 
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
@@ -554,12 +473,13 @@ class MainChatbot:
             Confirmation message after successfully posting to the gratitude banner.
         """
         # Retrieve the chain for creating a gratitude banner entry
-        entry_chain = self.get_chain("insert_gratitude")
+        user_message = user_input.get("customer_input", "")
+        # Step 1: Process user message with the reasoning chain
+        result = self.gratitude_manager.process( message=user_message)
 
-        # Process the user input through the entry chain
-        response = entry_chain.invoke(user_input)
-
-        return response.content
+        # Step 2: Generate response with the response chain
+        response = self.mood_entry_response.generate(result["success"])
+        return response
 
     def handle_delete_journal(self, user_input: Dict):
         """

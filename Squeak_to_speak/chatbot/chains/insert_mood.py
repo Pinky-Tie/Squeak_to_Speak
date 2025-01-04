@@ -1,8 +1,14 @@
 import sys
 import os
+from pydantic import BaseModel
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
-from chains.models import MoodEntry
+class MoodEntry(BaseModel):
+    user_id: int
+    mood: str
+    date: str
+    description: str
 import datetime
 
 # User Story: I want to revisit past entries in my journal or mood board to reflect, recall and understand my experiences and emotions over time.
@@ -14,7 +20,7 @@ class MoodEntryManager:
     def __init__(self, db_manager:DatabaseManager):
         self.db_manager = db_manager
 
-    def process(self, user_id: int, mood: str, description:str) -> dict[str, str]:
+    def process(self, user_id: int, mood: str) -> dict[str, str]:
         """
         Extracts variables from user message and inserts them into the database.
         """
@@ -26,11 +32,10 @@ class MoodEntryManager:
         entry = MoodEntry(
                 user_id = user_id,
                 mood = mood,
-                date = date,
-                description = description)
+                date = date)
 
         # Insert into the database
-        success = self.db_manager.insert("Journal", entry.dict())
+        success = self.db_manager.insert("mood_tracker", entry.dict())
         return {"success": success}
 
 

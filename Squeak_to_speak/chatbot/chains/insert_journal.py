@@ -2,10 +2,17 @@
 
 import datetime
 import sys
+from pydantic import BaseModel
+
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
-from chains.models import JournalEntry
+class JournalEntry(BaseModel):
+    user_id: int
+    message: str
+    date: str
+    hide_yn: bool
+    time: str
 
 # Reasoning Chain
 class JournalEntryManager:
@@ -18,7 +25,7 @@ class JournalEntryManager:
         hide_yn = 'hide' in user_message.lower()
 
         # Get current date and time
-        now = datetime.now()
+        now = datetime.datetime.now()
         date = now.strftime("%Y-%m-%d")
         time = now.strftime("%H:%M")
 

@@ -14,8 +14,9 @@ st.session_state.authentication_status = None
 # Retrieving data
 user_data= retrieve_data()
 usernames=user_data["email"]
+user_ids = user_data["user_id"]
 names = user_data["username"]
-hashed_passwords = stauth.Hasher(user_data["password"]).generate()
+hashed_passwords = stauth.Hasher(passwords=user_data["password"]).generate()
 
 authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
     "ab", "ab", cookie_expiry_days=0)
