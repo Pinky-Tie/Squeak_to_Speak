@@ -14,7 +14,7 @@ from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
-from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+#from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
 from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
 from chatbot.chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter

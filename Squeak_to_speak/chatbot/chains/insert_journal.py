@@ -7,16 +7,8 @@ from typing import Dict
 from pydantic import BaseModel
 from datetime import datetime
 import sqlite3
-class JournalEntry(BaseModel):
-    user_id: int
-    message: str
-    date: str
-    hide_yn: bool
-    time: str
+from data.database_functions import DatabaseManager
 
-
-
- 
 
 # Reasoning Chain
 # JournalEntry model
@@ -27,25 +19,6 @@ class JournalEntry(BaseModel):
     hide_yn: bool
     time: str
 
-# DatabaseManager provided in the prompt
-class DatabaseManager:
-    def __init__(self, conn):
-        self.conn = conn
-
-    def insert(self, table_name, data):
-        placeholders = ", ".join(f":{key}" for key in data.keys())
-        columns = ", ".join(data.keys())
-        query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute(query, data)
-            self.conn.commit()
-            return True
-        except Exception as e:
-            print(f"Error inserting into {table_name}: {e}")
-            return False
-        finally:
-            cursor.close()
 
 # Reasoning Chain
 class JournalManager:
@@ -62,6 +35,7 @@ class JournalManager:
         date = now.strftime("%Y-%m-%d")
         time = now.strftime("%H:%M")
 
+        print(user_message)
         # Create journal entry object
         entry = JournalEntry(
             user_id=int(user_id),
