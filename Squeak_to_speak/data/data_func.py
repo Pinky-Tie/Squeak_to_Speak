@@ -1,5 +1,7 @@
 import sqlite3
 from pathlib import Path
+from datetime import datetime
+import random
 
 # Connect to the SQLite database
 def connect_database():
@@ -83,3 +85,74 @@ def add_user(username, email, password, country):
     conn.commit()
     conn.close()
     return True
+
+
+def get_jornal_entries(email, target_date=None):
+    """
+    Fetch jounrnal entry for a user based on their email and a specific date.
+
+    Args:
+        email: The email of the user.
+        target_date: The date to filter entries (default is today in 'YYYY-MM-DD' format).
+
+    Returns:
+        List of strings if entries exist, or False if no entries are found.
+    """
+    conn, cursor = connect_database()
+
+    # Use today's date if no specific date is provided
+    if not target_date:
+        target_date = datetime.now().strftime("%Y-%m-%d")
+
+    # Step 1: Get the user_id for the given email
+    cursor.execute("SELECT user_id FROM users WHERE email = ?;", (email,))
+    user_id_row = cursor.fetchone()
+
+    if not user_id_row:
+        print("No user found with the given email.")
+        conn.close()
+        return False
+
+    user_id = user_id_row[0]
+
+    # Step 2: Get mood and description for the given user_id and date
+    query = """
+    SELECT message 
+    FROM journal 
+    WHERE user_id = ? AND date(date) = ?;
+    """
+    cursor.execute(query, (user_id, target_date))
+    rows = cursor.fetchall()
+    conn.close()
+    if not rows:
+        return False  # No records for the given date
+
+    return rows
+
+
+
+def gratitude_comments(limit=5):
+    """
+    Fetch a specified number of random comments from the Gratitude_entries table.
+
+    Args:
+        conn: SQLite database connection object.
+        limit: The number of random rows to fetch (default is 4).
+
+    Returns:
+        A list of comments if available, otherwise an empty list.
+    """
+    conn, cursor = connect_database()
+
+    # Query to fetch random rows
+    query = f"""
+    SELECT comment
+    FROM gratitude
+    ORDER BY RANDOM()
+    LIMIT ?;
+    """
+    cursor.execute(query, (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [row[0] for row in rows] 
+

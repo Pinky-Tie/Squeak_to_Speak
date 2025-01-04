@@ -31,7 +31,8 @@ if authentication_status==False:
 if authentication_status:
     st.success("Login Sucessful")
     st.session_state.authentication_status = True
-    st.session_state.username = name
+    st.session_state.username = username
+    st.session_state.name = name
     menu(change=True)
 if authentication_status==None:
     st.warning("Please enter your email and password")

@@ -16,6 +16,28 @@ from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
+#Maria
+"""
+from .chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
+from .chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
+from .chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
+from .chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
+from .chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
+from .chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
+from .chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
+from .chains.insert_gratitude import GratitudeManager
+from .chains.insert_journal import JournalManager, JournalEntryResponse
+from .chains.insert_mood import RetrieveEntries, PresentEntries
+from .chains.review_user_memory import RetrieveUserData, PresentUserData
+from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
+from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+import sqlite3
+db_file = r'C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
+# Connect to the SQLite database
+conn = sqlite3.connect(db_file)
+db_manager = DatabaseManager(conn)
+"""
+
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from chatbot.chains.chat_about_journal import RetrieveRelevantEntries, GenerateEmpatheticResponse
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
@@ -32,11 +54,11 @@ from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoo
 from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
 from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
+
 #databse connection
 import sqlite3
-db_file = 'Squeak_to_speak\data\database\squeaktospeak_db.db'
+db_file = r'D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
 
-# Connect to the SQLite database
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
 
