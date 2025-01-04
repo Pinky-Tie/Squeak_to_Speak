@@ -1,31 +1,18 @@
 # User Story: I want to document my thoughts and feelings in a private journal or mood board to reflect, vent or track my mental health journey in a safe space.
 
-# Chain 1
-# Goal: Insert journal entry into the user’s journal or mood board on the database
-# Implementation: This chain validates the user input, structures it for input in the database and completes that same input, finishing the process when it receives confirmation from the database.
-from typing import Dict
-from pydantic import BaseModel
-from datetime import datetime
-import sqlite3
+import datetime
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
-
-
-# Reasoning Chain
-# JournalEntry model
-class JournalEntry(BaseModel):
-    user_id: int
-    message: str
-    date: str
-    hide_yn: bool
-    time: str
-
+from chains.models import JournalEntry
 
 # Reasoning Chain
-class JournalManager:
+class JournalEntryManager:
     def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
 
-    def process(self, user_id: int, user_message: str) -> Dict[str, str]:
+    def process(self, user_id: int, user_message: str) -> dict[str, str]:
         """Extracts variables from user message and inserts them into the database."""
         # Default hide_yn to False
         hide_yn = 'hide' in user_message.lower()

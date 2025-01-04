@@ -1,32 +1,49 @@
 import datetime
+from pydantic import BaseModel
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from data.database_functions import DatabaseManager
+from chains.models import GratitudeEntry
+
 # User Story: I want to anonymously share something I’m grateful and/or happy for so that I can help brighten someone else’s day while fostering my own positivity.
 
 # Chain 1
 # Goal: Insert the users' gratitude message into the database
 # Implementation: This chain transforms the user’s input into an object that can be inserted into the database. The Chain ends with confirmation of insertion from the database.
 
-class GratitudeManager:
-    def __init__(self, db_manager):
+class GratitudeEntryManager:
+    def __init__(self, db_manager:DatabaseManager):
         self.db_manager = db_manager
 
-    def add_gratitude_message(self, comment):
-        # Validates and adds a gratitude message to the database.
-        if not comment or len(comment.strip()) == 0:
-            return "Your gratitude message cannot be empty."
+    def process(self, message:str) -> dict[str, str]:
+        """
+        Extracts variables from user message and inserts them into the database.
+        """
 
-        data = {
-            "date": datetime.now().strftime("%Y-%m-%d"),
-            "comment": comment,
-        }
+        # Get current date
+        date = datetime.now().strftime("%Y-%m-%d")
 
-        # Attempt to insert the gratitude message into the database
-        success = self.db_manager.insert("Gratitude_entries", data)
+        # Create journal entry object
+        entry = GratitudeEntry(
+            date = date,
+            comment = message
+        )
 
-        # Chain 2
-        # Goal: Inform the user that the entry has been inserted
-        # Implementation: This chain receives the user input and generates a final output using a prompt template.
+        # Insert into the database
+        success = self.db_manager.insert("Gratitude_entries", entry.dict())
+        return {"success": success}
 
+# Chain 2
+# Goal: Inform the user that the entry has been inserted
+# Implementation: This chain receives the user input and generates a final output using a prompt template.
+
+class GratitudeEntryResponse:
+    def generate(self, success: bool) -> str:
+        """
+        Generates a response based on the success of the database operation.
+        """
         if success:
-            return "Your gratitude message has been added successfully!"
+            return "Your gratitude entry has been successfully added."
         else:
-            return "An error occurred. Please try again."
+            return "There was an error adding your gratitude entry. Please try again later."

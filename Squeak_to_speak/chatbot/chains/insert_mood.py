@@ -1,54 +1,46 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from data.database_functions import DatabaseManager
+from chains.models import MoodEntry
+import datetime
+
 # User Story: I want to revisit past entries in my journal or mood board to reflect, recall and understand my experiences and emotions over time.
 
 # Chain 1
 # Goal: Retrieve the entries the users want to see
 # Implementation: This chain queries the database for matching entries, ordering and structuring them as output.
-class RetrieveEntries:
-    def __init__(self, db_manager):
+class MoodEntryManager:
+    def __init__(self, db_manager:DatabaseManager):
         self.db_manager = db_manager
 
-    def get_entries(self, user_id, entry_type, start_date=None, end_date=None):
+    def process(self, user_id: int, mood: str, description:str) -> dict[str, str]:
         """
-        Retrieves entries for the user based on the type (journal or mood board) and optional date range.
+        Extracts variables from user message and inserts them into the database.
         """
-        table_name = "Journal_entries" if entry_type == "journal" else "Moodboard_entries"
 
-        query = f"""
-        SELECT entry_id, content, created_at
-        FROM {table_name}
-        WHERE user_id = :user_id
-        """
-        params = {"user_id": user_id}
+        # Get current date
+        date = datetime.now().strftime("%Y-%m-%d")
 
-        if start_date:
-            query += " AND created_at >= :start_date"
-            params["start_date"] = start_date
+        # Create journal entry object
+        entry = MoodEntry(
+                user_id = user_id,
+                mood = mood,
+                date = date,
+                description = description)
 
-        if end_date:
-            query += " AND created_at <= :end_date"
-            params["end_date"] = end_date
-
-        query += " ORDER BY created_at ASC"
-
-        return self.db_manager.select(query, params)
+        # Insert into the database
+        success = self.db_manager.insert("Journal", entry.dict())
+        return {"success": success}
 
 
 # Chain 2
 # Goal: Present these entries to the user
 # Implementation: This chain receives all inputs (user input and structured entries) and generates a final output using a prompt template.
-class PresentEntries:
-    def format_output(self, entries, entry_type):
-        """
-        Formats retrieved entries into a structured, user-friendly format.
-        """
-        if not entries:
-            return f"No {entry_type} entries were found for the specified criteria."
-
-        response = f"Here are your {entry_type} entries:\n\n"
-        for entry in entries:
-            response += (
-                f"Entry ID: {entry['entry_id']}\n"
-                f"Date: {entry['created_at']}\n"
-                f"Content: {entry['content']}\n\n"
-            )
-        return response
+class MoodEntryResponse:
+    def generate(self, success: bool) -> str:
+        """Generates a response based on the success of the database operation."""
+        if success:
+            return "Your mood entry has been successfully added."
+        else:
+            return "There was an error adding your mood entry. Please try again later."
