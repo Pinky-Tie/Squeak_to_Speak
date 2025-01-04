@@ -3,8 +3,8 @@
 # Chain 1
 # Goal: Insert journal entry into the user’s journal or mood board on the database
 # Implementation: This chain validates the user input, structures it for input in the database and completes that same input, finishing the process when it receives confirmation from the database.
-from chatbot.chains.base import PromptTemplate as PromptT
-from chatbot.chains.base import  generate_prompt_templates
+from .base import PromptTemplate as PromptT
+from .base import  generate_prompt_templates
 from pydantic import BaseModel
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import PydanticOutputParser
@@ -48,7 +48,7 @@ class JournalManager:
     def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
 
-    def process(self, user_id: int, user_message: str) -> Dict[str, str]:
+    def process(self, user_id: int, user_message: str) -> dict[str, str]:
         """Extracts variables from user message and inserts them into the database."""
         # Default hide_yn to False
         hide_yn = 'hide' in user_message.lower()

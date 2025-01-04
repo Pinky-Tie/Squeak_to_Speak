@@ -27,17 +27,9 @@ from .chains.review_user_memory import RetrieveUserData, PresentUserData
 from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
 import sqlite3
-db_file = r'C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
-# Connect to the SQLite database
-conn = sqlite3.connect(db_file)
-db_manager = DatabaseManager(conn)
 
+db_file = "Squeak_to_speak.data.database.squeaktospeak_db.db" # Connect to the SQLite database
 
-#databse connection
-import sqlite3
-db_file = r'D:\MARGARIDA\dificuldade\3rd_year\capstone_project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db'
-
-# Connect to the SQLite database
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
 
