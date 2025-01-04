@@ -11,8 +11,6 @@ from langchain_openai import ChatOpenAI
 from chatbot.memory import MemoryManager
 from chatbot.router.loader import load_intention_classifier
 
-from chatbot.memory import MemoryManager
-from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
@@ -25,14 +23,16 @@ from .chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirma
 from .chains.find_hotline import IdentifyHotlinePreferences, HotlineFinder, HotlineOutputFormatter
 from .chains.find_support_group import IdentifySupportGroupPreferences, SupportGroupFinder, SupportGroupOutputFormatter
 from .chains.find_therapist import IdentifyUserPreferences, TherapistFinder, TherapistOutputFormatter
-from .chains.insert_gratitude import GratitudeManager
-from .chains.insert_journal import JournalManager, JournalEntryResponse
-from .chains.insert_mood import RetrieveEntries, PresentEntries
+from .chains.insert_gratitude import GratitudeEntryManager
+from .chains.insert_journal import JournalEntryManager, JournalEntryResponse
+from .chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from .chains.review_user_memory import RetrieveUserData, PresentUserData
 from .chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from .chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+from .chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from .chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 import sqlite3
-db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db" # Connect to the SQLite database
+db_file = r"C:\Users\maria\OneDrive - NOVAIMS\Documents\Uni related\3º Ano\Capstone Project\Squeak_to_Speak\Squeak_to_speak\data\database\squeaktospeak_db.db"
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
 """

@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
-from chains.models import MoodEntry
+from .models import MoodEntry
 import datetime
 
 # User Story: I want to revisit past entries in my journal or mood board to reflect, recall and understand my experiences and emotions over time.

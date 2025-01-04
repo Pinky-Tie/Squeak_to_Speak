@@ -156,3 +156,33 @@ def gratitude_comments(limit=5):
     conn.close()
     return [row[0] for row in rows] 
 
+
+
+
+# Connect to the database
+conn, cursor = connect_database()
+
+# Query to get all table names
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+tables = cursor.fetchall()  # Fetch all table names
+
+# Print table names
+table_names = [table[0] for table in tables]  # Extract table names from tuples
+print("Tables in the database:", table_names)
+
+# Iterate over each table and fetch one row
+for table in tables:
+    table_name = table[0]
+    print(f"Table: {table_name}")
+    try:
+        cursor.execute(f"SELECT * FROM {table_name} LIMIT 1;")
+        row = cursor.fetchone()  # Fetch one row
+        if row:
+            print(f"Sample row: {row}")
+        else:
+            print("Table is empty.")
+    except sqlite3.OperationalError as e:
+        print(f"Could not query table {table_name}. Error: {e}")
+
+# Close the connection
+conn.close()
