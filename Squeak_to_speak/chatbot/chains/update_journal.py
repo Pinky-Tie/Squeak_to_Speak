@@ -6,19 +6,13 @@ from data.database_functions import DatabaseManager
 # Goal: Identify which entry the user wants to modify
 # Implementation: This chain identifies the query the user wishes to alter and outputs it as an object.
 class IdentifyJournalEntryToModify:
-    def prompt_for_date(self) -> str:
-        """
-        Prompt the user to enter the date of the journal entry they want to modify.
-        """
-        return "Enter the date of the journal entry you want to modify, in format (YYYY-MM-DD): "
-
     def get_entry_to_modify(self, user_id: int, date: str, db_manager: DatabaseManager):
         """
         Retrieves the journal entry for the specified date.
         """
         query = """
         SELECT entry_id, content
-        FROM Journal_entries
+        FROM Journal
         WHERE user_id = :user_id AND entry_date = :entry_date
         """
         params = {"user_id": user_id, "entry_date": date}
@@ -34,18 +28,12 @@ class ModifyJournalEntry:
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def prompt_for_new_content(self) -> str:
-        """
-        Prompt the user to enter the new content for the journal entry.
-        """
-        return "Enter the new content for the journal entry: "
-
     def modify_entry(self, entry_id: int, updated_content: str):
         """
         Updates the journal entry with the provided content.
         """
         query = """
-        UPDATE Journal_entries
+        UPDATE Journal
         SET content = :updated_content, updated_at = CURRENT_TIMESTAMP
         WHERE entry_id = :entry_id
         """
