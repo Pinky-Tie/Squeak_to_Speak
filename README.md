@@ -79,7 +79,7 @@ The app will start, and you can open your browser to http://localhost:8501 to in
 
 2. Log in to the platform, by browsing to the Login page. 
 The user account for testing is the following:
-*username* - *password*
+*carlos.rossi33@example.com * - *byBjmFAT *
 
 
 
