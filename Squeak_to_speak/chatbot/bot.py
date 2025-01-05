@@ -26,8 +26,8 @@ from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
-from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
+#from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+#from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 import sys
 import os
@@ -82,11 +82,11 @@ class MainChatbot:
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
         
-        self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        self.present_mood_board_entries = PresentMoodBoardEntries()
+        #self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        #self.present_mood_board_entries = PresentMoodBoardEntries()
 
-        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        self.present_journal_entries = PresentJournalEntries()
+        #self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        #self.present_journal_entries = PresentJournalEntries()
 
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
@@ -125,8 +125,8 @@ class MainChatbot:
             },
 
             "insert_mood": {
-                "retrieve": self.retrieve_journal_entries,
-                "present": self.present_journal_entries
+                "retrieve": self.mood_manager,
+                "present": self.mood_entry_response
             },
             "insert_journal": {
                 "insert": self.journal_manager,

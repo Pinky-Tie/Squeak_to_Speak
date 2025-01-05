@@ -7,7 +7,7 @@ from langchain import callbacks
 from langchain.output_parsers import PydanticOutputParser
 from langchain.schema.runnable.base import Runnable
 from pydantic import BaseModel, Field
-from base import PromptTemplate, generate_prompt_templates
+
 from typing import List, Optional
 # Define the product database as a dictionary with product categories
 import sys
@@ -16,7 +16,7 @@ import json
 from langchain_openai import ChatOpenAI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from data.data_func import connect_database
-
+from chatbot.chains.base import PromptTemplate, generate_prompt_templates
 import openai
 from dotenv import load_dotenv
 load_dotenv()
@@ -147,7 +147,7 @@ class JournalInteractionHandler:
         return "I'm sorry, I didn't understand your request. Can you clarify?"
 
 
-# Example Usage
+'''# Example Usage
 # Create chains for querying and responding
 journal_query_chain = JournalQueryChain()
 journal_response_chain = JournalResponseChain(llm=ChatOpenAI(temperature=0.0, model="gpt-4o-mini"))
@@ -158,4 +158,4 @@ user_input = "Let me view my journal entries"
 user_id = 1  # Assume this is retrieved from the session or context
 response = journal_handler.handle_input(user_input = user_input, user_id = user_id)
 print(response)
-
+'''
