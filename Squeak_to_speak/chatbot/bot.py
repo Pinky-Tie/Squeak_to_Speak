@@ -26,9 +26,14 @@ from chatbot.chains.insert_journal import JournalEntryManager, JournalEntryRespo
 from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
+<<<<<<< HEAD
 from chatbot.chains.view_journal import JournalQueryChain, JournalResponseChain, JournalInteractionHandler
 from chatbot.chains.view_mood import MoodQueryChain, MoodResponseChain, MoodInteractionHandler
 from chatbot.chains.review_user_memory import UserQueryChain, UserResponseChain, UserInteractionHandler
+=======
+from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
+>>>>>>> 580fd59 (updated CRUD)
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
@@ -81,6 +86,15 @@ class MainChatbot:
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
         
+<<<<<<< HEAD
+=======
+        self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        self.present_mood_board_entries = PresentMoodBoardEntries()
+
+        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        self.present_journal_entries = PresentJournalEntries()
+
+>>>>>>> 580fd59 (updated CRUD)
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
         
@@ -114,6 +128,13 @@ class MainChatbot:
                 "confirm": self.deletion_confirmation_formatter
             },
 
+<<<<<<< HEAD
+=======
+            "insert_mood": {
+                "retrieve": self.retrieve_journal_entries,
+                "present": self.present_journal_entries
+            },
+>>>>>>> 580fd59 (updated CRUD)
             "insert_journal": {
                 "insert": self.journal_manager,
                 "response": self.journal_entry_response
@@ -260,6 +281,65 @@ class MainChatbot:
         response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
 
         return response
+<<<<<<< HEAD
+=======
+
+        """
+        Extracts dates from the input text.
+
+        Args:
+            text: The input text from the user.
+
+        Returns:
+            A dictionary with possible start_date and end_date.
+        """
+        words = text.split()
+        dates = [parse(word, fuzzy=True) for word in words if self.is_date(word)]
+        if len(dates) == 1:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": None}
+        elif len(dates) >= 2:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": dates[1].strftime('%Y-%m-%d')}
+        return {"start_date": None, "end_date": None}
+
+    '''def handle_recall_entry(self, user_input: Dict):
+        """Handle the intent to recall past journal entries based on theme or date.
+
+        Args:
+            user_input: The input text specifying the desired entries.
+
+        Returns:
+            A list or structured view of relevant entries.
+        """
+        # Extract dates from user input
+        dates = self.extract_dates(user_input["customer_input"])
+
+        # Retrieve the chain for recalling entries
+        retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
+
+        # Set the appropriate Pinecone index based on user input
+        if "index_name" in user_input:
+            retrieve_chain.set_pinecone_index(user_input["index_name"])
+
+        # Determine if the user wants to search by date or theme
+        if dates["start_date"] or dates["end_date"]:
+            entries = retrieve_chain.get_entries_by_date(
+                user_id=self.user_id,
+                entry_type=user_input.get("entry_type", "journal"),
+                start_date=dates["start_date"],
+                end_date=dates["end_date"]
+            )
+        else:
+            entries = retrieve_chain.query_relevant_entries(
+                user_input=user_input["theme"]
+            )
+
+        # Format the entries for presentation
+        present_chain = self.get_chain("chat_about_journal")[1]  # Assuming the second chain is for presentation
+        response = present_chain.format_output(entries, user_input.get("entry_type", "journal"))
+
+        return response
+        '''
+>>>>>>> 580fd59 (updated CRUD)
     
     def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
 

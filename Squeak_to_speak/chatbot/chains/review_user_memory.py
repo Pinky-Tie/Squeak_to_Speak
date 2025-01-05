@@ -3,12 +3,16 @@
 # Chain 1
 # Goal: Retrieve information on the user
 # Implementation: This chain takes the user’s input, defines a time window for retrieval of the data and queries the database for all relevant entries inside that time window. It will then structure the information and output it.
+from langchain import callbacks
+from langchain.output_parsers import PydanticOutputParser
 from langchain.schema.runnable.base import Runnable
 from pydantic import BaseModel, Field
+from typing import List, Optional
 # Define the product database as a dictionary with product categories
 import sys
 import os
 import json
+from langchain_openai import ChatOpenAI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from data.data_func import connect_database
 from chatbot.chains.base import PromptTemplate, generate_prompt_templates

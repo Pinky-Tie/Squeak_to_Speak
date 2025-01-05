@@ -5,6 +5,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
 
+
 class JournalEntry(BaseModel):
     user_id: int
     message: str
@@ -23,6 +24,19 @@ class JournalEntryManager:
 
         # Get current date
         date = datetime.now().strftime("%Y-%m-%d")
+        # Get current date
+        date = datetime.now().strftime("%Y-%m-%d")
+
+        # Check if an entry already exists for the given date
+        query = """
+        SELECT message_id
+        FROM Journal
+        WHERE user_id = :user_id AND date = :date
+        """
+        params = {"user_id": user_id, "date": date}
+        result = self.db_manager.select(query, params)
+        if result:
+            return {"error": "A journal entry already exists for today. Please update the existing entry or wait until tomorrow."}
 
         # Check if an entry already exists for the given date
         query = """
@@ -38,6 +52,7 @@ class JournalEntryManager:
         # Create journal entry object
         entry = JournalEntry(
             user_id=user_id,
+            user_id=user_id,
             message=user_message,
             date=date,
             hide_yn=hide_yn
@@ -49,6 +64,7 @@ class JournalEntryManager:
 
 # Response Chain
 class JournalEntryResponse:
+    def generate(self, result: dict) -> str:
     def generate(self, result: dict) -> str:
         """Generates a response based on the success of the database operation."""
         if "error" in result:
