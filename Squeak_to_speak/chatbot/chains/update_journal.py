@@ -28,12 +28,6 @@ class ModifyJournalEntry:
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def prompt_for_new_content(self) -> str:
-        """
-        Prompt the user to enter the new content for the journal entry.
-        """
-        return "Enter the new content for the journal entry: "
-
     def modify_entry(self, entry_id: int, updated_content: str):
         """
         Updates the journal entry with the provided content.
