@@ -26,8 +26,8 @@ from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-#from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
-#from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
+from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 import sys
 import os
@@ -82,11 +82,11 @@ class MainChatbot:
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
         
-        #self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        #self.present_mood_board_entries = PresentMoodBoardEntries()
+        self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        self.present_mood_board_entries = PresentMoodBoardEntries()
 
-        #self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        #self.present_journal_entries = PresentJournalEntries()
+        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
+        self.present_journal_entries = PresentJournalEntries()
 
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
@@ -125,8 +125,8 @@ class MainChatbot:
             },
 
             "insert_mood": {
-                "retrieve": self.mood_manager,
-                "present": self.mood_entry_response
+                "retrieve": self.retrieve_journal_entries,
+                "present": self.present_journal_entries
             },
             "insert_journal": {
                 "insert": self.journal_manager,
@@ -247,7 +247,24 @@ class MainChatbot:
             )
             return None
 
+    def get_random_gratitude_message(self) -> str:
+        """
+        Retrieves a random gratitude message from the gratitude_entries table.
 
+        Returns:
+            A random gratitude message.
+        """
+        query = """
+        SELECT content
+        FROM gratitude_entries
+        ORDER BY RANDOM()
+        LIMIT 1
+        """
+        result = self.db_manager.select(query)
+        if result:
+            return result[0]['content']
+        else:
+            return "No gratitude messages found."
 
 #Functions to handle each intention
 
@@ -263,7 +280,22 @@ class MainChatbot:
 
         return response
 
- 
+        """
+        Extracts dates from the input text.
+
+        Args:
+            text: The input text from the user.
+
+        Returns:
+            A dictionary with possible start_date and end_date.
+        """
+        words = text.split()
+        dates = [parse(word, fuzzy=True) for word in words if self.is_date(word)]
+        if len(dates) == 1:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": None}
+        elif len(dates) >= 2:
+            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": dates[1].strftime('%Y-%m-%d')}
+        return {"start_date": None, "end_date": None}
 
     '''def handle_recall_entry(self, user_input: Dict):
         """Handle the intent to recall past journal entries based on theme or date.
@@ -327,7 +359,7 @@ class MainChatbot:
 
     def extract_message(self, message: str) -> str:
         """Extract the message content from the user input message using the configured LLM."""
-        prompt = f"Extract the message content from the following input: '{message}'. The user's message should contain the intention to add to a journal or mood board and the message content you should extract."
+        prompt = f"Extract the message content from the following input: '{message}'. The user's message should contain the intention to add to a journal or mood board and the message content you should extract. Output only the extracted message"
         response = self.llm.invoke(prompt)
         
         # Extract the relevant part from the response content
@@ -370,6 +402,7 @@ class MainChatbot:
         # Step 2: Generate response with the response chain
         response = self.mood_entry_response.generate(result["success"])
         return response
+    
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
     
@@ -529,6 +562,7 @@ class MainChatbot:
         # print(f"User message: {message}")  # Debug print
         date = self.extract_date(message)
         new_content = self.extract_new_content(message)
+        # print(f"New content: {new_content}")  # Debug print
     
         if not date:
             return "Please provide the date of the journal entry you want to update in the format YYYY-MM-DD."
@@ -539,20 +573,21 @@ class MainChatbot:
         entry = identifier_chain.get_entry_to_modify(user_id, date, self.db_manager)
         if not entry:
             return f"No journal entry found for the date {date}."
-    
+        # print(entry)  # Debug print
+
         # Modify the entry
-        modification_result = modifier_chain.modify_entry(entry["message_id"], new_content)
+        modification_result = modifier_chain.modify_entry(entry[0], new_content)
     
         # Generate and return the confirmation message
-        return confirmation_chain.format_output(modification_result, date)
+        return confirmation_chain.format_output(modification_result)
     
     def extract_new_content(self, message: str) -> str:
         """Extract new content from the user input message using the configured LLM."""
-        prompt = f"Extract the new content from the following message: '{message}'. This is the content the user wants to update the entry with. The user's message should contain the intention to update, the date to update from, and the new content you should extract."
+        prompt = f"Extract the new content from the following message: '{message}'. This is the content the user wants to update the entry with. The user's message should contain the intention to update, the date to update from, and the new content you should extract. Output only the extracted content"
         response = self.llm.invoke(prompt)
         
         # Extract the relevant part from the response content
-        new_content = response.content.split('The new content to extract from the message is: "', 1)[-1].rsplit('"', 1)[0]
+        new_content = response.content.split('The new content to extract is: "', 1)[-1].rsplit('"', 1)[0]
         # print(f"Extracted new content: {new_content}")  # Debug print
         return new_content
 

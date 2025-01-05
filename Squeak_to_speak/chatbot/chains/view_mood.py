@@ -7,7 +7,6 @@ from langchain import callbacks
 from langchain.output_parsers import PydanticOutputParser
 from langchain.schema.runnable.base import Runnable
 from pydantic import BaseModel, Field
-from base import PromptTemplate, generate_prompt_templates
 from typing import List, Optional
 # Define the product database as a dictionary with product categories
 import sys
@@ -16,6 +15,7 @@ import json
 from langchain_openai import ChatOpenAI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from data.data_func import connect_database
+from chatbot.chains.base import PromptTemplate, generate_prompt_templates
 
 import openai
 from dotenv import load_dotenv
@@ -25,11 +25,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 
-# Base Models for data handling using Pydantic
 class MoodEntry(BaseModel):
     """Model for representing a Mood entry."""
     user_id: int = Field(..., description="User ID")
-    message: str = Field(..., description="message")
+    mood: str = Field(..., description="mood")
 
 class MoodQueryResult(BaseModel):
     """Model for the result containing multiple Mood entries."""
@@ -45,7 +44,7 @@ class MoodQueryChain(Runnable):
         try:
             query = """
             SELECT mood
-            FROM mood_board
+            FROM Mood_tracker
             WHERE user_id = ?
             LIMIT ?;
             """
@@ -55,7 +54,7 @@ class MoodQueryChain(Runnable):
             conn.close()
 
         # Convert rows into MoodEntry objects
-        results = [MoodEntry(user_id=user_id, message=row[0]) for row in rows]
+        results = [MoodEntry(user_id=user_id, mood=row[0]) for row in rows]
         return results
 
     def invoke(self, inputs):
@@ -102,23 +101,21 @@ class MoodResponseChain(Runnable):
         self.prompt = generate_prompt_templates(prompt_template, memory=memory)
         self.chain = self.prompt | self.llm
 
-    def invoke(self, inputs, config):
-        """Invoke the Mood response chain."""
-        Mood_entries = inputs.get("Mood_entries")
-        user_query = inputs.get("user_query")
+    def invoke(self, inputs):
+        """Invoke the chain to query mood entries."""
+        user_id = inputs.get("user_id")
+        limit = inputs.get("limit", 5)
 
-        # Combine inputs for the prompt
-        prompt_inputs = {
-            "Mood_entries": json.dumps(
-                [entry.dict() for entry in Mood_entries], indent=4
-            ),
-            "user_query": user_query,
-        }
+        # Fetch Journal entries
+        journal_entries = self.retrieve_mood(user_id=user_id, limit=limit)
 
-        # Add an empty chat_history to avoid errors
-        prompt_inputs["chat_history"] = []  # This ensures compatibility
+        # If no entries are found, return an appropriate message
+        if not journal_entries:
+            return {"message": "No mood entries found for the given user."}
 
-        return self.chain.invoke(prompt_inputs, config=config)
+        # Format the output
+        output = MoodQueryResult(results=journal_entries)
+        return output
 
 
 class MoodInteractionHandler:
@@ -130,32 +127,17 @@ class MoodInteractionHandler:
 
     def handle_input(self, user_input, user_id):
         """Process the user input to fetch and display Mood entries."""
-        if "Mood entries" in user_input.lower():
-            # Query the Mood entries
-            query_result = self.Mood_query_chain.invoke({"user_id": user_id, "limit": 5})
 
-            # Generate a response
-            response = self.Mood_response_chain.invoke(
-                {
-                    "Mood_entries": query_result.results,
-                    "user_query": user_input,
-                },
-                config={},
-            )
+        # Query the Mood entries
+        query_result = self.Mood_query_chain.invoke({"user_id": user_id, "limit": 5})
+        
+        # Generate a response
+        response = self.Mood_response_chain.invoke(
+            {
+                "Mood_entries": query_result.results,
+                "user_query": user_input,
+            },
+            config={},
+        )
 
-            return response
-
-        return "I'm sorry, I didn't understand your request. Can you clarify?"
-
-
-# Example Usage
-# Create chains for querying and responding
-Mood_query_chain = MoodQueryChain()
-Mood_response_chain = MoodResponseChain(llm=ChatOpenAI(temperature=0.0, model="gpt-4o-mini"))
-Mood_handler = MoodInteractionHandler(Mood_query_chain, Mood_response_chain)
-
-# Example user input and handling
-user_input = "Let me view my Mood entries"
-user_id = 1  # Assume this is retrieved from the session or context
-response = Mood_handler.handle_input(user_input = user_input, user_id = user_id)
-print(response)
+        return response

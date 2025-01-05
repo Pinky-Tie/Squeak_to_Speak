@@ -14,7 +14,7 @@ class MoodBoardEntryDeleter:
         Delete a specific mood board entry for the user.
         """
         query = """
-        DELETE FROM mood_tracker
+        DELETE FROM Mood_tracker
         WHERE user_id = :user_id AND date = :date
         """
         params = {

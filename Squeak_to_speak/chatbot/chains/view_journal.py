@@ -35,10 +35,10 @@ class JournalQueryResult(BaseModel):
     results: List[JournalEntry]
 
 class JournalQueryChain(Runnable):
-    """Chain for querying journal entries from a database based on user ID."""
+    """Chain for querying Journal entries from a database based on user ID."""
 
     def retrieve_journal(self, user_id=1, limit=5):
-        """Fetch a specified number of journal comments for a given user ID."""
+        """Fetch a specified number of Journal entries for a given user ID."""
         conn, cursor = connect_database()
 
         try:
@@ -58,16 +58,21 @@ class JournalQueryChain(Runnable):
         return results
 
     def invoke(self, inputs):
-        """Invoke the chain to query journal entries."""
+        """Invoke the chain to query Journal entries."""
         user_id = inputs.get("user_id")
         limit = inputs.get("limit", 5)
 
-        # Fetch journal entries
+        # Fetch Journal entries
         journal_entries = self.retrieve_journal(user_id=user_id, limit=limit)
+
+        # If no entries are found, return an appropriate message
+        if not journal_entries:
+            return {"message": "No journal entries found for the given user."}
 
         # Format the output
         output = JournalQueryResult(results=journal_entries)
         return output
+
 
 
 class JournalResponseChain(Runnable):
@@ -115,47 +120,40 @@ class JournalResponseChain(Runnable):
         }
 
         # Add an empty chat_history to avoid errors
-        prompt_inputs["chat_history"] = []  # This ensures compatibility
+        prompt_inputs["chat_history"] = []
 
-        return self.chain.invoke(prompt_inputs, config=config)
+        # Get the response from the chain
+        response = self.chain.invoke(prompt_inputs, config=config)
+
+        # Directly access the `content` attribute of the response
+        return response.content if hasattr(response, 'content') else str(response)
+
 
 
 class JournalInteractionHandler:
-    """Handles user inputs like 'let me view my journal entries'."""
+    """Handles user inputs like 'let me view my Journal entries'."""
 
     def __init__(self, journal_query_chain, journal_response_chain):
         self.journal_query_chain = journal_query_chain
         self.journal_response_chain = journal_response_chain
 
     def handle_input(self, user_input, user_id):
-        """Process the user input to fetch and display journal entries."""
-        if "journal entries" in user_input.lower():
-            # Query the journal entries
-            query_result = self.journal_query_chain.invoke({"user_id": user_id, "limit": 5})
+        """Process the user input to fetch and display Journal entries."""
 
-            # Generate a response
-            response = self.journal_response_chain.invoke(
-                {
-                    "journal_entries": query_result.results,
-                    "user_query": user_input,
-                },
-                config={},
-            )
+        # Query the Journal entries
+        query_result = self.journal_query_chain.invoke({"user_id": user_id, "limit": 5})
 
-            return response
+        # Check if no entries are found
+        if "message" in query_result:
+            return query_result["message"]
 
-        return "I'm sorry, I didn't understand your request. Can you clarify?"
+        # Generate a response
+        response = self.journal_response_chain.invoke(
+            {
+                "journal_entries": query_result.results,
+                "user_query": user_input,
+            },
+            config={},
+        )
 
-
-'''# Example Usage
-# Create chains for querying and responding
-journal_query_chain = JournalQueryChain()
-journal_response_chain = JournalResponseChain(llm=ChatOpenAI(temperature=0.0, model="gpt-4o-mini"))
-journal_handler = JournalInteractionHandler(journal_query_chain, journal_response_chain)
-
-# Example user input and handling
-user_input = "Let me view my journal entries"
-user_id = 1  # Assume this is retrieved from the session or context
-response = journal_handler.handle_input(user_input = user_input, user_id = user_id)
-print(response)
-'''
+        return response

@@ -11,7 +11,7 @@ class IdentifyJournalEntryToModify:
         Retrieves the journal entry for the specified date.
         """
         query = """
-        SELECT message_id, message
+        SELECT message_id
         FROM Journal
         WHERE user_id = :user_id AND date = :date
         """
@@ -25,7 +25,7 @@ class IdentifyJournalEntryToModify:
 # Goal: Alter the entry with the users' inputs
 # Implementation: This chain takes as input the entry to be altered and the user input, structures the new values for the entry and alters it, outputting confirmation for the alteration.
 class ModifyJournalEntry:
-    def __init__(self, db_manager):
+    def __init__(self, db_manager:DatabaseManager):
         self.db_manager = db_manager
 
     def modify_entry(self, message_id: int, updated_content: str):
@@ -38,7 +38,7 @@ class ModifyJournalEntry:
         WHERE message_id = :message_id
         """
         params = {"message_id": message_id, "updated_content": updated_content}
-        success = self.db_manager.execute(query, params)
+        success = self.db_manager.update(query, params)
         return {"success": success} if success else {"error": "Failed to update the entry."}
 
 # Chain 3
