@@ -11,11 +11,11 @@ class IdentifyJournalEntryToModify:
         Retrieves the journal entry for the specified date.
         """
         query = """
-        SELECT entry_id, content
+        SELECT message_id, message
         FROM Journal
-        WHERE user_id = :user_id AND entry_date = :entry_date
+        WHERE user_id = :user_id AND date = :date
         """
-        params = {"user_id": user_id, "entry_date": date}
+        params = {"user_id": user_id, "date": date}
         result = db_manager.select(query, params)
         if result:
             return result[0]
