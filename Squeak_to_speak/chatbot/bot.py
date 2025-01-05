@@ -1,5 +1,6 @@
 # Import necessary classes and modules for chatbot functionality
-import sys, os
+import sys
+import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import re
 
@@ -23,19 +24,17 @@ from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionC
 from chatbot.chains.insert_gratitude import GratitudeEntryManager, GratitudeEntryResponse
 from chatbot.chains.insert_journal import JournalEntryManager, JournalEntryResponse
 from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
-from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
-from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
+from chatbot.chains.view_journal import JournalQueryChain, JournalResponseChain, JournalInteractionHandler
+from chatbot.chains.view_mood import MoodQueryChain, MoodResponseChain, MoodInteractionHandler
+from chatbot.chains.review_user_memory import UserQueryChain, UserResponseChain, UserInteractionHandler
 
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
 import sqlite3
-db_file = "Squeak_to_speak\data\database\squeaktospeak_db.db"
+
+db_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "Squeaktospeak_db.db"))
 
 conn = sqlite3.connect(db_file)
 db_manager = DatabaseManager(conn)
@@ -82,12 +81,6 @@ class MainChatbot:
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
         
-        self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        self.present_mood_board_entries = PresentMoodBoardEntries()
-
-        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        self.present_journal_entries = PresentJournalEntries()
-
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
         
@@ -97,9 +90,6 @@ class MainChatbot:
 
         self.mood_manager = MoodEntryManager(db_manager=self.db_manager)
         self.mood_entry_response = MoodEntryResponse()
-
-        self.retrieve_user_data = RetrieveUserData(db_manager=self.db_manager)
-        self.present_user_data = PresentUserData()
 
         self.identify_mood_board_entry_to_modify = IdentifyMoodBoardEntryToModify()
         self.modify_mood_board_entry = ModifyMoodBoardEntry(db_manager=self.db_manager)
@@ -124,10 +114,6 @@ class MainChatbot:
                 "confirm": self.deletion_confirmation_formatter
             },
 
-            "insert_mood": {
-                "retrieve": self.retrieve_journal_entries,
-                "present": self.present_journal_entries
-            },
             "insert_journal": {
                 "insert": self.journal_manager,
                 "response": self.journal_entry_response
@@ -135,10 +121,6 @@ class MainChatbot:
             "insert_gratitude": {
                 "insert": self.gratitude_manager,
                 "response": self.gratitude_manager
-            },
-            "review_user_memory": {
-                "retrieve": self.retrieve_user_data,
-                "present": self.present_user_data
             },
             "update_mood": {
                 "identify": self.identify_mood_board_entry_to_modify,
@@ -156,12 +138,9 @@ class MainChatbot:
             }
         }
 
-        
-
 
         # Map of intentions to their corresponding handlers
         self.intent_handlers: Dict[Optional[str], Callable[[Dict[str, str]], str]] = {
-        #"review_user_memory": self.handle_support_information,
         "find_therapist": self.handle_find_therapist,
         "find_support_group": self.handle_find_support_group,
         "find_hotline": self.handle_find_hotline,
@@ -173,10 +152,12 @@ class MainChatbot:
         "ask_features": self.handle_know_services,
         "update_journal": self.handle_update_journal,
         "update_mood": self.handle_update_mood,
-        #"chat_about_journal": self.handle_recall_entry,
         "delete_journal":self.handle_delete_journal,
         "delete_mood":self.handle_delete_mood,
-        'chitchat':self.handle_chitchat_intent
+        'chitchat':self.handle_chitchat_intent,
+        'view_journal':self.handle_view_journal,
+        'view_mood':self.handle_view_mood,
+        "review_user_memory": self.handle_review_user_memory,
         }
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
@@ -279,62 +260,6 @@ class MainChatbot:
         response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
 
         return response
-
-        """
-        Extracts dates from the input text.
-
-        Args:
-            text: The input text from the user.
-
-        Returns:
-            A dictionary with possible start_date and end_date.
-        """
-        words = text.split()
-        dates = [parse(word, fuzzy=True) for word in words if self.is_date(word)]
-        if len(dates) == 1:
-            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": None}
-        elif len(dates) >= 2:
-            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": dates[1].strftime('%Y-%m-%d')}
-        return {"start_date": None, "end_date": None}
-
-    '''def handle_recall_entry(self, user_input: Dict):
-        """Handle the intent to recall past journal entries based on theme or date.
-
-        Args:
-            user_input: The input text specifying the desired entries.
-
-        Returns:
-            A list or structured view of relevant entries.
-        """
-        # Extract dates from user input
-        dates = self.extract_dates(user_input["customer_input"])
-
-        # Retrieve the chain for recalling entries
-        retrieve_chain = self.get_chain("chat_about_journal")[0]  # Assuming the first chain is for retrieval
-
-        # Set the appropriate Pinecone index based on user input
-        if "index_name" in user_input:
-            retrieve_chain.set_pinecone_index(user_input["index_name"])
-
-        # Determine if the user wants to search by date or theme
-        if dates["start_date"] or dates["end_date"]:
-            entries = retrieve_chain.get_entries_by_date(
-                user_id=self.user_id,
-                entry_type=user_input.get("entry_type", "journal"),
-                start_date=dates["start_date"],
-                end_date=dates["end_date"]
-            )
-        else:
-            entries = retrieve_chain.query_relevant_entries(
-                user_input=user_input["theme"]
-            )
-
-        # Format the entries for presentation
-        present_chain = self.get_chain("chat_about_journal")[1]  # Assuming the second chain is for presentation
-        response = present_chain.format_output(entries, user_input.get("entry_type", "journal"))
-
-        return response
-        '''
     
     def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
 
@@ -412,28 +337,11 @@ class MainChatbot:
         Returns:
             A list or structured view of relevant journal entries.
         """
-        retrieve_chain = RetrieveJournalEntries(self.db_manager, self.rag_pipeline)
-        present_chain = PresentJournalEntries()
+        message = user_input.get("customer_input", "")
+        journal_handler = JournalInteractionHandler(JournalQueryChain(), JournalResponseChain(llm=self.llm))
+        response = journal_handler.handle_input(user_input = message, user_id = self.user_id)
     
-        if "search_type" not in user_input:
-            # Prompt the user to choose between searching by date or topic
-            return retrieve_chain.prompt_for_search_type()
-        elif user_input["search_type"] == "date" and "date" not in user_input:
-            # Prompt the user for the date if not provided
-            return retrieve_chain.prompt_for_date()
-        elif user_input["search_type"] == "topic" and "topic" not in user_input:
-            # Prompt the user for the topic if not provided
-            return retrieve_chain.prompt_for_topic()
-    
-        # Retrieve and present journal entries based on the search type
-        if user_input["search_type"] == "date":
-            entries = retrieve_chain.get_entries_by_date(self.user_id, user_input["date"])
-        elif user_input["search_type"] == "topic":
-            entries = retrieve_chain.get_entries_by_topic(self.user_id, user_input["topic"])
-        else:
-            return "Invalid search type. Please type 'date' or 'topic'."
-    
-        return present_chain.format_output(entries)
+        return response
     
     def handle_view_mood(self, user_input: Dict):
         """Handle the intent to view past mood board entries.
@@ -444,28 +352,11 @@ class MainChatbot:
         Returns:
             A list or structured view of relevant mood board entries.
         """
-        retrieve_chain = RetrieveMoodBoardEntries(self.db_manager, self.rag_pipeline)
-        present_chain = PresentMoodBoardEntries()
+        message = user_input.get("customer_input", "")
+        mood_handler = MoodInteractionHandler(MoodQueryChain(), MoodResponseChain(llm=self.llm))
+        response = mood_handler.handle_input(user_input = message, user_id = self.user_id)
     
-        if "search_type" not in user_input:
-            # Prompt the user to choose between searching by date or topic
-            return retrieve_chain.prompt_for_search_type()
-        elif user_input["search_type"] == "date" and "date" not in user_input:
-            # Prompt the user for the date if not provided
-            return retrieve_chain.prompt_for_date()
-        elif user_input["search_type"] == "topic" and "topic" not in user_input:
-            # Prompt the user for the topic if not provided
-            return retrieve_chain.prompt_for_topic()
-    
-        # Retrieve and present mood board entries based on the search type
-        if user_input["search_type"] == "date":
-            entries = retrieve_chain.get_entries_by_date(self.user_id, user_input["date"])
-        elif user_input["search_type"] == "topic":
-            entries = retrieve_chain.get_entries_by_topic(self.user_id, user_input["topic"])
-        else:
-            return "Invalid search type. Please type 'date' or 'topic'."
-    
-        return present_chain.format_output(entries)
+        return response
 
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.
@@ -635,18 +526,12 @@ class MainChatbot:
         Returns:
             A formatted string presenting the user's stored data.
         """
-        retriever_chain = RetrieveUserData(self.db_manager)
-        presenter_chain = PresentUserData()
+
+        message = user_input.get("customer_input", "")
+        mood_handler = UserInteractionHandler(UserQueryChain(), UserResponseChain(llm=self.llm))
+        response = mood_handler.handle_input(user_input = message, user_id = self.user_id)
     
-        # Retrieve the start and end dates from user input or use defaults
-        start_date = user_input.get("start_date")
-        end_date = user_input.get("end_date")
-    
-        # Retrieve the user data
-        user_data = retriever_chain.retrieve_data(self.user_id, start_date, end_date)
-    
-        # Generate and return the formatted output
-        return presenter_chain.format_output(user_data)
+        return response
     
     def handle_chitchat_intent(self, user_input: Dict[str, str]) -> str:
         """Handle the chitchat intent by providing a response.
@@ -671,25 +556,23 @@ class MainChatbot:
         Returns:
             The content of the response after processing through the new chain.
         """
-        possible_intention = [
-        "review_user_memory"
-        "find_therapist"
-        "find_support_group"
-        "find_hotline"
-        "habit_alternatives"
-        "insert_mood"
-        "delete_mood"
-        "update_mood"
-        "view_mood"
-        "insert_journal"
-        "delete_journal"
-        "view_journal"
-        "insert_gratitude"
-        "ask_missionvalues"
-        "ask_features"
-        "review_user_memory"
-        "chat_about_journal"
-        ]
+        possible_intention = ["review_user_memory",
+                                "find_therapist",
+                                "find_support_group",
+                                "find_hotline",
+                                "habit_alternatives",
+                                "insert_mood",
+                                "delete_mood",
+                                "update_mood",
+                                "view_mood",
+                                "insert_journal",
+                                "delete_journal",
+                                "view_journal",
+                                "insert_gratitude",
+                                "ask_missionvalues",
+                                "ask_features",
+                                "review_user_memory"
+                                ]
 
         chitchat_reasoning_chain, _ = self.get_chain("chitchat")
 
