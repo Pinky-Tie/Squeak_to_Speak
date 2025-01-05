@@ -263,22 +263,7 @@ class MainChatbot:
 
         return response
 
-        """
-        Extracts dates from the input text.
-
-        Args:
-            text: The input text from the user.
-
-        Returns:
-            A dictionary with possible start_date and end_date.
-        """
-        words = text.split()
-        dates = [parse(word, fuzzy=True) for word in words if self.is_date(word)]
-        if len(dates) == 1:
-            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": None}
-        elif len(dates) >= 2:
-            return {"start_date": dates[0].strftime('%Y-%m-%d'), "end_date": dates[1].strftime('%Y-%m-%d')}
-        return {"start_date": None, "end_date": None}
+ 
 
     '''def handle_recall_entry(self, user_input: Dict):
         """Handle the intent to recall past journal entries based on theme or date.
