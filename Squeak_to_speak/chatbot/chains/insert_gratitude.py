@@ -25,7 +25,7 @@ class GratitudeEntryManager:
         """
 
         # Get current date
-        date = datetime.now().strftime("%Y-%m-%d")
+        date = datetime.datetime.now().strftime("%Y-%m-%d")
 
         # Create journal entry object
         entry = GratitudeEntry(

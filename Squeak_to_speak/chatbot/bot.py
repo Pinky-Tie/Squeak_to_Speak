@@ -240,24 +240,7 @@ class MainChatbot:
             )
             return None
 
-    def get_random_gratitude_message(self) -> str:
-        """
-        Retrieves a random gratitude message from the gratitude_entries table.
 
-        Returns:
-            A random gratitude message.
-        """
-        query = """
-        SELECT content
-        FROM gratitude_entries
-        ORDER BY RANDOM()
-        LIMIT 1
-        """
-        result = self.db_manager.select(query)
-        if result:
-            return result[0]['content']
-        else:
-            return "No gratitude messages found."
 
 #Functions to handle each intention
 
@@ -391,7 +374,7 @@ class MainChatbot:
         """
         user_message = user_input.get("customer_input", "")
         # Step 1: Process user message with the reasoning chain
-        result = self.mood_manager.process(user_id=self.user_id, user_message=user_message)
+        result = self.mood_manager.process(user_id=self.user_id, mood=user_message)
 
         # Step 2: Generate response with the response chain
         response = self.mood_entry_response.generate(result["success"])

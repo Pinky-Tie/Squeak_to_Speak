@@ -3,71 +3,159 @@
 # Chain 1: Retrieve Journal Entries
 # Goal: Retrieve the journal entries the user wants to see.
 # Implementation: This chain queries the database for journal entries matching the user’s criteria, orders, and structures them as output.
+from langchain import callbacks
+from langchain.output_parsers import PydanticOutputParser
+from langchain.schema.runnable.base import Runnable
+from pydantic import BaseModel, Field
+from base import PromptTemplate, generate_prompt_templates
+from typing import List, Optional
+# Define the product database as a dictionary with product categories
+import sys
+import os
+import json
+from langchain_openai import ChatOpenAI
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+from data.data_func import connect_database
 
-class RetrieveJournalEntries:
-    def __init__(self, db_manager, rag_pipeline):
-        self.db_manager = db_manager
-        self.rag_pipeline = rag_pipeline
+import openai
+from dotenv import load_dotenv
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    def prompt_for_search_type(self) -> str:
-        """
-        Prompt the user to choose between searching by date or topic.
-        """
-        return "Do you want to search by date or topic? Please type 'date' or 'topic'."
 
-    def prompt_for_date(self) -> str:
-        """
-        Prompt the user to enter the date of the journal entry they want to view.
-        """
-        return "Enter the date of the journal entry you want to view, in format (YYYY-MM-DD): "
 
-    def prompt_for_topic(self) -> str:
-        """
-        Prompt the user to enter the topic of the journal entry they want to view.
-        """
-        return "Enter the topic of the journal entry you want to view: "
+# Base Models for data handling using Pydantic
+class JournalEntry(BaseModel):
+    """Model for representing a journal entry."""
+    user_id: int = Field(..., description="User ID")
+    message: str = Field(..., description="message")
 
-    def get_entries_by_date(self, user_id: int, date: str):
-        """
-        Retrieves journal entries based on the specified date.
-        """
+class JournalQueryResult(BaseModel):
+    """Model for the result containing multiple journal entries."""
+    results: List[JournalEntry]
+
+class JournalQueryChain(Runnable):
+    """Chain for querying journal entries from a database based on user ID."""
+
+    def retrieve_journal(self, user_id=1, limit=5):
+        """Fetch a specified number of journal comments for a given user ID."""
+        conn, cursor = connect_database()
+
         try:
             query = """
-            SELECT entry_id, content, created_at
-            FROM Journal_entries
-            WHERE user_id = :user_id AND entry_date = :entry_date
-            ORDER BY created_at DESC
+            SELECT message
+            FROM Journal
+            WHERE user_id = ?
+            LIMIT ?;
             """
-            params = {
-                "user_id": user_id,
-                "entry_date": date,
-            }
-            results = self.db_manager.fetch_all(query, params)
-            return {"entries": results} if results else {"error": "No entries found for the specified date."}
-        except Exception as e:
-            return {"error": str(e)}
+            cursor.execute(query, (user_id, limit))
+            rows = cursor.fetchall()
+        finally:
+            conn.close()
 
-    def get_entries_by_topic(self, user_id: int, topic: str):
-        """
-        Retrieves journal entries based on the specified topic using RAG.
-        """
-        try:
-            query = f"Find journal entries about {topic}"
-            response = self.rag_pipeline.rag_chain.invoke({"customer_input": query})
-            return {"entries": response} if response else {"error": "No entries found for the specified topic."}
-        except Exception as e:
-            return {"error": str(e)}
+        # Convert rows into JournalEntry objects
+        results = [JournalEntry(user_id=user_id, message=row[0]) for row in rows]
+        return results
 
-# Chain 2: Present Journal Entries
-# Goal: Present the retrieved journal entries to the user.
-# Implementation: This chain formats the retrieved entries and presents them to the user.
-class PresentJournalEntries:
-    def format_output(self, entries):
-        """
-        Formats the retrieved journal entries for presentation.
-        """
-        if "error" in entries:
-            return entries["error"]
-        
-        formatted_entries = "\n".join([f"Date: {entry['created_at']}\nContent: {entry['content']}" for entry in entries["entries"]])
-        return formatted_entries if formatted_entries else "No entries found for the specified date or topic."
+    def invoke(self, inputs):
+        """Invoke the chain to query journal entries."""
+        user_id = inputs.get("user_id")
+        limit = inputs.get("limit", 5)
+
+        # Fetch journal entries
+        journal_entries = self.retrieve_journal(user_id=user_id, limit=limit)
+
+        # Format the output
+        output = JournalQueryResult(results=journal_entries)
+        return output
+
+
+class JournalResponseChain(Runnable):
+    """Chain that generates a response to a journal query."""
+
+    def __init__(self, llm, memory=True):
+        """Initialize the journal response chain."""
+        super().__init__()
+        self.llm = llm
+
+        # Define the prompt template for customer service interaction
+        prompt_template = PromptTemplate(
+            system_template="""
+            You are a journal assistant capable of retrieving and summarizing user journal entries.
+            Your task is to present the retrieved journal entries in a clear and organized manner.
+
+            Guidelines:
+            1. Provide a concise summary of the entries.
+            2. Show empathy and understanding in the tone.
+            3. Offer additional assistance if the user requires further support.
+            
+            Retrieved Journal Entries:
+            {journal_entries}
+            """,
+            human_template="""
+            User Query:
+            {user_query}
+            """,
+        )
+
+        self.prompt = generate_prompt_templates(prompt_template, memory=memory)
+        self.chain = self.prompt | self.llm
+
+    def invoke(self, inputs, config):
+        """Invoke the journal response chain."""
+        journal_entries = inputs.get("journal_entries")
+        user_query = inputs.get("user_query")
+
+        # Combine inputs for the prompt
+        prompt_inputs = {
+            "journal_entries": json.dumps(
+                [entry.dict() for entry in journal_entries], indent=4
+            ),
+            "user_query": user_query,
+        }
+
+        # Add an empty chat_history to avoid errors
+        prompt_inputs["chat_history"] = []  # This ensures compatibility
+
+        return self.chain.invoke(prompt_inputs, config=config)
+
+
+class JournalInteractionHandler:
+    """Handles user inputs like 'let me view my journal entries'."""
+
+    def __init__(self, journal_query_chain, journal_response_chain):
+        self.journal_query_chain = journal_query_chain
+        self.journal_response_chain = journal_response_chain
+
+    def handle_input(self, user_input, user_id):
+        """Process the user input to fetch and display journal entries."""
+        if "journal entries" in user_input.lower():
+            # Query the journal entries
+            query_result = self.journal_query_chain.invoke({"user_id": user_id, "limit": 5})
+
+            # Generate a response
+            response = self.journal_response_chain.invoke(
+                {
+                    "journal_entries": query_result.results,
+                    "user_query": user_input,
+                },
+                config={},
+            )
+
+            return response
+
+        return "I'm sorry, I didn't understand your request. Can you clarify?"
+
+
+# Example Usage
+# Create chains for querying and responding
+journal_query_chain = JournalQueryChain()
+journal_response_chain = JournalResponseChain(llm=ChatOpenAI(temperature=0.0, model="gpt-4o-mini"))
+journal_handler = JournalInteractionHandler(journal_query_chain, journal_response_chain)
+
+# Example user input and handling
+user_input = "Let me view my journal entries"
+user_id = 1  # Assume this is retrieved from the session or context
+response = journal_handler.handle_input(user_input = user_input, user_id = user_id)
+print(response)
+
