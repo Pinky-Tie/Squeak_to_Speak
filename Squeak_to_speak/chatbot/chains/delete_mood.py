@@ -6,33 +6,22 @@ from data.database_functions import DatabaseManager
 # Goal: Delete the entry the user has requested to be deleted
 # Implementation: This chain identifies the entry the user wishes to delete and deletes it, outputting confirmation from the database.
 class MoodBoardEntryDeleter:
-    def __init__(self, db_manager:DatabaseManager):
+    def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
 
-    def prompt_for_date(self) -> str:
-        """
-        Prompt the user to enter the date of the mood board entry they want to delete.
-        """
-        return "Enter the date you want to delete from, in format (YYYY-MM-DD): "
-
-    def process(self, user_id: int, date: str = None):
+    def process(self, user_id: int, date: str):
         """
         Delete a specific mood board entry for the user.
         """
-        if date is None:
-            # Prompt the user for the date if not provided
-            return self.prompt_for_date()
-        
         query = """
-        DELETE FROM Mood_board_entries
-        WHERE user_id = :user_id AND entry_date = :entry_date
-        RETURNING entry_id
+        DELETE FROM mood_tracker
+        WHERE user_id = :user_id AND date = :date
         """
         params = {
             "user_id": user_id,
-            "entry_date": date,
+            "date": date
         }
-        result = self.db_manager.execute(query, params)
+        result = self.db_manager.delete(query, params)
         return result
 
 
