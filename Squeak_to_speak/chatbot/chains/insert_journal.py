@@ -5,6 +5,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from data.database_functions import DatabaseManager
 
+
 class JournalEntry(BaseModel):
     user_id: int
     message: str
@@ -45,15 +46,15 @@ class JournalEntryManager:
 
         # Insert into the database
         success = self.db_manager.insert("Journal", entry.dict())
-        return {"success": success}
+        
+        return success["success"]
 
 # Response Chain
 class JournalEntryResponse:
-    def generate(self, result: dict) -> str:
+    def generate(self, result) -> str:
         """Generates a response based on the success of the database operation."""
-        if "error" in result:
-            return result["error"]
-        if result["success"]:
+  
+        if result:
             return "Your journal entry has been successfully added."
         else:
             return "There was an error adding your journal entry. Please try again later."

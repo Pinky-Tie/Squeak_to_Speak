@@ -64,6 +64,8 @@ To set up your environment for testing the chatbot, follow these steps:
 
     pip install -r requirements.txt
 
+  An In console version of the chatbot can be run with **console_app.py**
+
 
 ### 2.2 How to Run the Chatbot
 
@@ -216,170 +218,196 @@ Communicate with Squeak to Speak’s assistant, leveraging its understanding of 
 
 For each intention, provide 3 examples of test messages that users can use to verify the chatbot's functionality. Include both typical and edge-case inputs to ensure the chatbot handles various scenarios.
 
-#### 1. I want a recommendation for a healthcare professional
+#### 1. Review User Memory
 
 **Test Messages:**
-
-1. "Can you recommend a therapist who specializes in anxiety and is based in Lisbon?"
-2. "I'm looking for a therapist who can help with both depression and marriage issues. Can you find one?"
-3. "I need a healthcare professional who can help me with bipolar disorder. Does the recommendation include online options?"
+1. "What information is stored about my interactions?"
+2. "What insights do you have on my preferences?"
+3. "What data is stored regarding my journal entries?"
 
 **Expected Behavior:**  
-The chatbot should provide a personalized recommendation for a healthcare professional that fits the user’s specified needs and location, including any relevant options such as online services.
+The chatbot should provide a summary of stored data, ensuring transparency and clarity about user-specific information.
 
 ---
 
-#### 2. I want to know about support groups in my area
+#### 2. Find Therapist
 
 **Test Messages:**
-
-1. "Are there any support groups for people struggling with anxiety in Lisbon?"
-2. "Can you tell me if there are any grief support groups near me?"
-3. "I need a support group for people who have dealt with childhood trauma. Do you have anything like that?"
+1. "Help me find a therapist that focuses on trauma and offers online sessions."
+2. "Help me find a therapist that is LGBTQ+ friendly and has evening availability."
+3. "Help me find a therapist that specializes in anxiety and is affordable."
 
 **Expected Behavior:**  
-The chatbot should provide information about local support groups that match the user's needs, including details like group type and location.
+The chatbot should recommend therapists based on user-specified preferences such as specialization, availability, and budget.
 
 ---
 
-#### 3. I want a contact for an emergency or non-emergency hotline
+#### 3. Find Support Group
 
 **Test Messages:**
-
-1. "What’s the contact for a suicide prevention hotline in my area?"
-2. "I need the contact for a mental health crisis hotline in Lisbon, please."
-3. "Can you provide the contact for a non-emergency mental health helpline that operates after hours?"
+1. "Help me find a support group that focuses on anxiety in New York."
+2. "Help me find a support group that offers in-person meetings for loneliness."
+3. "Help me find a support group that meets online for depression."
 
 **Expected Behavior:**  
-The chatbot should provide the appropriate hotline contact information based on the urgency and location specified by the user.
+The chatbot should provide a list of relevant support groups based on the user's criteria.
 
 ---
 
-#### 4. I want an alternative to a habit I have
+#### 4. Find Hotline
 
 **Test Messages:**
-
-1. "What are some good substitutes for my coffee addiction?"
+1. "Help me find a hotline that provides general counseling services."
+2. "Help me find a hotline that offers immediate crisis support."
+3. "Help me find a hotline that specializes in mental health issues."
 
 **Expected Behavior:**  
-The chatbot should offer practical and healthy alternatives to the user's habits, tailored to the specifics of their request.
+The chatbot should suggest hotline numbers for various needs, including 24/7 services and specific areas of concern.
 
 ---
 
-#### 5. I want to make an entry in my journal or mood board
+#### 5. Habit Alternatives
 
 **Test Messages:**
-
-1. "Can you add an entry in my journal saying that I'm feeling overwhelmed today?"
-2. "Can you add a mood board entry with a quote I liked today?"
-3. "I want to write about my anxiety, but I don’t know how to express it. Can you help me get started?"
+1. "Suggest an alternative for snacking on chips."
+2. "Suggest an alternative for procrastinating on my tasks."
+3. "Suggest an alternative for skipping my workouts."
 
 **Expected Behavior:**  
-The chatbot should add a new entry to the user's journal or mood board based on their input and ensure it is saved for future reference.
+The chatbot should provide practical and healthier alternatives for the user's current habits.
 
 ---
 
-#### 6. I want to see my journal or mood board
+#### 6. Insert Mood
 
 **Test Messages:**
-
-1. "Can you show me what I wrote in my journal last week?"
-2. "Can I look at all my entries about stress from the past month?"
-3. "I forgot if I wrote anything positive in my mood board last week. Can you check?"
+1. "Today, I feel excited about starting my new project."
+2. "Today, I feel nostalgic thinking about my childhood."
+3. "Today, I feel frustrated with the challenges I'm facing."
 
 **Expected Behavior:**  
-The chatbot should retrieve and display relevant entries from the user's journal or mood board, allowing them to review their past thoughts and emotions.
+The chatbot should record the user's mood and store it on the mood board.
 
 ---
 
-#### 7. I want to make an entry on the community gratitude banner
+#### 7. Insert Journal
 
 **Test Messages:**
-
-1. "I want to share that I’m grateful for my family. Can you add that to the gratitude banner?"
-2. "I want to share something really personal that I'm thankful for. Can it remain anonymous?"
-3. "Can I add an entry about how grateful I am for this service?"
+1. "I want to add to my journal today: I felt really happy after my walk."
+2. "I want to add to my journal today: I learned something new today that excited me."
+3. "I want to add to my journal today: Today was a productive day at work."
 
 **Expected Behavior:**  
-The chatbot should add an entry to the community gratitude banner, ensuring it respects any privacy preferences.
+The chatbot should save the journal entry accurately.
 
 ---
 
-#### 8. I want to know more about Squeak to Speak mission and values
+#### 8. Insert Gratitude
 
 **Test Messages:**
-
-1. "Can you tell me more about what Squeak to Speak stands for?"
-2. "How does Squeak to Speak incorporate mental health awareness into its mission?"
-3. "What values drive the development of Squeak to Speak’s AI assistant?"
+1. "I am grateful for the laughter shared with my colleagues."
+2. "I am grateful for the beautiful sunset I saw today."
+3. "I am grateful for the opportunity to learn something new today."
 
 **Expected Behavior:**  
-The chatbot should provide clear information about the company's mission, values, and how they align with its services and technology.
+The chatbot should append the gratitude message to the community gratitude banner.
 
 ---
 
-#### 9. I want to know what Squeak and Speak can do for me
+#### 9. Ask Mission/Values
 
 **Test Messages:**
-
-1. "What features does Squeak to Speak offer for managing mental health?"
-2. "Can I use Squeak to Speak to find mental health professionals and attend support groups?"
-3. "What can Squeak to Speak do to help me with stress and anxiety management?"
+1. "Tell me about Squeak to Speak's story and how it started."
+2. "Tell me about Squeak to Speak's vision for the future."
+3. "Tell me about Squeak to Speak and its core values."
 
 **Expected Behavior:**  
-The chatbot should outline the key features and capabilities of Squeak to Speak, helping the user understand how it can assist them with their mental health.
+The chatbot should provide details about the platform's mission, vision, and values.
 
 ---
 
-#### 10. I want to know what Squeak and Speak knows about me
+#### 10. Ask Features
 
 **Test Messages:**
-
-1. "Can you tell me what information Squeak to Speak holds about my mental health?"
-2. "What kind of data does Squeak to Speak keep about my journal entries and mood board?"
-3. "I want to know if Squeak to Speak tracks any personal information, like my preferences or location."
+1. "Tell me about your chatbot and its role in supporting mental health."
+2. "Tell me about your chatbot's features and how they can aid my well-being."
+3. "Tell me about your chatbot and the resources it provides for mental wellness."
 
 **Expected Behavior:**  
-The chatbot should provide transparency about the data Squeak to Speak collects, how it's used, and what the user can review or modify.
+The chatbot should summarize its key features and functionalities.
 
 ---
 
-#### 11. I want to delete data from my Journal or Mood Board
+#### 11. Update Journal
 
 **Test Messages:**
-
-1. "Can you delete the last entry from my journal?"
-2. "I want to delete an entire month of entries from my mood board. Can you do that?"
-3. "Can you permanently remove all my journal entries from the past year?"
+1. "I want to change a journal entry from 2023-10-05 to correct a mistake."
+2. "I want to change a journal entry from 2023-10-01 to reflect my new feelings."
+3. "I want to change a journal entry on 2023-07-30 to include my recent thoughts."
 
 **Expected Behavior:**  
-The chatbot should delete the requested data from the journal or mood board and confirm the deletion.
+The chatbot should allow modifications to existing journal entries and ensure changes are saved.
 
 ---
 
-#### 12. I want to alter data on my Journal or Mood Board
+#### 12. Update Mood
 
 **Test Messages:**
-
-1. "Can you update my journal entry from yesterday to reflect how I feel now?"
-2. "I want to edit my mood board entry to add that I’m feeling more positive."
-3. "Can you change the date on my journal entry from last week to today’s date?"
+1. "I want to change my mood on 2023-10-01 to reflect feeling more hopeful."
+2. "I want to change my mood on 2023-10-12 to reflect that I'm feeling sad."
+3. "I want to change my mood on 2023-08-25 to indicate I'm feeling motivated."
 
 **Expected Behavior:**  
-The chatbot should allow the user to modify existing entries with new information, ensuring the updates are correctly saved.
+The chatbot should update the mood entry on the mood board with the new details.
 
 ---
 
-#### 13. I want to talk to the Chatbot having the knowledge of what I wrote in my journal
+#### 13. View Journal
 
 **Test Messages:**
-
-1. "Can you help me reflect on my journal entries about stress?"
-2. "Can you remember what I wrote last month about feeling overwhelmed?"
-3. "Can you pull up some of my past journal entries on mental health challenges so we can talk about them?"
+1. "How does my journal look from last month?"
+2. "How does my journal look for the year?"
+3. "What have I added to my journal entries?"
 
 **Expected Behavior:**  
-The chatbot should recall relevant journal or mood board entries and use that knowledge to provide personalized and empathetic responses.
+The chatbot should display the requested journal entries based on the user's timeframe or topic.
+
+---
+
+#### 14. View Mood
+
+**Test Messages:**
+1. "What does my mood board look like for this month?"
+2. "How has my mood been on 2023-10-10?"
+3. "What does my mood board look like for the past few days?"
+
+**Expected Behavior:**  
+The chatbot should show mood entries corresponding to the specified time period.
+
+---
+
+#### 15. Delete Journal
+
+**Test Messages:**
+1. "Delete my journal entry on 2023-01-22."
+2. "Delete my journal entry on 2023-10-01."
+3. "Delete my journal entry on 2023-08-20."
+
+**Expected Behavior:**  
+The chatbot should remove the specified journal entry.
+
+---
+
+#### 16. Delete Mood
+
+**Test Messages:**
+1. "Delete my mood on 2023-08-20."
+2. "Delete my mood on 2023-03-12."
+3. "Delete my mood on 2023-06-25."
+
+**Expected Behavior:**  
+The chatbot should delete the corresponding mood board entry.
+
 
 
 
@@ -389,44 +417,25 @@ The chatbot should recall relevant journal or mood board entries and use that kn
 ### 5.1 Intention Router Implementation
 
 - **Message Generation**:  
-  Describe how you generated messages for each user intention. Did you create the messages manually, use synthetic data, or leverage a dataset? Specify the method used and tools/scripts for generating the data.  
-  Where are the generated messages stored (e.g., in a file, database, or another format)?
+  Each message was artificially created with the use of the same OpenAI model used in the chatbot. The prompts and parameters can be found
+  in generate_intentions.ipynb
 
 ### 5.2 Semantic Router Training
 
 - **Hyperparameters**:  
-  Report which encoder was used in the semantic router.  
-  Report the aggregation method and the `top_k` parameter used for selecting the most relevant results.
+  The HuggingFace Enconder was used to train the semantic router, mantaining the default agregation and top_k params.
 
-### 5.3 Post-Processing for Accuracy Improvement
-
-- **Post-Processing Techniques**:  
-  If you applied any post-processing techniques to enhance the router's accuracy, describe them here.  
-  For example, did you use a Large Language Model (LLM) for additional refinement?  
-  Explain how these techniques were integrated into the pipeline and any custom code or algorithms used.
-
----
 
 ## 6. Intention Router Accuracy Testing Results
 
 ### Methodology
+    To accuractly train and test the intention router, the following steps were taken:
 
-1. **Message Creation**:
+   - With the artificial method explained above,  generated 100 messages per intention and 25 messages with no intention.
+   - Splitted the dataset into train and test subparts (80/20)
+   - Trained the and evaluated the semantic router. Obtaining a test accuracy score of 71.79%
 
-   - Generate at least 50 messages per intention, totaling 400 messages. These can be either synthetic or human-generated.
-   - Additionally, generate at least 25 small-talk messages related to your company and 25 off-topic messages unrelated to the company, labeled as "None."
 
-2. **Data Splitting**:
-
-   - Split the dataset into training and testing sets (80/20), ensuring a balanced distribution of each intention across both sets.
-
-3. **Training the Semantic Router**:
-
-   - Use the training split to train the semantic router. Report the accuracy on both the training and testing splits.
-
-4. **Post-Processing with LLM**:
-
-   - If applicable, apply post-processing using an LLM to improve the accuracy of the router. Report accuracy on both the training and testing splits after post-processing.
 
 5. **Reporting Results**:
 
@@ -435,17 +444,23 @@ The chatbot should recall relevant journal or mood board entries and use that kn
 
 | Intention              | Test Inputs | Correct | Incorrect | Accuracy (%) |
 |------------------------|-------------|---------|-----------|--------------|
-| update_journal         | 4           | 2       | 2         | 50.0         |
-| find_support_group     | 3           | 2       | 1         | 66.67        |
-| ask_features           | 2           | 2       | 0         | 100.0        |
+| insert_journal         | 2           | 0       | 2         | 0.0          |
+| delete_journal         | 4           | 4       | 0         | 100.0        |
+| update_mood            | 1           | 1       | 0         | 100.0        |
 | find_therapist         | 3           | 3       | 0         | 100.0        |
-| find_hotline           | 3           | 3       | 0         | 100.0        |
-| chat_about_journal     | 1           | 0       | 1         | 0.0          |
-| insert_mood            | 2           | 0       | 2         | 0.0          |
-| review_user_memory     | 1           | 0       | 1         | 0.0          |
-| insert_journal         | 2           | 2       | 0         | 100.0        |
-| ask_missionvalues      | 2           | 2       | 0         | 100.0        |
-| **Average Accuracy**   | 23          | 16      | 7         | 69.57        |
+| view_journal           | 2           | 2       | 0         | 100.0        |
+| update_journal         | 3           | 3       | 0         | 100.0        |
+| ask_missionvalues      | 4           | 4       | 0         | 100.0        |
+| None                   | 1           | 1       | 0         | 100.0        |
+| delete_mood            | 3           | 3       | 0         | 100.0        |
+| review_user_memory     | 3           | 0       | 3         | 0.0          |
+| insert_gratitude       | 2           | 1       | 1         | 50.0         |
+| view_mood              | 1           | 1       | 0         | 100.0        |
+| ask_features           | 1           | 1       | 0         | 100.0        |
+| habit_alternatives     | 2           | 0       | 2         | 0.0          |
+| find_hotline           | 1           | 0       | 1         | 0.0          |
+| **Average Accuracy**   | **33**      | **24**  | **9**     | **72.73**    |
+
 
 
 ```

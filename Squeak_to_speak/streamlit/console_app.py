@@ -34,15 +34,7 @@ def main(bot: MainChatbot):
             print(f"Error: {str(e)}")
             print("Please try again with a different query.")
 
-def display_rotating_banner(bot):
-    """
-    Displays a rotating banner of random gratitude messages.
-    """
-    placeholder = st.empty()
-    while True:
-        random_gratitude_message = bot.get_random_gratitude_message()
-        placeholder.text(random_gratitude_message)
-        time.sleep(5)  # Rotate every 5 seconds
+
 
 if __name__ == "__main__":
     # Load environment variables from a .env file
@@ -70,9 +62,3 @@ if __name__ == "__main__":
     # Start the main interaction loop
     main(bot)
 
-'''def Homepage():
-    st.title("Homepage")
-
-pg = st.navigation([st.Page(Homepage), st.Page("login_page.py"), st.Page("user_registration.py")])
-pg.run()
-'''
