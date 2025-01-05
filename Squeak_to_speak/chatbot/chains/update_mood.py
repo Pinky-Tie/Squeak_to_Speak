@@ -11,7 +11,7 @@ class IdentifyMoodBoardEntryToModify:
         Retrieves the mood board entry for the specified date.
         """
         query = """
-        SELECT mood_id, mood
+        SELECT mood_id
         FROM Mood_tracker
         WHERE user_id = :user_id AND date = :date
         """
@@ -25,19 +25,19 @@ class IdentifyMoodBoardEntryToModify:
 # Goal: Alter the entry with the users' inputs
 # Implementation: This chain takes as input the entry to be altered and the user input, structures the new values for the entry and alters it, outputting confirmation for the alteration.
 class ModifyMoodBoardEntry:
-    def __init__(self, db_manager:DatabaseManager):
+    def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
 
-    def modify_entry(self, entry_id: int, updated_content: str):
+    def modify_entry(self, mood_id: int, updated_content: str):
         """
         Updates the mood board entry with the provided content.
         """
         query = """
         UPDATE Mood_tracker
         SET mood = :updated_content
-        WHERE mood_id = :entry_id
+        WHERE mood_id = :mood_id
         """
-        params = {"entry_id": entry_id, "updated_content": updated_content}
+        params = {"mood_id": mood_id, "updated_content": updated_content}
         success = self.db_manager.update(query, params)
         return {"success": success} if success else {"error": "Failed to update the entry."}
 
