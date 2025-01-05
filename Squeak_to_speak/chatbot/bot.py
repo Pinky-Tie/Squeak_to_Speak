@@ -543,7 +543,7 @@ class MainChatbot:
     
         # Extract the date and new content from user input
         message = user_input.get("message", "")
-        print(f"User message: {message}")  # Debug print
+        # print(f"User message: {message}")  # Debug print
         date = self.extract_date(message)
         new_content = self.extract_new_content(message)
     
@@ -558,7 +558,7 @@ class MainChatbot:
             return f"No journal entry found for the date {date}."
     
         # Modify the entry
-        modification_result = modifier_chain.modify_entry(entry["entry_id"], new_content)
+        modification_result = modifier_chain.modify_entry(entry["message_id"], new_content)
     
         # Generate and return the confirmation message
         return confirmation_chain.format_output(modification_result, date)
@@ -570,7 +570,7 @@ class MainChatbot:
         
         # Extract the relevant part from the response content
         new_content = response.content.split('The new content to extract from the message is: "', 1)[-1].rsplit('"', 1)[0]
-        print(f"Extracted new content: {new_content}")  # Debug print
+        # print(f"Extracted new content: {new_content}")  # Debug print
         return new_content
 
     def handle_update_mood(self, user_input: Dict):
@@ -588,7 +588,7 @@ class MainChatbot:
     
         # Extract the date and new content from user input
         message = user_input.get("message", "")
-        print(f"User message: {message}")  # Debug print
+        # print(f"User message: {message}")  # Debug print
         date = self.extract_date(message)
         new_content = self.extract_new_content(message)
     
@@ -603,7 +603,7 @@ class MainChatbot:
             return f"No mood board entry found for the date {date}."
     
         # Modify the entry
-        modification_result = modifier_chain.modify_entry(entry["entry_id"], new_content)
+        modification_result = modifier_chain.modify_entry(entry["mood_id"], new_content)
     
         # Generate and return the confirmation message
         return confirmation_chain.format_output(modification_result)
