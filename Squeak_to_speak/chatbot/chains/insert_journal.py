@@ -65,7 +65,6 @@ class JournalEntryManager:
 # Response Chain
 class JournalEntryResponse:
     def generate(self, result: dict) -> str:
-    def generate(self, result: dict) -> str:
         """Generates a response based on the success of the database operation."""
         if "error" in result:
             return result["error"]
