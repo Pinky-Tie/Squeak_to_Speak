@@ -561,13 +561,17 @@ class MainChatbot:
         modification_result = modifier_chain.modify_entry(entry["entry_id"], new_content)
     
         # Generate and return the confirmation message
-        return confirmation_chain.format_output(modification_result)
+        return confirmation_chain.format_output(modification_result, date)
     
     def extract_new_content(self, message: str) -> str:
-        """Extract new content from the user input message."""
-        # Assuming new content follows the date in the message
-        parts = message.split(maxsplit=1)
-        return parts[1] if len(parts) > 1 else None
+        """Extract new content from the user input message using the configured LLM."""
+        prompt = f"Extract the new content from the following message: '{message}'. This is the content the user wants to update the entry with. The user's message should contain the intention to update, the date to update from, and the new content you should extract."
+        response = self.llm.invoke(prompt)
+        
+        # Extract the relevant part from the response content
+        new_content = response.content.split('The new content to extract from the message is: "', 1)[-1].rsplit('"', 1)[0]
+        print(f"Extracted new content: {new_content}")  # Debug print
+        return new_content
 
     def handle_update_mood(self, user_input: Dict):
         """Handle the intent to update a mood board entry.
