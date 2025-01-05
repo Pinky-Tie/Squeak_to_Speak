@@ -359,7 +359,7 @@ class MainChatbot:
 
     def extract_message(self, message: str) -> str:
         """Extract the message content from the user input message using the configured LLM."""
-        prompt = f"Extract the message content from the following input: '{message}'. The user's message should contain the intention to add to a journal or mood board and the message content you should extract."
+        prompt = f"Extract the message content from the following input: '{message}'. The user's message should contain the intention to add to a journal or mood board and the message content you should extract. Output only the extracted message"
         response = self.llm.invoke(prompt)
         
         # Extract the relevant part from the response content
@@ -402,6 +402,7 @@ class MainChatbot:
         # Step 2: Generate response with the response chain
         response = self.mood_entry_response.generate(result["success"])
         return response
+    
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
     
@@ -561,6 +562,7 @@ class MainChatbot:
         # print(f"User message: {message}")  # Debug print
         date = self.extract_date(message)
         new_content = self.extract_new_content(message)
+        # print(f"New content: {new_content}")  # Debug print
     
         if not date:
             return "Please provide the date of the journal entry you want to update in the format YYYY-MM-DD."
@@ -571,20 +573,21 @@ class MainChatbot:
         entry = identifier_chain.get_entry_to_modify(user_id, date, self.db_manager)
         if not entry:
             return f"No journal entry found for the date {date}."
-    
+        # print(entry)  # Debug print
+
         # Modify the entry
-        modification_result = modifier_chain.modify_entry(entry["message_id"], new_content)
+        modification_result = modifier_chain.modify_entry(entry[0], new_content)
     
         # Generate and return the confirmation message
-        return confirmation_chain.format_output(modification_result, date)
+        return confirmation_chain.format_output(modification_result)
     
     def extract_new_content(self, message: str) -> str:
         """Extract new content from the user input message using the configured LLM."""
-        prompt = f"Extract the new content from the following message: '{message}'. This is the content the user wants to update the entry with. The user's message should contain the intention to update, the date to update from, and the new content you should extract."
+        prompt = f"Extract the new content from the following message: '{message}'. This is the content the user wants to update the entry with. The user's message should contain the intention to update, the date to update from, and the new content you should extract. Output only the extracted content"
         response = self.llm.invoke(prompt)
         
         # Extract the relevant part from the response content
-        new_content = response.content.split('The new content to extract from the message is: "', 1)[-1].rsplit('"', 1)[0]
+        new_content = response.content.split('The new content to extract is: "', 1)[-1].rsplit('"', 1)[0]
         # print(f"Extracted new content: {new_content}")  # Debug print
         return new_content
 

@@ -12,7 +12,6 @@ class JournalEntry(BaseModel):
     message: str
     date: str
     hide_yn: bool
-    time: str
 
 # Reasoning Chain
 class JournalEntryManager:
