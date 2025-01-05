@@ -340,36 +340,51 @@ class MainChatbot:
 
         return response
 
+    def extract_message(self, message: str) -> str:
+        """Extract the message content from the user input message using the configured LLM."""
+        prompt = f"Extract the message content from the following input: '{message}'. The user's message should contain the intention to add to a journal or mood board and the message content you should extract."
+        response = self.llm.invoke(prompt)
+        
+        # Extract the relevant part from the response content
+        extracted_message = response.content.split('The message content to extract from the input is: "', 1)[-1].rsplit('"', 1)[0]
+        print(f"Extracted message content: {extracted_message}")  # Debug print
+        return extracted_message
+
     def handle_insert_journal(self, user_input: Dict[str, str]) -> str:
         """
-        Handles journal entry intent by processing user input and providing a response."""
-        
-        user_message = user_input.get("customer_input", "")
+        Handles journal entry intent by processing user input and providing a response.
+        """
+        message = user_input.get("customer_input", "")
+        print(f"User message: {message}")  # Debug print
+        extracted_message = self.extract_message(message)
+    
         # Step 1: Process user message with the reasoning chain
-        result = self.journal_manager.process(user_id=self.user_id, user_message=user_message)
-
+        result = self.journal_manager.process(user_id=self.user_id, user_message=extracted_message)
+    
         # Step 2: Generate response with the response chain
         response = self.journal_response.generate(result["success"])
-
+    
         return response
 
     def handle_insert_mood(self, user_input: Dict):
         """Handle the intent to make an entry in the mood board.
-
+    
         Args:
             user_input: The input text from the user.
-
+    
         Returns:
             Confirmation message after successfully processing the mood board entry.
         """
-        user_message = user_input.get("customer_input", "")
+        message = user_input.get("customer_input", "")
+        print(f"User message: {message}")  # Debug print
+        extracted_message = self.extract_message(message)
+    
         # Step 1: Process user message with the reasoning chain
-        result = self.mood_manager.process(user_id=self.user_id, mood=user_message)
-
+        result = self.mood_manager.process(user_id=self.user_id, mood=extracted_message)
+    
         # Step 2: Generate response with the response chain
         response = self.mood_entry_response.generate(result["success"])
         return response
-
     def handle_view_journal(self, user_input: Dict):
         """Handle the intent to view past journal entries.
     
@@ -526,7 +541,7 @@ class MainChatbot:
     
         # Extract the date and new content from user input
         message = user_input.get("message", "")
-        print(f"User message: {message}")  # Debug print
+        # print(f"User message: {message}")  # Debug print
         date = self.extract_date(message)
         new_content = self.extract_new_content(message)
     
@@ -541,7 +556,7 @@ class MainChatbot:
             return f"No journal entry found for the date {date}."
     
         # Modify the entry
-        modification_result = modifier_chain.modify_entry(entry["entry_id"], new_content)
+        modification_result = modifier_chain.modify_entry(entry["message_id"], new_content)
     
         # Generate and return the confirmation message
         return confirmation_chain.format_output(modification_result, date)
@@ -553,7 +568,7 @@ class MainChatbot:
         
         # Extract the relevant part from the response content
         new_content = response.content.split('The new content to extract from the message is: "', 1)[-1].rsplit('"', 1)[0]
-        print(f"Extracted new content: {new_content}")  # Debug print
+        # print(f"Extracted new content: {new_content}")  # Debug print
         return new_content
 
     def handle_update_mood(self, user_input: Dict):
@@ -571,7 +586,7 @@ class MainChatbot:
     
         # Extract the date and new content from user input
         message = user_input.get("message", "")
-        print(f"User message: {message}")  # Debug print
+        # print(f"User message: {message}")  # Debug print
         date = self.extract_date(message)
         new_content = self.extract_new_content(message)
     
@@ -586,7 +601,7 @@ class MainChatbot:
             return f"No mood board entry found for the date {date}."
     
         # Modify the entry
-        modification_result = modifier_chain.modify_entry(entry["entry_id"], new_content)
+        modification_result = modifier_chain.modify_entry(entry["mood_id"], new_content)
     
         # Generate and return the confirmation message
         return confirmation_chain.format_output(modification_result)
