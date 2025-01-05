@@ -27,7 +27,6 @@ class JournalEntryManager:
         # Get current date and time
         now = datetime.datetime.now()
         date = now.strftime("%Y-%m-%d")
-        time = now.strftime("%H:%M")
 
         print(user_message)
         # Create journal entry object
@@ -35,8 +34,7 @@ class JournalEntryManager:
             user_id=int(user_id),
             message=user_message,
             date=date,
-            hide_yn=hide_yn,
-            time=time
+            hide_yn=hide_yn
         )
 
         # Insert into the database

@@ -86,17 +86,17 @@
     },
     {
         "Intention": "find_support_group",
-        "Message": "Help me find a support group that meets weekly for social anxiety.",
+        "Message": "Help me find a support group that meets weekly for anxiety support.",
         "Id": 18
     },
     {
         "Intention": "find_support_group",
-        "Message": "Help me find a support group that offers in-person meetings for loneliness.",
+        "Message": "Help me find a support group that is in-person for substance abuse.",
         "Id": 19
     },
     {
         "Intention": "find_support_group",
-        "Message": "Help me find a support group that specializes in eating disorders nearby.",
+        "Message": "Help me find a support group that focuses on LGBTQ+ issues in my area.",
         "Id": 20
     },
     {
@@ -116,37 +116,37 @@
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that assists with abuse cases.",
+        "Message": "Help me find a hotline that can assist with abuse situations.",
         "Id": 24
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that I can call for anxiety support.",
+        "Message": "Help me find a hotline that is available 24/7 for emergencies.",
         "Id": 25
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that offers resources for depression.",
+        "Message": "Help me find a hotline that focuses on addiction support.",
         "Id": 26
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that is available 24/7.",
+        "Message": "Help me find a hotline that offers resources for anxiety.",
         "Id": 27
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that can help with substance abuse.",
+        "Message": "Help me find a hotline that can help with grief counseling.",
         "Id": 28
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that focuses on grief support.",
+        "Message": "Help me find a hotline that provides support for depression.",
         "Id": 29
     },
     {
         "Intention": "find_hotline",
-        "Message": "Help me find a hotline that provides LGBTQ+ mental health resources.",
+        "Message": "Help me find a hotline that I can call for non-emergency advice.",
         "Id": 30
     },
     {
@@ -171,7 +171,7 @@
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "Suggest an alternative for using plastic bags when shopping.",
+        "Message": "Suggest an alternative for using plastic water bottles.",
         "Id": 35
     },
     {
@@ -186,22 +186,22 @@
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "Suggest an alternative for drinking coffee in the morning.",
+        "Message": "Suggest an alternative for spending too much time on social media.",
         "Id": 38
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "Suggest an alternative for spending too much time on social media.",
+        "Message": "Suggest an alternative for drinking coffee in the afternoon.",
         "Id": 39
     },
     {
         "Intention": "habit_alternatives",
-        "Message": "Suggest an alternative for using my car for short trips.",
+        "Message": "Suggest an alternative for skipping my workouts.",
         "Id": 40
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I felt really anxious during the meeting.",
+        "Message": "I want to add to my journal today: I felt really anxious about my presentation.",
         "Id": 41
     },
     {
@@ -216,42 +216,42 @@
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I felt overwhelmed with work tasks.",
+        "Message": "I want to add to my journal today: I felt overwhelmed but managed to stay positive.",
         "Id": 44
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I had a wonderful dinner with family.",
+        "Message": "I want to add to my journal today: I had a great conversation with my colleague.",
         "Id": 45
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I felt proud of my recent accomplishments.",
+        "Message": "I want to add to my journal today: I learned something new that excited me.",
         "Id": 46
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I struggled with negative thoughts today.",
+        "Message": "I want to add to my journal today: I felt a sense of accomplishment after finishing my project.",
         "Id": 47
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I felt happy after finishing my book.",
+        "Message": "I want to add to my journal today: I struggled with my emotions but found some clarity.",
         "Id": 48
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I experienced a lot of stress today.",
+        "Message": "I want to add to my journal today: I felt happy when I received good news.",
         "Id": 49
     },
     {
         "Intention": "insert_journal",
-        "Message": "I want to add to my journal today: I felt inspired by a podcast I listened to.",
+        "Message": "I want to add to my journal today: I reflected on my goals and felt motivated.",
         "Id": 50
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on September 15.",
+        "Message": "Delete my journal entry on September 10th.",
         "Id": 51
     },
     {
@@ -261,42 +261,42 @@
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on feeling anxious.",
+        "Message": "Delete my journal entry on the stressful day.",
         "Id": 53
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on last week's reflections.",
+        "Message": "Delete my journal entry on my last therapy session.",
         "Id": 54
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on the trip to the beach.",
+        "Message": "Delete my journal entry on the vacation.",
         "Id": 55
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on my goals for this month.",
+        "Message": "Delete my journal entry on feeling anxious.",
         "Id": 56
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on the stressful day.",
+        "Message": "Delete my journal entry on the happy moment.",
         "Id": 57
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on the happy moment.",
+        "Message": "Delete my journal entry on the tough week.",
         "Id": 58
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on the tough week.",
+        "Message": "Delete my journal entry on the family gathering.",
         "Id": 59
     },
     {
         "Intention": "delete_journal",
-        "Message": "Delete my journal entry on the family gathering.",
+        "Message": "Delete my journal entry on the project deadline.",
         "Id": 60
     },
     {
@@ -311,92 +311,92 @@
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry to reflect my current mood.",
+        "Message": "I want to change a journal entry on my birthday.",
         "Id": 63
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry on my birthday.",
+        "Message": "I want to change a journal entry regarding my new job.",
         "Id": 64
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry regarding my work stress.",
+        "Message": "I want to change a journal entry about my feelings yesterday.",
         "Id": 65
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry about my family.",
+        "Message": "I want to change a journal entry to reflect my current mood.",
         "Id": 66
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry to add more details.",
+        "Message": "I want to change a journal entry about my workout.",
         "Id": 67
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry from two days ago.",
+        "Message": "I want to change a journal entry on my family gathering.",
         "Id": 68
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry about my goals.",
+        "Message": "I want to change a journal entry about my recent trip.",
         "Id": 69
     },
     {
         "Intention": "update_journal",
-        "Message": "I want to change a journal entry to update my feelings.",
+        "Message": "I want to change a journal entry to add more details.",
         "Id": 70
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on October 1st?",
+        "Message": "How does my journal look for last week?",
         "Id": 71
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the 15th of last month?",
+        "Message": "What have I added to my journal recently?",
         "Id": 72
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on July 4th?",
+        "Message": "How does my journal look this month?",
         "Id": 73
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on my birthday?",
+        "Message": "What have I added to my journal in October?",
         "Id": 74
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the first day of spring?",
+        "Message": "How does my journal look for the past few days?",
         "Id": 75
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the last Friday?",
+        "Message": "What have I added to my journal about my mood?",
         "Id": 76
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the weekend?",
+        "Message": "How does my journal look for the last entry?",
         "Id": 77
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the day I felt anxious?",
+        "Message": "What have I added to my journal on gratitude?",
         "Id": 78
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the day I celebrated?",
+        "Message": "How does my journal look for the last two weeks?",
         "Id": 79
     },
     {
         "Intention": "view_journal",
-        "Message": "How was my day on the day I started my new job?",
+        "Message": "What have I added to my journal about my goals?",
         "Id": 80
     },
     {
@@ -411,27 +411,27 @@
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel overwhelmed but hopeful for the future.",
+        "Message": "Today, I feel overwhelmed with everything going on.",
         "Id": 83
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel relaxed and content after a long week.",
+        "Message": "Today, I feel excited about starting my new project.",
         "Id": 84
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel sad and need to talk about it.",
+        "Message": "Today, I feel calm and at peace with my surroundings.",
         "Id": 85
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel energized and ready to tackle my goals.",
+        "Message": "Today, I feel a little sad but hopeful for tomorrow.",
         "Id": 86
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel frustrated with my current situation.",
+        "Message": "Today, I feel energized and ready to tackle my goals.",
         "Id": 87
     },
     {
@@ -441,12 +441,12 @@
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel inspired by a new project I'm starting.",
+        "Message": "Today, I feel frustrated with the lack of progress.",
         "Id": 89
     },
     {
         "Intention": "insert_mood",
-        "Message": "Today, I feel calm and at peace with my decisions.",
+        "Message": "Today, I feel content and satisfied with my achievements.",
         "Id": 90
     },
     {
@@ -456,477 +456,422 @@
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood on the 12th of last month.",
+        "Message": "Delete my mood entry from last week.",
         "Id": 92
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood on the day I felt anxious.",
+        "Message": "Delete my mood on the 12th of September.",
         "Id": 93
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood entry from last Friday.",
+        "Message": "Delete my mood from yesterday.",
         "Id": 94
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood on the 1st of this month.",
+        "Message": "Delete my mood entry for last Friday.",
         "Id": 95
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood on the day I was happy.",
+        "Message": "Delete my mood on the 1st of August.",
         "Id": 96
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood from yesterday.",
+        "Message": "Delete my mood from two days ago.",
         "Id": 97
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood on the 15th.",
+        "Message": "Delete my mood on March 15th.",
         "Id": 98
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood entry for last Saturday.",
+        "Message": "Delete my mood entry for the 20th.",
         "Id": 99
     },
     {
         "Intention": "delete_mood",
-        "Message": "Delete my mood on the day I felt sad.",
+        "Message": "Delete my mood on the 30th of June.",
         "Id": 100
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on September 30th.",
-        "Id": 101
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood from two days ago.",
-        "Id": 102
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on the 20th.",
-        "Id": 103
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood entry from last week.",
-        "Id": 104
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on the day I felt overwhelmed.",
-        "Id": 105
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on the 10th of October.",
-        "Id": 106
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood from the 3rd.",
-        "Id": 107
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on the day I felt grateful.",
-        "Id": 108
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood entry for the 25th.",
-        "Id": 109
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on the day I was stressed.",
-        "Id": 110
-    },
-    {
-        "Intention": "delete_mood",
-        "Message": "Delete my mood on the 8th.",
-        "Id": 111
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood from happy to anxious.",
-        "Id": 112
+        "Id": 101
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood entry to reflect feeling more relaxed.",
-        "Id": 113
+        "Id": 102
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood description to include feeling overwhelmed.",
-        "Id": 114
+        "Id": 103
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood to excited instead of bored.",
-        "Id": 115
+        "Id": 104
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood entry to show I'm feeling hopeful.",
-        "Id": 116
+        "Id": 105
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood from sad to content.",
-        "Id": 117
+        "Id": 106
     },
     {
         "Intention": "update_mood",
         "Message": "I want to change my mood to frustrated and update the notes.",
+        "Id": 107
+    },
+    {
+        "Intention": "update_mood",
+        "Message": "I want to change my mood to indicate I'm feeling energetic.",
+        "Id": 108
+    },
+    {
+        "Intention": "update_mood",
+        "Message": "I want to change my mood entry to reflect a sense of calm.",
+        "Id": 109
+    },
+    {
+        "Intention": "update_mood",
+        "Message": "I want to change my mood from stressed to motivated.",
+        "Id": 110
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "How has my mood been on the last week?",
+        "Id": 111
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "What does my mood board look like for this month?",
+        "Id": 112
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "How has my mood been on the 15th of October?",
+        "Id": 113
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "What does my mood board look like for September?",
+        "Id": 114
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "How has my mood been lately?",
+        "Id": 115
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "What does my mood board look like for the past few days?",
+        "Id": 116
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "How has my mood been on my birthday?",
+        "Id": 117
+    },
+    {
+        "Intention": "view_mood",
+        "Message": "What does my mood board look like for this year?",
         "Id": 118
     },
     {
-        "Intention": "update_mood",
-        "Message": "I want to change my mood to reflect feeling energized today.",
+        "Intention": "view_mood",
+        "Message": "How has my mood been during the last holiday?",
         "Id": 119
     },
     {
-        "Intention": "update_mood",
-        "Message": "I want to change my mood entry to indicate I'm feeling grateful.",
+        "Intention": "view_mood",
+        "Message": "What does my mood board look like for last week?",
         "Id": 120
-    },
-    {
-        "Intention": "update_mood",
-        "Message": "I want to change my mood from stressed to calm.",
-        "Id": 121
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on March 15?",
-        "Id": 122
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on my birthday?",
-        "Id": 123
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the last day of school?",
-        "Id": 124
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel during the holidays?",
-        "Id": 125
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the day I got my job?",
-        "Id": 126
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the first day of spring?",
-        "Id": 127
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the weekend of the concert?",
-        "Id": 128
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the day I moved?",
-        "Id": 129
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the day I graduated?",
-        "Id": 130
-    },
-    {
-        "Intention": "view_mood",
-        "Message": "How did I feel on the day I started therapy?",
-        "Id": 131
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the support of my friends during tough times.",
-        "Id": 132
+        "Id": 121
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the beautiful sunset I saw today.",
-        "Id": 133
+        "Id": 122
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the delicious meal I had with my family.",
-        "Id": 134
+        "Id": 123
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the kindness of strangers I experienced this week.",
-        "Id": 135
+        "Id": 124
     },
     {
         "Intention": "insert_gratitude",
-        "Message": "I am grateful for the time I spent reading a good book.",
-        "Id": 136
+        "Message": "I am grateful for the time I spent reading my favorite book.",
+        "Id": 125
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the laughter shared with my loved ones.",
-        "Id": 137
+        "Id": 126
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the opportunity to learn something new today.",
-        "Id": 138
+        "Id": 127
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the warm cup of coffee that started my day.",
-        "Id": 139
+        "Id": 128
     },
     {
         "Intention": "insert_gratitude",
         "Message": "I am grateful for the peaceful moments I found in nature.",
-        "Id": 140
+        "Id": 129
     },
     {
         "Intention": "insert_gratitude",
-        "Message": "I am grateful for the small victories that made my day brighter.",
-        "Id": 141
+        "Message": "I am grateful for the small victories I achieved this week.",
+        "Id": 130
     },
     {
         "Intention": "ask_missionvalues",
         "Message": "Tell me about Squeak to Speak's mission and vision.",
-        "Id": 142
+        "Id": 131
     },
     {
         "Intention": "ask_missionvalues",
         "Message": "Tell me about Squeak to Speak and its core values.",
-        "Id": 143
+        "Id": 132
     },
     {
         "Intention": "ask_missionvalues",
         "Message": "Tell me about Squeak to Speak's goals and purpose.",
-        "Id": 144
+        "Id": 133
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Tell me about Squeak to Speak and its commitment to mental health.",
-        "Id": 145
+        "Message": "Tell me about Squeak to Speak's commitment to mental health.",
+        "Id": 134
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Tell me about Squeak to Speak's story and how it started.",
-        "Id": 146
+        "Message": "Tell me about Squeak to Speak and how it was created.",
+        "Id": 135
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Tell me about Squeak to Speak's values regarding user privacy.",
-        "Id": 147
+        "Message": "Tell me about Squeak to Speak's focus on user privacy.",
+        "Id": 136
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Tell me about Squeak to Speak and what it stands for.",
-        "Id": 148
-    },
-    {
-        "Intention": "ask_missionvalues",
-        "Message": "Tell me about Squeak to Speak's mission in supporting mental health.",
-        "Id": 149
+        "Message": "Tell me about Squeak to Speak's mission statement.",
+        "Id": 137
     },
     {
         "Intention": "ask_missionvalues",
         "Message": "Tell me about Squeak to Speak and its vision for the future.",
-        "Id": 150
+        "Id": 138
     },
     {
         "Intention": "ask_missionvalues",
-        "Message": "Tell me about Squeak to Speak's dedication to mental health awareness.",
-        "Id": 151
+        "Message": "Tell me about Squeak to Speak's values and principles.",
+        "Id": 139
+    },
+    {
+        "Intention": "ask_missionvalues",
+        "Message": "Tell me about Squeak to Speak's dedication to mental health advocacy.",
+        "Id": 140
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot and its features.",
-        "Id": 152
+        "Id": 141
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot's functionalities for mental health.",
-        "Id": 153
+        "Id": 142
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot and how it can help me.",
-        "Id": 154
+        "Id": 143
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot's tools and resources available.",
-        "Id": 155
+        "Id": 144
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot and what benefits it offers.",
-        "Id": 156
+        "Id": 145
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot's capabilities for user support.",
-        "Id": 157
+        "Id": 146
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot and how it assists users.",
-        "Id": 158
+        "Id": 147
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot's features for emotional well-being.",
-        "Id": 159
+        "Id": 148
     },
     {
         "Intention": "ask_features",
         "Message": "Tell me about your chatbot and its mental health support.",
-        "Id": 160
+        "Id": 149
     },
     {
         "Intention": "ask_features",
-        "Message": "Tell me about your chatbot's services and how they work.",
-        "Id": 161
+        "Message": "Tell me about your chatbot's role in mental health management.",
+        "Id": 150
     },
     {
         "Intention": "review_user_memory",
         "Message": "What data do you have on me?",
-        "Id": 162
+        "Id": 151
     },
     {
         "Intention": "review_user_memory",
         "Message": "What information is stored about my preferences?",
-        "Id": 163
+        "Id": 152
     },
     {
         "Intention": "review_user_memory",
         "Message": "Can I see my previous interactions with you?",
-        "Id": 164
+        "Id": 153
     },
     {
         "Intention": "review_user_memory",
         "Message": "What journal entries do you have recorded for me?",
-        "Id": 165
+        "Id": 154
     },
     {
         "Intention": "review_user_memory",
-        "Message": "What details do you have about my account?",
-        "Id": 166
+        "Message": "I'd like to review the data you have on me.",
+        "Id": 155
     },
     {
         "Intention": "review_user_memory",
-        "Message": "What data have you collected regarding my usage?",
-        "Id": 167
+        "Message": "What details do you have about my past activities?",
+        "Id": 156
     },
     {
         "Intention": "review_user_memory",
         "Message": "Can you show me my stored preferences?",
-        "Id": 168
+        "Id": 157
     },
     {
         "Intention": "review_user_memory",
-        "Message": "What insights do you have from my past entries?",
-        "Id": 169
+        "Message": "What information do you keep about my usage?",
+        "Id": 158
     },
     {
         "Intention": "review_user_memory",
-        "Message": "What information do you keep about my interactions?",
-        "Id": 170
+        "Message": "I'd like to know what data is collected about me.",
+        "Id": 159
     },
     {
         "Intention": "review_user_memory",
-        "Message": "What do you know about my mental health journey?",
-        "Id": 171
+        "Message": "What insights do you have from my journal entries?",
+        "Id": 160
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on September 15.",
-        "Id": 172
+        "Message": "I want to talk about how I felt on September 10.",
+        "Id": 161
     },
     {
         "Intention": "chat_about_journal",
         "Message": "I want to talk about how I felt on my birthday.",
-        "Id": 173
-    },
-    {
-        "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on the last rainy day.",
-        "Id": 174
+        "Id": 162
     },
     {
         "Intention": "chat_about_journal",
         "Message": "I want to talk about how I felt on the day I got my promotion.",
-        "Id": 175
+        "Id": 163
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on the day I visited the museum.",
-        "Id": 176
+        "Message": "I want to talk about how I felt on the last day of school.",
+        "Id": 164
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on the first day of spring.",
-        "Id": 177
+        "Message": "I want to talk about how I felt on the day I moved.",
+        "Id": 165
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on the day I completed my project.",
-        "Id": 178
-    },
-    {
-        "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on the day I met my friend.",
-        "Id": 179
+        "Message": "I want to talk about how I felt on the day I lost my job.",
+        "Id": 166
     },
     {
         "Intention": "chat_about_journal",
         "Message": "I want to talk about how I felt on the day I went hiking.",
-        "Id": 180
+        "Id": 167
     },
     {
         "Intention": "chat_about_journal",
-        "Message": "I want to talk about how I felt on the day I watched that movie.",
-        "Id": 181
+        "Message": "I want to talk about how I felt on the day I met my friend.",
+        "Id": 168
+    },
+    {
+        "Intention": "chat_about_journal",
+        "Message": "I want to talk about how I felt on the day I finished my project.",
+        "Id": 169
+    },
+    {
+        "Intention": "chat_about_journal",
+        "Message": "I want to talk about how I felt on the day I started therapy.",
+        "Id": 170
     },
     {
         "Intention": "None",
         "Message": "What's your favorite movie of all time?",
-        "Id": 182
+        "Id": 171
     },
     {
         "Intention": "None",
         "Message": "I wonder how many stars are in the universe.",
-        "Id": 183
+        "Id": 172
     },
     {
         "Intention": "None",
         "Message": "Do you think pineapple belongs on pizza?",
-        "Id": 184
+        "Id": 173
     },
     {
         "Intention": "None",
         "Message": "I really enjoy rainy days; they feel so cozy.",
-        "Id": 185
+        "Id": 174
     },
     {
         "Intention": "None",
-        "Message": "What do you think about the latest tech trends?",
-        "Id": 186
+        "Message": "Have you ever tried making your own bread?",
+        "Id": 175
     }
 ]

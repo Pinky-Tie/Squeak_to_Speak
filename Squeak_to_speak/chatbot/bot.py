@@ -26,7 +26,8 @@ from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.review_user_memory import RetrieveUserData, PresentUserData
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-#from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_journal import JournalQueryChain, JournalResponseChain, JournalInteractionHandler
+from chatbot.chains.view_mood import MoodQueryChain, MoodResponseChain, MoodInteractionHandler
 #from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 import sys
@@ -153,7 +154,8 @@ class MainChatbot:
             "chitchat": {
                 "reasoning": self.chitchat_classifier_chain,
                 "response": self.chitchat_response_chain
-            }
+            },
+
         }
 
         
@@ -176,7 +178,9 @@ class MainChatbot:
         #"chat_about_journal": self.handle_recall_entry,
         "delete_journal":self.handle_delete_journal,
         "delete_mood":self.handle_delete_mood,
-        'chitchat':self.handle_chitchat_intent
+        'chitchat':self.handle_chitchat_intent,
+        'view_journal':self.handle_view_journal,
+        'view_mood':self.handle_view_mood,
         }
         # Load the intention classifier to determine user intents
         self.intention_classifier = load_intention_classifier()
@@ -379,28 +383,11 @@ class MainChatbot:
         Returns:
             A list or structured view of relevant journal entries.
         """
-        retrieve_chain = RetrieveJournalEntries(self.db_manager, self.rag_pipeline)
-        present_chain = PresentJournalEntries()
+        message = user_input.get("customer_input", "")
+        journal_handler = JournalInteractionHandler(JournalQueryChain(), JournalResponseChain(llm=self.llm))
+        response = journal_handler.handle_input(user_input = message, user_id = self.user_id)
     
-        if "search_type" not in user_input:
-            # Prompt the user to choose between searching by date or topic
-            return retrieve_chain.prompt_for_search_type()
-        elif user_input["search_type"] == "date" and "date" not in user_input:
-            # Prompt the user for the date if not provided
-            return retrieve_chain.prompt_for_date()
-        elif user_input["search_type"] == "topic" and "topic" not in user_input:
-            # Prompt the user for the topic if not provided
-            return retrieve_chain.prompt_for_topic()
-    
-        # Retrieve and present journal entries based on the search type
-        if user_input["search_type"] == "date":
-            entries = retrieve_chain.get_entries_by_date(self.user_id, user_input["date"])
-        elif user_input["search_type"] == "topic":
-            entries = retrieve_chain.get_entries_by_topic(self.user_id, user_input["topic"])
-        else:
-            return "Invalid search type. Please type 'date' or 'topic'."
-    
-        return present_chain.format_output(entries)
+        return response
     
     def handle_view_mood(self, user_input: Dict):
         """Handle the intent to view past mood board entries.
@@ -411,28 +398,13 @@ class MainChatbot:
         Returns:
             A list or structured view of relevant mood board entries.
         """
-        retrieve_chain = RetrieveMoodBoardEntries(self.db_manager, self.rag_pipeline)
-        present_chain = PresentMoodBoardEntries()
+        message = user_input.get("customer_input", "")
+        mood_handler = MoodInteractionHandler(MoodQueryChain(), MoodResponseChain(llm=self.llm))
+        response = mood_handler.handle_input(user_input = message, user_id = self.user_id)
     
-        if "search_type" not in user_input:
-            # Prompt the user to choose between searching by date or topic
-            return retrieve_chain.prompt_for_search_type()
-        elif user_input["search_type"] == "date" and "date" not in user_input:
-            # Prompt the user for the date if not provided
-            return retrieve_chain.prompt_for_date()
-        elif user_input["search_type"] == "topic" and "topic" not in user_input:
-            # Prompt the user for the topic if not provided
-            return retrieve_chain.prompt_for_topic()
+        return response
     
-        # Retrieve and present mood board entries based on the search type
-        if user_input["search_type"] == "date":
-            entries = retrieve_chain.get_entries_by_date(self.user_id, user_input["date"])
-        elif user_input["search_type"] == "topic":
-            entries = retrieve_chain.get_entries_by_topic(self.user_id, user_input["topic"])
-        else:
-            return "Invalid search type. Please type 'date' or 'topic'."
-    
-        return present_chain.format_output(entries)
+
 
     def handle_insert_gratitude(self, user_input: Dict):
         """Handle the intent to make an entry on the community gratitude banner.

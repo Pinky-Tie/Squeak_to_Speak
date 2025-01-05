@@ -115,9 +115,13 @@ class JournalResponseChain(Runnable):
         }
 
         # Add an empty chat_history to avoid errors
-        prompt_inputs["chat_history"] = []  # This ensures compatibility
+        prompt_inputs["chat_history"] = []
 
-        return self.chain.invoke(prompt_inputs, config=config)
+        # Get the response from the chain
+        response = self.chain.invoke(prompt_inputs, config=config)
+
+        # Directly access the `content` attribute of the response
+        return response.content if hasattr(response, 'content') else str(response)
 
 
 class JournalInteractionHandler:
@@ -129,22 +133,22 @@ class JournalInteractionHandler:
 
     def handle_input(self, user_input, user_id):
         """Process the user input to fetch and display journal entries."""
-        if "journal entries" in user_input.lower():
-            # Query the journal entries
-            query_result = self.journal_query_chain.invoke({"user_id": user_id, "limit": 5})
 
-            # Generate a response
-            response = self.journal_response_chain.invoke(
-                {
-                    "journal_entries": query_result.results,
-                    "user_query": user_input,
-                },
-                config={},
-            )
+        # Query the journal entries
+        query_result = self.journal_query_chain.invoke({"user_id": user_id, "limit": 5})
 
-            return response
+        # Generate a response
+        response = self.journal_response_chain.invoke(
+            {
+                "journal_entries": query_result.results,
+                "user_query": user_input,
+            },
+            config={},
+        )
 
-        return "I'm sorry, I didn't understand your request. Can you clarify?"
+        return response
+
+
 
 
 '''# Example Usage
