@@ -28,16 +28,16 @@ class ModifyJournalEntry:
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def modify_entry(self, entry_id: int, updated_content: str):
+    def modify_entry(self, message_id: int, updated_content: str):
         """
         Updates the journal entry with the provided content.
         """
         query = """
         UPDATE Journal
-        SET content = :updated_content, updated_at = CURRENT_TIMESTAMP
-        WHERE entry_id = :entry_id
+        SET message = :updated_content
+        WHERE message_id = :message_id
         """
-        params = {"entry_id": entry_id, "updated_content": updated_content}
+        params = {"message_id": message_id, "updated_content": updated_content}
         success = self.db_manager.execute(query, params)
         return {"success": success} if success else {"error": "Failed to update the entry."}
 
