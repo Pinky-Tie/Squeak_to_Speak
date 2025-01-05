@@ -35,7 +35,7 @@ class MoodEntryManager:
                 date = date)
 
         # Insert into the database
-        success = self.db_manager.insert("mood_tracker", entry.dict())
+        success = self.db_manager.insert("Mood_tracker", entry.dict())
         return {"success": success}
 
 
