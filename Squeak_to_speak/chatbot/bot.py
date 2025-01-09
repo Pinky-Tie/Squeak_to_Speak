@@ -36,7 +36,7 @@ import sqlite3
 
 db_file = r"C:\Users\pedro\Downloads\Squeak_to_Speak\Squeak_to_speak\data\Squeaktospeak_db.db"
 
-conn = sqlite3.connect(db_file, threading= False)
+conn = sqlite3.connect(db_file, check_same_thread= False)
 db_manager = DatabaseManager(conn)
 
 
