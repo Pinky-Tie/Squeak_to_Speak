@@ -11,7 +11,7 @@ def connect_database():
     Returns:
         The connection and cursor.
     """
-    db_file = r"C:\Users\pedro\Downloads\Squeak_to_Speak\Squeak_to_speak\data\Squeaktospeak_db.db"
+    db_file = "Squeak_to_speak\data\Squeaktospeak_db.db"
 
     conn_1 = sqlite3.connect(db_file)
     cursor_1 = conn_1.cursor()

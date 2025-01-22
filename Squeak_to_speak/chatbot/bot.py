@@ -2,7 +2,7 @@
 import sys
 import os
 
-from Squeak_to_speak.chatbot.chains.review_user_memory import UserInteractionHandler, UserQueryChain, UserResponseChain
+from chatbot.chains.review_user_memory import UserInteractionHandler, UserQueryChain, UserResponseChain
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import re
 
@@ -18,8 +18,6 @@ from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
-import threading
-
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
 from chatbot.chains.delete_mood import MoodBoardEntryDeleter, MoodBoardDeletionConfirmationFormatter
@@ -28,14 +26,13 @@ from chatbot.chains.insert_journal import JournalEntryManager, JournalEntryRespo
 from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-from chatbot.chains.view_journal import JournalInteractionHandler, JournalQueryChain, JournalResponseChain, RetrieveJournalEntries, PresentJournalEntries
-from chatbot.chains.view_mood import MoodInteractionHandler, MoodQueryChain, MoodResponseChain, RetrieveMoodBoardEntries, PresentMoodBoardEntries
+from chatbot.chains.view_journal import JournalInteractionHandler, JournalQueryChain, JournalResponseChain
+from chatbot.chains.view_mood import MoodInteractionHandler, MoodQueryChain, MoodResponseChain
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
 import sqlite3
 
-db_file = r"C:\Users\pedro\Downloads\Squeak_to_Speak\Squeak_to_speak\data\Squeaktospeak_db.db"
+db_file = 'Squeak_to_speak\data\Squeaktospeak_db.db'
 
 conn = sqlite3.connect(db_file, check_same_thread= False)
 db_manager = DatabaseManager(conn)
@@ -80,12 +77,6 @@ class MainChatbot:
         
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
-        
-        self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        self.present_mood_board_entries = PresentMoodBoardEntries()
-
-        self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
-        self.present_journal_entries = PresentJournalEntries()
 
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
@@ -119,10 +110,9 @@ class MainChatbot:
                 "delete": self.journal_entry_deleter,
                 "confirm": self.deletion_confirmation_formatter
             },
-
             "insert_mood": {
-                "retrieve": self.retrieve_journal_entries,
-                "present": self.present_journal_entries
+                "insert": self.mood_manager,
+                "response": self.mood_entry_response
             },
             "insert_journal": {
                 "insert": self.journal_manager,
