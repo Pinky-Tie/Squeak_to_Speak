@@ -99,29 +99,21 @@ with col2:
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 # Set a default model
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
 
+if "bot" not in st.session_state:
+    user_id = get_user_id(st.session_state.get("username", "default_user"))  # Replace "default_user" with appropriate fallback
+    st.session_state.bot = MainChatbot(user_id=int(user_id), conversation_id=1)
+
+# Main function to interact with the bot
 def main(user_input):
-    """Main interaction loop for the chatbot.
-
-    Args:
-        bot: An instance of the MainChatbot.
-    """
     try:
-        user_id = get_user_id(st.session_state.username)
-
-
-        bot= MainChatbot(user_id = int(user_id), conversation_id = 1)
+        bot = st.session_state.bot
         # Process the user's input using the bot and display the response
-        response = bot.process_user_input({"customer_input": prompt})
-        print(f"Response type: {type(response)}")
+        response = bot.process_user_input({"customer_input": user_input})
         return response
-
     except Exception as e:
-        # Handle any exceptions and prompt the user to try again
-        response=(f"Error: {str(e)}")
-        return response
+        # Handle exceptions and prompt the user to try again
+        return f"Error: {str(e)}"
 
 
 if __name__ == "__main__":
@@ -140,14 +132,12 @@ for message in st.session_state.messages:
     with st.chat_message(name=message["role"], avatar=message["avatar"]):
         st.markdown(message["content"])
 
-prompt= st.chat_input("What is on your mind?")
-# React to user input
+prompt = st.chat_input("What is on your mind?")
 if prompt:
-    with st.chat_message(name="user", avatar="visual_assets\Pessoa.png"):
+    with st.chat_message(name="user", avatar="visual_assets/Pessoa.png"):
         st.markdown(prompt)
-        response = main(prompt) 
-    st.session_state.messages.append({"role": "user", "content": prompt, "avatar":"visual_assets\Pessoa.png"}) 
-    # Display assistant response in chat message container
-    with st.chat_message(name="assistant", avatar="visual_assets\Ratinho.png"):
+    response = main(prompt)
+    st.session_state.messages.append({"role": "user", "content": prompt, "avatar": "visual_assets/Pessoa.png"})
+    with st.chat_message(name="assistant", avatar="visual_assets/Ratinho.png"):
         st.markdown(response)
-    st.session_state.messages.append({"role": "assistant", "content": response, "avatar":"visual_assets\Ratinho.png"})
+    st.session_state.messages.append({"role": "assistant", "content": response, "avatar": "visual_assets/Ratinho.png"})

@@ -1,6 +1,8 @@
 # Import necessary classes and modules for chatbot functionality
 import sys
 import os
+
+from Squeak_to_speak.chatbot.chains.review_user_memory import UserInteractionHandler, UserQueryChain, UserResponseChain
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import re
 
@@ -16,7 +18,7 @@ from chatbot.router.loader import load_intention_classifier
 from data.database_functions import DatabaseManager
 from chatbot.rag import RAGPipeline
 
-
+import threading
 
 from chatbot.chains.chitchat import ChitChatClassifierChain, ChitChatResponseChain
 from chatbot.chains.delete_journal import JournalEntryDeleter, DeletionConfirmationFormatter
@@ -26,22 +28,16 @@ from chatbot.chains.insert_journal import JournalEntryManager, JournalEntryRespo
 from chatbot.chains.insert_mood import MoodEntryManager, MoodEntryResponse
 from chatbot.chains.update_journal import IdentifyJournalEntryToModify, ModifyJournalEntry, InformUserOfJournalChange
 from chatbot.chains.update_mood import IdentifyMoodBoardEntryToModify, ModifyMoodBoardEntry, InformUserOfMoodBoardChange
-<<<<<<< HEAD
-from chatbot.chains.view_journal import JournalQueryChain, JournalResponseChain, JournalInteractionHandler
-from chatbot.chains.view_mood import MoodQueryChain, MoodResponseChain, MoodInteractionHandler
-from chatbot.chains.review_user_memory import UserQueryChain, UserResponseChain, UserInteractionHandler
-=======
-from chatbot.chains.view_journal import RetrieveJournalEntries, PresentJournalEntries
-from chatbot.chains.view_mood import RetrieveMoodBoardEntries, PresentMoodBoardEntries
->>>>>>> 580fd59 (updated CRUD)
+from chatbot.chains.view_journal import JournalInteractionHandler, JournalQueryChain, JournalResponseChain, RetrieveJournalEntries, PresentJournalEntries
+from chatbot.chains.view_mood import MoodInteractionHandler, MoodQueryChain, MoodResponseChain, RetrieveMoodBoardEntries, PresentMoodBoardEntries
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #databse connection
 import sqlite3
 
-db_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "Squeaktospeak_db.db"))
+db_file = r"C:\Users\pedro\Downloads\Squeak_to_Speak\Squeak_to_speak\data\Squeaktospeak_db.db"
 
-conn = sqlite3.connect(db_file)
+conn = sqlite3.connect(db_file, check_same_thread= False)
 db_manager = DatabaseManager(conn)
 
 
@@ -58,8 +54,7 @@ class MainChatbot:
         # Configure the language model with specific parameters for response generation
         self.llm = ChatOpenAI(temperature=0.0, model="gpt-4o-mini")
         self.db_manager = DatabaseManager(conn)
-        self.journal_manager = JournalEntryManager(self.db_manager)
-        self.journal_response = JournalEntryResponse()
+
         self.user_id = user_id
         self.conversation_id = conversation_id
         self.memory_config = {
@@ -86,15 +81,12 @@ class MainChatbot:
         self.journal_entry_deleter = JournalEntryDeleter(db_manager=self.db_manager)
         self.deletion_confirmation_formatter = DeletionConfirmationFormatter()
         
-<<<<<<< HEAD
-=======
         self.retrieve_mood_board_entries = RetrieveMoodBoardEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
         self.present_mood_board_entries = PresentMoodBoardEntries()
 
         self.retrieve_journal_entries = RetrieveJournalEntries(db_manager=self.db_manager, rag_pipeline=self.rag)
         self.present_journal_entries = PresentJournalEntries()
 
->>>>>>> 580fd59 (updated CRUD)
         self.journal_manager = JournalEntryManager(db_manager=self.db_manager)
         self.journal_entry_response = JournalEntryResponse()
         
@@ -128,13 +120,10 @@ class MainChatbot:
                 "confirm": self.deletion_confirmation_formatter
             },
 
-<<<<<<< HEAD
-=======
             "insert_mood": {
                 "retrieve": self.retrieve_journal_entries,
                 "present": self.present_journal_entries
             },
->>>>>>> 580fd59 (updated CRUD)
             "insert_journal": {
                 "insert": self.journal_manager,
                 "response": self.journal_entry_response
@@ -158,6 +147,8 @@ class MainChatbot:
                 "response": self.chitchat_response_chain
             }
         }
+        self.chitchat_classifier_chain = ChitChatClassifierChain(llm=self.llm)
+        self.chitchat_response_chain = self.add_memory_to_runnable(ChitChatResponseChain(llm=self.llm))
 
 
         # Map of intentions to their corresponding handlers
@@ -205,16 +196,7 @@ class MainChatbot:
             }  # Add runnable name for tracking
         )
 
-    def get_chain(self, intent: str):
-        """Retrieve the reasoning and response chains based on user intent.
 
-        Args:
-            intent: The identified intent of the user input.
-
-        Returns:
-            A tuple containing the reasoning and response chain instances for the intent.
-        """
-        return self.chain_map[intent]["reasoning"], self.chain_map[intent]["response"]
 
     def get_user_intent(self, user_input: Dict):
         """Classify the user intent based on the input text.
@@ -249,30 +231,13 @@ class MainChatbot:
             )
             return None
 
-    def get_random_gratitude_message(self) -> str:
-        """
-        Retrieves a random gratitude message from the gratitude_entries table.
 
-        Returns:
-            A random gratitude message.
-        """
-        query = """
-        SELECT content
-        FROM gratitude_entries
-        ORDER BY RANDOM()
-        LIMIT 1
-        """
-        result = self.db_manager.select(query)
-        if result:
-            return result[0]['content']
-        else:
-            return "No gratitude messages found."
 
 #Functions to handle each intention
 
     def handle_know_mission(self, user_input: Dict[str, str]) -> str:
 
-        response = self.rag.ma(user_input,index_name = "pdf-data", config=self.memory_config)
+        response = self.rag(user_input,index_name = "pdf-data", config=self.memory_config)
 
         return response
 
@@ -281,8 +246,6 @@ class MainChatbot:
         response = self.rag.invoke(user_input,index_name = "pdf-data", config=self.memory_config)
 
         return response
-<<<<<<< HEAD
-=======
 
         """
         Extracts dates from the input text.
@@ -339,7 +302,6 @@ class MainChatbot:
 
         return response
         '''
->>>>>>> 580fd59 (updated CRUD)
     
     def handle_habit_alternatives(self, user_input: Dict[str, str]) -> str:
 
@@ -381,12 +343,14 @@ class MainChatbot:
         extracted_message = self.extract_message(message)
     
         # Step 1: Process user message with the reasoning chain
-        result = self.journal_manager.process(user_id=self.user_id, user_message=extracted_message)
+        result = JournalEntryManager(self.db_manager).process(user_id=self.user_id, user_message=extracted_message)
     
         # Step 2: Generate response with the response chain
-        response = self.journal_response.generate(result["success"])
+        response = JournalEntryResponse().generate(result)
     
         return response
+
+
 
     def handle_insert_mood(self, user_input: Dict):
         """Handle the intent to make an entry in the mood board.
@@ -402,10 +366,10 @@ class MainChatbot:
         extracted_message = self.extract_message(message)
     
         # Step 1: Process user message with the reasoning chain
-        result = self.mood_manager.process(user_id=self.user_id, mood=extracted_message)
+        result = MoodEntryManager(db_manager=self.db_manager).process(user_id=self.user_id, mood=extracted_message)
     
         # Step 2: Generate response with the response chain
-        response = self.mood_entry_response.generate(result["success"])
+        response = MoodEntryResponse().generate(result)
         return response
     
     def handle_view_journal(self, user_input: Dict):
@@ -450,10 +414,10 @@ class MainChatbot:
         # Retrieve the chain for creating a gratitude banner entry
         user_message = user_input.get("customer_input", "")
         # Step 1: Process user message with the reasoning chain
-        result = self.gratitude_manager.process( message=user_message)
+        result = GratitudeEntryManager(db_manager=self.db_manager).process( message=user_message)
 
         # Step 2: Generate response with the response chain
-        response = self.mood_entry_response.generate(result["success"])
+        response = GratitudeEntryResponse().generate(result)
         return response
 
     def handle_delete_journal(self, user_input: Dict):
@@ -622,9 +586,8 @@ class MainChatbot:
         Returns:
             The content of the response after processing through the chitchat chain.
         """
-        _, chitchat_response_chain = self.get_chain("chitchat")
 
-        response = chitchat_response_chain.invoke(user_input, config=self.memory_config)
+        response =self.chitchat_response_chain.invoke(user_input, config=self.memory_config)
         return response
 
     def handle_unknown_intent(self, user_input: Dict[str, str]) -> str:
@@ -654,7 +617,6 @@ class MainChatbot:
                                 "review_user_memory"
                                 ]
 
-        chitchat_reasoning_chain, _ = self.get_chain("chitchat")
 
         input_message = {}
 
@@ -664,18 +626,11 @@ class MainChatbot:
             self.user_id, self.conversation_id
         )
 
-        reasoning_output1 = chitchat_reasoning_chain.invoke(input_message)
 
-        if reasoning_output1.chitchat:
-            print("Chitchat")
-            return self.handle_chitchat_intent(user_input)
-        else:
-            router_reasoning_chain2, _ = self.get_chain("router")
-            reasoning_output2 = router_reasoning_chain2.invoke(input_message)
-            new_intention = reasoning_output2.intent
-            print("New Intention:", new_intention)
-            new_handler = self.intent_handlers.get(new_intention)
-            return new_handler(user_input)
+      
+        print("Chitchat")
+        return self.handle_chitchat_intent(user_input)
+
 
     def save_memory(self) -> None:
         """Save the current memory state of the bot."""

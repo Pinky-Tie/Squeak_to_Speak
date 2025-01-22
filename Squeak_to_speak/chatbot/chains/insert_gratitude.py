@@ -35,7 +35,7 @@ class GratitudeEntryManager:
 
         # Insert into the database
         success = self.db_manager.insert("Gratitude_entries", entry.dict())
-        return {"success": success}
+        return success["success"]
 
 # Chain 2
 # Goal: Inform the user that the entry has been inserted

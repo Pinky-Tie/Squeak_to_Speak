@@ -7,20 +7,17 @@ class DatabaseManager:
     def __init__(self, conn):
         self.conn = conn
 
-    def insert(self, table_name, data):
-        placeholders = ", ".join(f":{key}" for key in data.keys())
-        columns = ", ".join(data.keys())
-        query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-        cursor = self.conn.cursor()
+    def insert(self, table: str, data: dict) -> dict:
         try:
-            cursor.execute(query, data)
+            columns = ', '.join(data.keys())
+            placeholders = ', '.join(['?'] * len(data))
+            query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+            self.conn.execute(query, tuple(data.values()))
             self.conn.commit()
-            return True
+            return {"success": True}
         except Exception as e:
-            print(f"Error inserting into {table_name}: {e}")
-            return False
-        finally:
-            cursor.close()
+            print(f"Error inserting into {table}: {e}")
+            return {"success": False, "error": str(e)}
 
     def select(self, query, params=None):
         cursor = self.conn.cursor()
