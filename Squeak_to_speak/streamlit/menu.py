@@ -1,4 +1,6 @@
 import streamlit as st
+st.session_state.setdefault("authentication_status", False)
+
 
 def authenticated_menu():
     # Show a navigation menu for authenticated users
@@ -7,6 +9,7 @@ def authenticated_menu():
     logout = st.sidebar.button("Logout")
     if logout:
         st.session_state.authentication_status= False
+        st.session_state.messages = []
         menu(start=True) 
 
 

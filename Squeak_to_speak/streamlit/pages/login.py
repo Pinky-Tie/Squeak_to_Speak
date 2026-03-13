@@ -2,26 +2,21 @@ import streamlit as st
 import streamlit_authenticator as stauth  
 from streamlit_option_menu import option_menu
 from menu import menu
-from Squeak_to_speak.data.data_func import retrieve_data
-
+from database import users_dict
+st.session_state.setdefault("authentication_status", False)
 # Redirecting if needed
 menu()
-
+st.set_page_config(layout="wide")
 st.title("Welcome Back!")
 
-st.session_state.authentication_status = None
 
-# Retrieving data
-user_data= retrieve_data()
-usernames=user_data["email"]
-user_ids = user_data["user_id"]
-names = user_data["username"]
-hashed_passwords = stauth.Hasher(passwords=user_data["password"]).generate()
+authenticator = stauth.Authenticate(users_dict,
+    "ab", "ab", 0)
 
-authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
-    "ab", "ab", cookie_expiry_days=0)
-
-name, authentication_status, username = authenticator.login("Log-in into your account", "main")
+authenticator.login("main", "Log-in into your account")
+name = st.session_state.get("name")
+authentication_status = st.session_state.get("authentication_status")
+username = st.session_state.get("username")
 
 if authentication_status==False:
     st.error("Incorrect credentials")

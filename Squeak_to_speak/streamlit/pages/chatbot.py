@@ -1,18 +1,13 @@
 import streamlit as st
-from openai import OpenAI
 from menu import menu
-from dotenv import load_dotenv  # Import dotenv to load environment variables
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
-from Squeak_to_speak.chatbot.bot import MainChatbot
-load_dotenv()
-from Squeak_to_speak.data.data_func import get_user_id
-
-
+import random
+import time
+st.session_state.authentication_status = True
 # Redirect to homepage.py if not logged in
 menu()
-
+st.set_page_config(layout="wide")
 @st.dialog("Discover how to benefit from Squeaky")
 def show_help():
     col1, col2=st.columns((3,4))
@@ -89,55 +84,30 @@ def show_help():
                     "What data do you have on me?"
 """) 
 
-col1, col2 = st.columns((6,2))
+col1, col2 = st.columns((8,1))
 with col1: 
     st.title("Squeaky")
+    st.warning("DEMO VERSION: Squeaky main version is currently unavailable for use.   Feel free to explore an echo demo version available.")
+
 with col2:
     if st.button("Discover how to benefit from Squeaky"):
         show_help()
 
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-# Set a default model
-
-if "bot" not in st.session_state:
-    user_id = get_user_id(st.session_state.get("username", "default_user"))  # Replace "default_user" with appropriate fallback
-    st.session_state.bot = MainChatbot(user_id=int(user_id), conversation_id=1)
-
-# Main function to interact with the bot
-def main(user_input):
-    try:
-        bot = st.session_state.bot
-        # Process the user's input using the bot and display the response
-        response = bot.process_user_input({"customer_input": user_input})
-        return response
-    except Exception as e:
-        # Handle exceptions and prompt the user to try again
-        return f"Error: {str(e)}"
-
-
-if __name__ == "__main__":
-    # Load environment variables from a .env file
-    load_dotenv()
-
-    # Notify the user that the bot is starting
-    print("Starting the bot...")
-
-# Initialize chat history
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+        st.session_state.messages = []
 
-# Display chat messages from history on app rerun
 for message in st.session_state.messages:
-    with st.chat_message(name=message["role"], avatar=message["avatar"]):
+    with st.chat_message(message["role"], avatar=message.get("avatar", None)):
         st.markdown(message["content"])
 
-prompt = st.chat_input("What is on your mind?")
+prompt = st.chat_input("How are you feeling today?")
 if prompt:
-    with st.chat_message(name="user", avatar="visual_assets/Pessoa.png"):
+    with st.chat_message("user", avatar="visual_assets/Pessoa.png"):
         st.markdown(prompt)
-    response = main(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt, "avatar": "visual_assets/Pessoa.png"})
-    with st.chat_message(name="assistant", avatar="visual_assets/Ratinho.png"):
+
+    response = prompt
+    with st.chat_message("assistant",  avatar="visual_assets/Ratinho.png"):
         st.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response, "avatar": "visual_assets/Ratinho.png"})
+

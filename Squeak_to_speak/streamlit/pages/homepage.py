@@ -2,10 +2,10 @@ import streamlit as st
 from menu import menu
 import json
 from streamlit_lottie import st_lottie
-
+st.session_state.setdefault("authentication_status", False)
 # Redirect if needed
 menu()
-
+st.set_page_config(layout="wide")
 
 def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
@@ -83,7 +83,7 @@ with st.container():
         st.header(''':primary[Ready to Start Your Journey?]''')
         st.markdown("""Take the first step toward understanding your emotions and finding the support you deserve.  
                     Let Squeak to Speak guide you.""")
-        register_now = st.button("Sing Up Now")
+        register_now = st.button("Sign Up Now")
         if register_now:
             st.switch_page("pages/user_registration_page.py")
     st.divider()

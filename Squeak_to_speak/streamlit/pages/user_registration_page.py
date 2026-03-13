@@ -1,11 +1,7 @@
 import re
 import streamlit as st
-from Squeak_to_speak.data.data_func import is_email_unique, add_user
+from database import email_unique, is_valid_email, add_user
 from menu import menu
-
-def is_valid_email(email):
-    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-    return re.match(pattern, email) is not None
 
 st.title("User Registration")
 
@@ -33,7 +29,7 @@ with st.form("registration_form"):
         elif len(password) < 8:
             st.error("Password must be at least 8 characters")
             st.session_state.authentication_status = False
-        elif not is_email_unique(username):
+        elif not email_unique(username):
             st.error("Email already registered")
             st.session_state.authentication_status = False
         else:
